@@ -1,0 +1,7 @@
+<div class="padd">
+  <div class="mockup-code">
+    <pre data-prefix="$"><code>npm i daisyui</code></pre> 
+    <pre data-prefix=">" class="text-warning"><code>installing...</code></pre> 
+    <pre data-prefix=">" class="text-success"><code>Done!</code></pre>
+  </div>
+</div>
