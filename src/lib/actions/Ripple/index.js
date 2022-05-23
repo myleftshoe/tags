@@ -4,7 +4,6 @@ import { RippleStart, RippleStop } from './material-ripple';
  * @param node {Element}
  */
 export default (node, _options = {}) => {
-    console.log({ node });
     let options = _options;
     let destroyed = false;
     let ripple;
