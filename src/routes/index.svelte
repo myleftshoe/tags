@@ -12,11 +12,11 @@
             <div>primary 1</div>
             <div>secondary1</div>
         </div>
-        <div>meta</div>
+        <div class="flex flex-col justify-center">meta</div>
     </li>
     {/each}
 </ul>
 
-<button class="btn" use:Ripple={{ centered: false }}>
+<button class="btn m-10" use:Ripple={{ centered: false }}>
     test
 </button>
