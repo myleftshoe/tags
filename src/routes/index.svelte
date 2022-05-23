@@ -1,5 +1,5 @@
 <script context="module">
-    import Ripple from '$lib/actions/Ripple'
+    import Ripple from 'svelte-ripple-action'
     const items = Array.from({length: 5}, (v, i) => ({
         primary: `primary ${i}`,
         secondary: `secondary ${i}`,
