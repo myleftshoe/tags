@@ -2,7 +2,7 @@
     import '../app.css';
 </script>
 
-<nav class="navbar bg-primary text-primary-content">
+<nav class="navbar bg-primary text-primary-content flex flex-row justify-between">
     <div class="flex-none">
         <button class="btn btn-square btn-ghost">
             <svg
@@ -15,8 +15,11 @@
             </svg>
         </button>
     </div>
-    <div class="flex-1">
+    <!-- <div class="flex-1">
         <a class="btn btn-ghost normal-case text-xl">daisyUI</a>
+    </div> -->
+    <div class="form-control">
+        <input type="text" placeholder="Search" class="input input-bordered" />
     </div>
     <div class="flex-none">
         <div class="dropdown dropdown-end">
@@ -26,6 +29,7 @@
                     fill="none"
                     viewBox="0 0 24 24"
                     class="inline-block w-5 h-5 stroke-current"
+                    transform="rotate(90)"
                 >
                     <path
                         stroke-linecap="round"
