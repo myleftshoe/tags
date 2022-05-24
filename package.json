@@ -25,6 +25,6 @@
   "type": "module",
   "dependencies": {
     "daisyui": "^2.15.0",
-    "svelte-ripple-action": "^0.0.1"
+    "svelte-ripple": "^0.1.0"
   }
 }
