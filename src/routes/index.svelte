@@ -7,9 +7,15 @@
 </script>
 <script>
     let selectedItem = {} 
-    function handleItemClick(item) {
+    const handleItemClick = (item) => (e) => {
         selectedItem = item
         console.log(item)
+    }
+
+    function forceRefresh() {
+        console.log('forceRefresh', {selectedItem})
+        console.table(items)
+        items = [ ...items ]
     }
 
     $: items = fuzzy($products.filter(({status}) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'Description', 'id'])
@@ -17,7 +23,7 @@
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}
     <label for="edit-modal">
-          <li class="flex flex-row justify-between py-4 px-6 text-base-content bg-base-100 active:bg-base-200 dark:border-b" on:click={(e) => handleItemClick(item)}>
+          <li class="flex flex-row justify-between py-4 px-6 text-base-content bg-base-100 active:bg-base-200 dark:border-b" on:click={handleItemClick(item)}>
             <div style={`${item.status === 'unbound' && 'opacity:.50'}`}>
                 <div>{item.name}</div>
                 <!-- <div>{item.label5}</div>
@@ -37,7 +43,7 @@
     <progress class="progress progress-accent"></progress>
 {/if} -->
 
-<Modal id="edit-modal" closeButton  on:close={() => items = [ ...items ]}>
+<Modal id="edit-modal" closeButton  on:close={forceRefresh}>
     <div class="flex flex-col gap-4">
         <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label4}/>
         <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label5}/>

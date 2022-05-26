@@ -11,10 +11,12 @@
         dispatch('close')
     }
 
-    $:console.log($$props, {closeButton})
+    let open = false
+    $:console.log($$props, {closeButton}, {open})
+    $: !open && dispatch('close')
 </script>
 
-<input type="checkbox" {id} class="modal-toggle" />
+<input type="checkbox" {id} class="modal-toggle" bind:checked={open}/>
 <div class="modal">
     {#if closeOnOutsideClick}
         <label for={id} class="absolute left-0 top-0 h-full w-full"/>
