@@ -3,6 +3,7 @@
     import showUnbound from '$lib/stores/bound';
     import products from '$lib/stores/products'
     import fuzzy from '$lib/util/fuzzy'
+    import Modal from '$lib/components/modal.svelte'
 </script>
 <script>
     let selectedItem = {} 
@@ -10,18 +11,17 @@
         selectedItem = item
         console.log(item)
     }
-    function handleDialogClose() {
-        console.log('should close')
-    }
+
     $: items = fuzzy($products.filter(({status}) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'Description', 'id'])
 </script>
-<ul class="flex flex-col divide-y divide-primary">
+<ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}
-    <label for="my-modal-6">
-          <li class="flex flex-row justify-between py-4 px-6 text-base-content bg-base-100 active:bg-base-200" on:click={(e) => handleItemClick(item)}>
+    <label for="edit-modal">
+          <li class="flex flex-row justify-between py-4 px-6 text-base-content bg-base-100 active:bg-base-200 dark:border-b" on:click={(e) => handleItemClick(item)}>
             <div style={`${item.status === 'unbound' && 'opacity:.50'}`}>
-                <div>{item.label5}</div>
-                <div>{item.label4}</div>
+                <div>{item.name}</div>
+                <!-- <div>{item.label5}</div>
+                <div>{item.label4}</div> -->
             </div>
             <div class="flex flex-col justify-center items-end"
                 style={`${item.status === 'unbound' && 'opacity:.50'}`}
@@ -37,18 +37,15 @@
     <progress class="progress progress-accent"></progress>
 {/if} -->
 
-
-<!-- The button to open modal -->
-<!-- <label for="my-modal-6" class="btn modal-button">open modal</label> -->
-
-<!-- Put this part before </body> tag -->
-<input type="checkbox" id="my-modal-6" class="modal-toggle"/>
-<div class="modal">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">Congratulations random Interner user!</h3>
-    <p class="py-4">{selectedItem.name}</p>
-    <div class="modal-action">
-        <label for="my-modal-6" class="btn" on:click={handleDialogClose}>Done</label>
+<Modal id="edit-modal" closeButton  on:close={() => items = [ ...items ]}>
+    <div class="flex flex-col gap-4">
+        <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label4}/>
+        <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label5}/>
+        <span class="flex flex-row items-center relative gap-2">
+            <span class="absolute left-4 text-xl">$</span>
+            <input id="price" type="number" class="input input-lg input-bordered w-full focus:input-primary text-right text-xl" bind:value={selectedItem.price}/>
+            <input type="text" class="input input-lg input-bordered w-full focus:input-primary text-xl" bind:value={selectedItem.label10}/>
+        </span>
+        <label for="edit-modal" class="btn">Done</label>
     </div>
-  </div>
-</div>
+</Modal>

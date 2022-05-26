@@ -7,6 +7,8 @@ import { alpha } from '$lib/util/sort'
 export default readable([], (set) => {
     (async function asyncWrapper() {
         console.log('productStore')
+        set([])
+        return
         const response = await minew.get(`/goods?page=1&size=9999&storeId=123`)
         const products = response.rows
             .filter(row => ['FRUIT', 'VEGETABLES'].includes(row.label13))
