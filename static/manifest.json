@@ -1,0 +1,16 @@
+{
+    "short_name": "bind short_name",
+    "name": "bind name",
+    "start_url": "/",
+    "icons": [{
+        "src": "logo_256.png",
+        "type": "image/png",
+        "sizes": "256x256"
+    }],
+    "background_color": "#333",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "theme_color": "#3367D6",
+    "description": "bind description"
+}
