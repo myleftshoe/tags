@@ -30,7 +30,7 @@
     <meta name="theme-color" content="{themeColor}"/> 
 </svelte:head>
 
-<nav bind:this={refs.nav} class="navbar bg-secondary sticky top-0 shadow-xl">
+<nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl">
     <div class="navbar-start">
         <button class="btn btn-ghost btn-circle">
             <label class="swap">
@@ -46,7 +46,7 @@
             bind:value={$search}
             type="search"
             placeholder="Search"
-            class="input input-bordered text-base focus:input-primary"
+            class="input input-bordered input-sm py-5 text-base focus:input-primary"
         />
         <button
             class="btn btn-xs btn-circle btn-ghost absolute right-2 text-base-content bg-base-300"
