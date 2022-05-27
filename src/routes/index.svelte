@@ -26,18 +26,17 @@
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}
     <label for="edit-modal">
-          <li class="flex flex-row justify-between py-4 px-6 text-base-content bg-base-100 active:bg-base-200 dark:border-b" on:click={handleItemClick(item)}>
-            <div style={`${item.status === 'unbound' && 'opacity:.50'}`}>
+          <li class="flex flex-row gap-5 justify-between py-4 px-6 text-base-content bg-base-100 active:bg-base-200 dark:border-b" on:click={handleItemClick(item)}>
+            <div class="flex flex-col justify-center items-end w-1/4" style={`${item.status === 'unbound' && 'opacity:.50'}`} >
+                <div>${item.price}</div>
+                <div>{item.label10}</div>
+            </div>
+            <div class="w-2/3" style={`${item.status === 'unbound' && 'opacity:.50'}`}>
                 <!-- <div>{item.name}</div> -->
                 <div>{item.label5}</div>
                 <div>{item.label4}</div>
             </div>
-            <div class="flex flex-col justify-center items-end"
-                style={`${item.status === 'unbound' && 'opacity:.50'}`}
-            >
-                <div>${item.price}</div>
-                <div>{item.label10}</div>
-            </div>
+
         </li>
     </label>
     {/each}
