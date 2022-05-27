@@ -11,6 +11,6 @@
     "display": "standalone",
     "orientation": "portrait-primary",
     "scope": "/",
-    "theme_color": "#3367D6",
+    "theme_color": "#000",
     "description": "bind description"
 }
