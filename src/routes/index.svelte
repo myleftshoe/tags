@@ -4,6 +4,7 @@
     import products from '$lib/stores/products'
     import fuzzy from '$lib/util/fuzzy'
     import Modal from '$lib/components/modal.svelte'
+    import PriceModal from '$lib/components/priceModal.svelte'
 </script>
 <script>
     let selectedItem = {}
@@ -25,20 +26,22 @@
 </script>
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}
-    <label for="edit-modal">
         <li class="flex flex-row gap-3 justify-between py-4 px-4 text-base-content bg-base-100 active:bg-base-200" on:click={handleItemClick(item)}>
-            <div class="flex flex-row justify-center items-end w-1/3" style={`${item.status === 'unbound' && 'opacity:.50'}`} >
-                <span>${item.price}</span>
-                <span class="text-xs relative -right-1 bottom-1">{item.label10}</span>
-                <!-- <div>{item.label10}</div> -->
+                <div class="flex flex-row justify-center items-end w-1/3" style={`${item.status === 'unbound' && 'opacity:.50'}`} >
+                    <label for="price-modal">
+                        <span class="before:content-['$'] before:text-xs before:translate-x-6 before:relative before:bottom-0.5 before:right-0.5">{item.price}</span>
+                        <span class="text-xs relative -right-1 -bottom-2">{item.label10}</span>
+                        <!-- <div>{item.label10}</div> -->
+                    </label>
             </div>
-            <div class="w-2/3" style={`${item.status === 'unbound' && 'opacity:.50'}`}>
-                <div>{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</div>
-                <!-- <div>{item.label5}</div>
-                <div>{item.label4}</div> -->
+                <div class="w-2/3" style={`${item.status === 'unbound' && 'opacity:.50'}`}>
+                    <label for="edit-modal">
+                        <div>{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</div>
+                    <!-- <div>{item.label5}</div>
+                    <div>{item.label4}</div> -->
+                </label>
             </div>
         </li>
-    </label>
     {/each}
 </ul>
 <!-- {#if !$products.length}
@@ -60,3 +63,5 @@
         <label for="edit-modal" class="btn">Cancel</label>
     </div>
 </Modal>
+
+<PriceModal price={selectedItem.price} unit={selectedItem.label10}/>
