@@ -28,7 +28,8 @@
     <label for="edit-modal">
         <li class="flex flex-row gap-3 justify-between py-4 px-4 text-base-content bg-base-100 active:bg-base-200" on:click={handleItemClick(item)}>
             <div class="flex flex-row justify-center items-end w-1/3" style={`${item.status === 'unbound' && 'opacity:.50'}`} >
-                <div>${item.price} {item.label10}</div>
+                <span>${item.price}</span>
+                <span class="text-xs relative -right-1 bottom-1">{item.label10}</span>
                 <!-- <div>{item.label10}</div> -->
             </div>
             <div class="w-2/3" style={`${item.status === 'unbound' && 'opacity:.50'}`}>
