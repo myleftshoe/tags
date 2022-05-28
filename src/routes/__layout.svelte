@@ -30,7 +30,7 @@
     <meta name="theme-color" content="{themeColor}"/> 
 </svelte:head>
 
-<nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl">
+<nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-50">
     <div class="navbar-start">
         <button class="btn btn-ghost btn-circle">
             <label class="swap">
