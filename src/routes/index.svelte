@@ -3,7 +3,7 @@
     import showUnbound from '$lib/stores/bound';
     import products from '$lib/stores/products'
     import fuzzy from '$lib/util/fuzzy'
-    import Modal from '$lib/components/modal.svelte'
+    import Modal from '$lib/components/overlay.svelte'
     import PriceModal from '$lib/components/priceModal.svelte'
     import Overlay from '$lib/components/overlay.svelte'
     import Keypad from '$lib/components/keypad.svelte'
@@ -19,7 +19,7 @@
         originalItem = { ...item }
         selectedItem = item
         console.log(item)
-        // open = true
+        open = true
     }
 
     function handleClose(e) {
@@ -68,10 +68,8 @@
         </li>
     {/each}
 </ul>
-<!-- {#if !$products.length}
-    <progress class="progress progress-accent"></progress>
-{/if} -->
-<Modal id="edit-modal" closeButton on:close={resetItem}>
+
+<!-- <Modal closeButton on:close={resetItem} bind:open>
     <div class="flex flex-col gap-4">
         <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label5}/>
         <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label4}/>
@@ -82,13 +80,23 @@
         </span>
     </div>
     <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-full">
-        <label for="edit-modal" class="btn" on:click={forceRefresh}>OK</label>
-        <label for="edit-modal" class="btn">Cancel</label>
+        <button class="btn" on:click={forceRefresh}>OK</button>
+        <button class="btn" on:click={resetItem}>Cancel</button>
+    </div>
+</Modal> -->
+
+<Modal closeButton on:close={resetItem} bind:open>
+    <PriceModal bind:open price={selectedItem.price} unit={selectedItem.label10} {selectedItem}/>
+    <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-full">
+        <button class="btn" on:click={forceRefresh}>OK</button>
+        <button class="btn" on:click={resetItem}>Cancel</button>
     </div>
 </Modal>
-
-<PriceModal price={selectedItem.price} unit={selectedItem.label10}/>
-
-<Overlay bind:open on:close={() => console.log('close evet')}>
+<!-- <Overlay bind:open on:close={() => console.log('close evet')}>
     <Keypad on:submit={() => open=false}/>
-</Overlay>
+</Overlay> -->
+
+
+<!-- {#if !$products.length}
+    <progress class="progress progress-accent"></progress>
+{/if} -->

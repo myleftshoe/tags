@@ -1,23 +1,33 @@
 <script>
-    import Modal from '$lib/components/modal.svelte'
     export let price = '99.99'
     export let unit = 'kg'
+    export let selectedItem = {}
+
+    export let open = false
 
     const increment = (e) => {
         dollars = (parseInt(dollars) + 1).toString()
-    } 
+        if (dollars.length > 2)
+            dollars = '99'
+    }
 
     const decrement = (e) => {
         dollars = (parseInt(dollars) - 1).toString()
-    }     
+        if (dollars.startsWith('-'))
+            dollars = '0'
+    }
 
-    let [dollars, cents] = price.split('.')
+    let [dollars, cents = ''] = price.split('.')
+
     $: console.log({ dollars, cents })
 </script>
 
-<Modal id="price-modal" on:close>
-    <div class="flex flex-col justify-center items-center gap-5">
-        <span class="text-lg">APPLES FUJI</span>
+<main class="flex flex-col gap-10 p-5 justify-between place-content-center">
+    <header class="flex flex-col w-full">
+        <input type="text" class="input input-bordered focus:input-primary text-lg" bind:value={selectedItem.label5} />
+        <input type="text" class="input input-bordered focus:input-primary text-lg" bind:value={selectedItem.label4} />
+    </header>
+    <content>
         <div class="flex flex-row justify-around items-center gap-5">
             <div class="flex flex-col gap-2">
                 <button on:click={increment} class="btn text-3xl">+</button>
@@ -37,17 +47,13 @@
                     maxlength="2"
                     class="input input-md input-ghost focus:input-primary w-full text-xl px-2"
                 />
-                <input 
-                    bind:value={unit} 
-                    type="text" 
-                    class="input input-md input-ghost focus:input-primary w-full text-xl px-2" 
-                />        
+                <input
+                    bind:value={unit}
+                    type="text"
+                    class="input input-md input-ghost focus:input-primary w-full text-xl px-2"
+                />
             </div>
         </div>
-    </div>
-    <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-full">
-        <!-- <label for="price-modal" class="btn" on:click={forceRefresh}>OK</label> -->
-        <label for="price-modal" class="btn btn-primary">OK</label>
-        <label for="price-modal" class="btn">Cancel</label>
-    </div>
-</Modal>
+    </content>
+    <footer></footer>
+</main>
