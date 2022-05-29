@@ -30,7 +30,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
         {/if}
-        <footer on:click={close}>
+        <footer on:click={close} class="grid place-items-center">
             <slot name='actions'/>
         </footer>
     </main>
@@ -48,3 +48,5 @@
         z-index: 999;
     }
 </style>
+
+<!-- <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-2/3"> -->

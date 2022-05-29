@@ -5,9 +5,6 @@
     import fuzzy from '$lib/util/fuzzy'
     import Modal from '$lib/components/overlay.svelte'
     import PriceModal from '$lib/components/priceModal.svelte'
-    import Overlay from '$lib/components/overlay.svelte'
-    import Keypad from '$lib/components/keypad.svelte'
-
 </script>
 <script>
 
@@ -69,7 +66,7 @@
     {/each}
 </ul>
 
-<!-- <Modal closeButton on:close={resetItem} bind:open>
+<!-- <Overlay closeButton on:close={resetItem} bind:open>
     <div class="flex flex-col gap-4">
         <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label5}/>
         <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label4}/>
@@ -79,19 +76,19 @@
             <input type="text" class="input input-lg input-bordered w-full focus:input-primary text-xl" bind:value={selectedItem.label10}/>
         </span>
     </div>
-    <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-full">
+    <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-2/3">
         <button class="btn" on:click={forceRefresh}>OK</button>
         <button class="btn" on:click={resetItem}>Cancel</button>
     </div>
-</Modal> -->
+</Overlay> -->
 
-<Modal closeButton on:close={resetItem} bind:open>
+<Overlay closeButton on:close={resetItem} bind:open>
     <PriceModal bind:open price={selectedItem.price} unit={selectedItem.label10} {selectedItem}/>
-    <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-full">
-        <button class="btn" on:click={forceRefresh}>OK</button>
-        <button class="btn" on:click={resetItem}>Cancel</button>
+    <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-2/3">
+        <button class="btn btn-accent" on:click={forceRefresh}>OK</button>
+        <button class="btn btn-ghost" on:click={resetItem}>Cancel</button>
     </div>
-</Modal>
+</Overlay>
 <!-- <Overlay bind:open on:close={() => console.log('close evet')}>
     <Keypad on:submit={() => open=false}/>
 </Overlay> -->
