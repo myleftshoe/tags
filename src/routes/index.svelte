@@ -36,6 +36,12 @@
         selectedItem = {}
     }
 
+    const dollars = (price) => price.split('.')[0]
+    const cents = (price) => {
+        const c = price.split('.')[1] ?? ''
+        return c && `.${c}`
+    }
+
     let open = false
     $: items = fuzzy($products.filter(({status}) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'Description', 'id'])
 </script>
@@ -45,8 +51,8 @@
             <div class="flex flex-row justify-center items-center w-1/3" style={`${item.status === 'unbound' && 'opacity:.50'}`} >
                 <label for="price-modal">
                     <sup>$</sup>
-                    <span class="text-xl">{item.price.split('.')[0]}</span>
-                    <sup>.{item.price.split('.')[1]}</sup>
+                    <span class="text-xl">{dollars(item.price)}</span>
+                    <sup>{cents(item.price)}</sup>
                     <sub >{item.label10}</sub>
                     <!-- <span class="text-xs relative -right-1 -bottom-2">{item.label10}</span> -->
                     <!-- <div>{item.label10}</div> -->
