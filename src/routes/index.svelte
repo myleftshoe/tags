@@ -2,9 +2,11 @@
     import search from '$lib/stores/search'
     import showUnbound from '$lib/stores/bound';
     import products from '$lib/stores/products'
+    import { fetchPreview } from '$lib/stores/products'
     import fuzzy from '$lib/util/fuzzy'
-    import Modal from '$lib/components/overlay.svelte'
+    import Overlay from '$lib/components/overlay.svelte'
     import PriceModal from '$lib/components/priceModal.svelte'
+    import Tag from '$lib/components/tag.svelte'
 </script>
 <script>
 
@@ -24,7 +26,6 @@
         open = false
     }
 
-
     function resetItem() {
         Object.assign(selectedItem, originalItem)
     }
@@ -33,6 +34,18 @@
         selectedItem = {}
     }
 
+
+    let product = {}
+    const isHex12 = (value = '') => /^([0-9A-Fa-f]{12})$/.test(value.trim())
+    async function getProduct(value) {
+        console.log(value)
+        if (!isHex12(value)) return
+        product = await fetchPreview(value)
+        console.log(product)
+        open = true
+    }    
+
+
     const dollars = (price) => price.split('.')[0]
     const cents = (price) => {
         const c = price.split('.')[1] ?? ''
@@ -40,6 +53,7 @@
     }
 
     let open = false
+    $: getProduct($search)
     $: items = fuzzy($products.filter(({status}) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'Description', 'id'])
 </script>
 <ul class="flex flex-col divide-y divide-base-300">
@@ -82,13 +96,13 @@
     </div>
 </Overlay> -->
 
-<Overlay closeButton on:close={resetItem} bind:open>
+<!-- <Overlay closeButton on:close={resetItem} bind:open>
     <PriceModal bind:open price={selectedItem.price} unit={selectedItem.label10} {selectedItem}/>
     <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-2/3">
         <button class="btn btn-accent" on:click={forceRefresh}>OK</button>
         <button class="btn btn-ghost" on:click={resetItem}>Cancel</button>
     </div>
-</Overlay>
+</Overlay> -->
 <!-- <Overlay bind:open on:close={() => console.log('close evet')}>
     <Keypad on:submit={() => open=false}/>
 </Overlay> -->
@@ -97,3 +111,6 @@
 <!-- {#if !$products.length}
     <progress class="progress progress-accent"></progress>
 {/if} -->
+<Overlay bind:open closeButton>
+    <Tag {product}/>
+</Overlay>
