@@ -5,15 +5,28 @@
     import fuzzy from '$lib/util/fuzzy'
     import Modal from '$lib/components/modal.svelte'
     import PriceModal from '$lib/components/priceModal.svelte'
+    import Overlay from '$lib/components/overlay.svelte'
+    import Keypad from '$lib/components/keypad.svelte'
+
 </script>
 <script>
+
+    let loggedIn = false
     let selectedItem = {}
     let originalItem = {} 
+
     const handleItemClick = (item) => (e) => {
         originalItem = { ...item }
         selectedItem = item
         console.log(item)
+        // open = true
     }
+
+    function handleClose(e) {
+        console.log(e.target.innerText)
+        open = false
+    }
+
 
     function resetItem() {
         Object.assign(selectedItem, originalItem)
@@ -22,21 +35,26 @@
         items = [ ...items ]
         selectedItem = {}
     }
+
+    let open = false
     $: items = fuzzy($products.filter(({status}) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'Description', 'id'])
 </script>
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}
         <li class="flex flex-row gap-3 justify-between py-4 px-4 text-base-content bg-base-100 active:bg-base-200" on:click={handleItemClick(item)}>
-                <div class="flex flex-row justify-center items-end w-1/3" style={`${item.status === 'unbound' && 'opacity:.50'}`} >
-                    <label for="price-modal">
-                        <span class="before:content-['$'] before:text-xs before:translate-x-6 before:relative before:bottom-0.5 before:right-0.5">{item.price}</span>
-                        <span class="text-xs relative -right-1 -bottom-2">{item.label10}</span>
-                        <!-- <div>{item.label10}</div> -->
-                    </label>
+            <div class="flex flex-row justify-center items-center w-1/3" style={`${item.status === 'unbound' && 'opacity:.50'}`} >
+                <label for="price-modal">
+                    <sup>$</sup>
+                    <span class="text-xl">{item.price.split('.')[0]}</span>
+                    <sup>.{item.price.split('.')[1]}</sup>
+                    <sub >{item.label10}</sub>
+                    <!-- <span class="text-xs relative -right-1 -bottom-2">{item.label10}</span> -->
+                    <!-- <div>{item.label10}</div> -->
+                </label>
             </div>
-                <div class="w-2/3" style={`${item.status === 'unbound' && 'opacity:.50'}`}>
-                    <label for="edit-modal">
-                        <div>{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</div>
+            <div class="w-2/3 flex flex-col justify-center" style={`${item.status === 'unbound' && 'opacity:.50'}`}>
+                <label for="edit-modal">
+                    {`${item.label4.trim()} ${item.label5.trim()}`.trim()}
                     <!-- <div>{item.label5}</div>
                     <div>{item.label4}</div> -->
                 </label>
@@ -47,7 +65,6 @@
 <!-- {#if !$products.length}
     <progress class="progress progress-accent"></progress>
 {/if} -->
-
 <Modal id="edit-modal" closeButton on:close={resetItem}>
     <div class="flex flex-col gap-4">
         <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label5}/>
@@ -65,3 +82,7 @@
 </Modal>
 
 <PriceModal price={selectedItem.price} unit={selectedItem.label10}/>
+
+<Overlay bind:open on:close={() => console.log('close evet')}>
+    <Keypad on:submit={() => open=false}/>
+</Overlay>
