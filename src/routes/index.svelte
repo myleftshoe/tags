@@ -40,9 +40,9 @@
     async function getProduct(value) {
         console.log(value)
         if (!isHex12(value)) return
+        open = true
         product = await fetchPreview(value)
         console.log(product)
-        open = true
     }    
 
 
