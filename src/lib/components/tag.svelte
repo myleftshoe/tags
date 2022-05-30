@@ -87,21 +87,26 @@
         <progress class="absolute progress w-{width} bottom-0"></progress>
     {/if} -->
     </tag>
+    <div class="flex flex-row gap-10">
+        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">+</button>
+        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">-</button>
+    </div>    
+
 </container>
 {/if}
 <style>
     container {
         position: relative;
+        padding: 5rem 0;
         display: flex;
         flex-direction: column;
-        height: 100vh;
-        justify-content: flex-start;
         align-items: center;
         background-color:blue;
+        overflow: scroll;
     }
     tag {
         display: grid;
-        position: absolute; 
+        /* position: absolute;  */
         top: 20px;
         box-sizing: border-box;
         /* display: grid;
