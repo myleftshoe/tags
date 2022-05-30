@@ -35,7 +35,7 @@
     }
 
 
-    let product = {}
+    let product
     const isHex12 = (value = '') => /^([0-9A-Fa-f]{12})$/.test(value.trim())
     async function getProduct(value) {
         console.log(value)

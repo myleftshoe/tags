@@ -1,37 +1,60 @@
+<script context="module">
+    const labelMappings = {
+        label3: '0000',
+        label4: 'name 2',
+        label5: 'name 1',
+        label6: '9.99',
+        label8: 'Organic',
+        label9: 'grade',
+        label10: 'kg',
+        label11: 'VIC',
+    }
+
+</script>
+
 <script>
-    import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import demoData from '$lib/stores/demoData.json'
-import { each, hasContext } from 'svelte/internal';
     // console.log(JSON.stringify(demoData, null, 2))
 
-    export let product = {}
-    const data = demoData[0]
+    let refs = {} 
 
+    const data = demoData[0]
     const { height, width } = data.size
+
     const text = Object.entries(data.text)
-    const dollar = data.icons?.icon1 
+    console.log(text)
+    export let product = text.reduce((acc, cur) => {
+        console.log(cur)
+        const [label] = cur
+        const value = labelMappings[label] ?? label
+        acc[label] = value
+        return acc
+    }, {})
+
+
+    console.warn(JSON.stringify(product, null, 4))
+
+    const dollar = data.icons?.icon1
 
     // console.log(text)
-    console.log(product)
+    console.warn(product)
+
+    function selectText(e) {
+        e.target.select()
+    }
 
     let innerWidth
     $: scale = Math.min(innerWidth/width, 1)
+    $: if (product.id) { 
+        refs.tagcontent.style.filter = 'none';
+        refs.tagcontent.style.opacity = 1
+    }
 </script>
 <svelte:window bind:innerWidth/>
-{#if !product.hasOwnProperty('id')}
+{#if product}
 <container>
     <tag style="height: {height + 80}px; width: {width}px; transform: scale({scale}, 0.85);">
-        <Skeleton height={height + 80} width={width} primaryColor="#ddd"> 
-            {#each text as [label, style], i}
-                <rect width="96" height={style['font-size']} x={style.x} y={style.y} rx={8} ry={8}/>
-            {/each}
-        </Skeleton>
-
-    </tag>
-</container>
-{:else}
-<container>
-    <tag style="height: {height + 80}px; width: {width}px; transform: scale({scale}, 0.85);">
+        <tagcontent bind:this={refs.tagcontent}>
         {#each text as [label, style], i}
             <span style="
                 top: {style.y}px; 
@@ -39,13 +62,17 @@ import { each, hasContext } from 'svelte/internal';
                 color: {style.color};
                 font-size: {style['font-size']}px; 
                 font-weight: {style.bold ? 'bold': 'normal'}; 
-                font-family: {style["font-family"]};
+                font-family: {style["font-family"]}, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             ">
-                {#if (style['effect'] === 'minitail-up')}
+                {#if (label === 'label6')}
                     {product[label].split('.')[0]}.
-                    <sup>{product[label].split('.')[1]}</sup>
+                    <sup>{product[label].split('.')[1] ?? ''}</sup>
                 {:else}
-                    <input style="background:none" value="{product[label] ?? ''}"/>
+                    <input 
+                        value="{product[label] ?? ''}" 
+                        on:focus={selectText}
+                        placeholder="{labelMappings[label]}"
+                    />
                 {/if}
             </span>
         {/each}
@@ -55,6 +82,7 @@ import { each, hasContext } from 'svelte/internal';
             font-size: {dollar['font-size']}px; 
             color: {dollar.color};
         ">$</span>
+    </tagcontent>
     </tag>
 </container>
 {/if}
@@ -67,9 +95,9 @@ import { each, hasContext } from 'svelte/internal';
         justify-content: flex-start;
         align-items: center;
         background-color:blue;
-
     }
     tag {
+        display: grid;
         position: absolute; 
         top: 20px;
         box-sizing: border-box;
@@ -82,6 +110,13 @@ import { each, hasContext } from 'svelte/internal';
         border-radius: 32px;
         transform-origin: center top;
         transition: transform 0.1s ease-out;
+        overflow: hidden;
+        /* max-width: 100vw; */
+    }
+    tagcontent {
+        filter: contrast(50%) blur(1px);
+        opacity: 0.5;
+        transition: all .6s linear;
     }
     span { 
         position: absolute;
@@ -89,4 +124,17 @@ import { each, hasContext } from 'svelte/internal';
     sup { 
         font-size: .6em;
     }
+    input { 
+        border: none; 
+        outline: none;
+    }
+    input {
+        background-color: transparent;
+        /* padding: 0 .5rem; */
+        transition: background-color .2s ease;
+        border-radius: 5px;
+    }
+    /* input:focus {
+        background-color: #f002;
+    } */
 </style>
