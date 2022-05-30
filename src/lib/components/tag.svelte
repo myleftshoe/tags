@@ -83,6 +83,9 @@
             color: {dollar.color};
         ">$</span>
     </tagcontent>
+    <!-- {#if !product.id}
+        <progress class="absolute progress w-{width} bottom-0"></progress>
+    {/if} -->
     </tag>
 </container>
 {/if}
