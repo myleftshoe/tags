@@ -42,10 +42,10 @@
     export let product = nullProduct
 
 
-    afterUpdate(() => {
-        const scrollWidth = refs.container.scrollWidth
-        refs.container.scrollLeft = (scrollWidth - innerWidth) / 2
-    })
+    // afterUpdate(() => {
+    //     const scrollWidth = refs.container.scrollWidth
+    //     refs.container.scrollLeft = (scrollWidth - innerWidth) / 2
+    // })
 
     function selectText(e) {
         e.target.select()
@@ -56,12 +56,12 @@
     $: product ??=  nullProduct
     $: pp({product})
 
-    let innerWidth
+    let innerWidth, innerHeight
     $: scale = Math.min((innerWidth - 84)/width, .75)
     $: pp({scale})
 
 </script>
-<svelte:window bind:innerWidth/>
+<svelte:window bind:innerWidth bind:innerHeight/>
 <container bind:this={refs.container}>
     <case  bind:this={refs.case} style="transform: scale({scale});">
         <border>
@@ -101,32 +101,53 @@
             </tag>
         </border>
     </case>
-    <div class="flex flex-row gap-10">
-        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">+</button>
-        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">-</button>
-    </div>    
+    <!-- <div class="flex flex-row gap-10 h-full items-end"> -->
+        <actions>
+            <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">-</button>
+            <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">+</button>
+        </actions>
+    <!-- </div>     -->
 </container>
 
 <style>
+    actions { 
+        display: flex;
+        height: 100%;
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
+        padding: 2rem 0;
+        align-items: flex-end;
+        
+    }
+    @media (orientation: landscape) {
+        actions {
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+    }    
     container {
         position: relative;
         padding: 2rem 0;
         display: grid;
         place-items: center center;
         width: 100vw;
+        height: 100vh;
         /* flex-direction: column;
         align-items: center; */
         overflow: hidden;
-        /* background-color: black; */
+        background-color: black;
     }
     case {
-        position: relative;
+        position: absolute;
         outline: 1px solid #0001;
         box-shadow: 10px 10px 10px #0007, -1px -1px 1px white;
         border-width: 32px 15px 32px 15px;
         border-color: #fff;
         border-radius: 32px;
-        transform-origin: center top;
+        transform-origin: center center;
         transition: transform 0.1s ease-out;
     }
     case:after {
