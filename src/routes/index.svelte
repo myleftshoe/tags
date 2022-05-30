@@ -1,7 +1,7 @@
 <script context="module">
     import search from '$lib/stores/search'
     import showUnbound from '$lib/stores/bound';
-    import products from '$lib/stores/products'
+    import products, {nullProduct} from '$lib/stores/products'
     import { fetchPreview } from '$lib/stores/products'
     import fuzzy from '$lib/util/fuzzy'
     import Overlay from '$lib/components/overlay.svelte'
@@ -35,7 +35,8 @@
     }
 
 
-    let product = {}
+    let product = nullProduct
+
     const isHex12 = (value = '') => /^([0-9A-Fa-f]{12})$/.test(value.trim())
     async function getProduct(value) {
         console.log(value)
@@ -111,6 +112,6 @@
 <!-- {#if !$products.length}
     <progress class="progress progress-accent"></progress>
 {/if} -->
-<Overlay bind:open closeButton on:close={() => product = {}}>
+<Overlay bind:open closeButton on:close={() => product = nullProduct}>
     <Tag {product}/>
 </Overlay>

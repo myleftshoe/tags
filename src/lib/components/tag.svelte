@@ -1,8 +1,11 @@
-<script context="module">
+<script context="module" lang='ts'>
+
+    const pp = (o) => console.log(JSON.stringify(o, null, 2))
+
     const labelMappings = {
         label3: '0000',
-        label4: 'name 2',
-        label5: 'name 1',
+        label4: 'name 1',
+        label5: 'name 2',
         label6: '9.99',
         label8: 'Organic',
         label9: 'grade',
@@ -10,12 +13,24 @@
         label11: 'VIC',
     }
 
+    const fields = {
+        label3: { name: 'plucode', editable: false, },
+        label4: { name: 'name1', editable: true, },
+        label5: { name: 'name2', editable: true, },
+        label6: { name: 'price', editable: true, },
+        label8: { name: 'specification', editable: true, },
+        label9: { name: 'grade', editable: true, },
+        label10: { name: 'unit', editable: true, },
+        label11: { name: 'origin', editable: true, },
+    }
+
 </script>
 
 <script>
     import { afterUpdate } from 'svelte'
     import demoData from '$lib/stores/demoData.json'
-    // console.log(JSON.stringify(demoData, null, 2))
+    import nullProduct from '$lib/stores/products'
+    // pp({demoData})
 
     let refs = {} 
 
@@ -23,8 +38,8 @@
     const { height, width } = data.size
 
     const text = Object.entries(data.text)
-    console.log(text)
-    export let product = {}
+    pp({text})
+    export let product = nullProduct
 
 
     afterUpdate(() => {
@@ -32,40 +47,26 @@
         refs.container.scrollLeft = (scrollWidth - innerWidth) / 2
     })
 
-    console.warn(JSON.stringify(product, null, 4))
-
-    const dollar = data.icons?.icon1
-
-    // console.log(text)
-    console.warn(product)
-
     function selectText(e) {
         e.target.select()
     }
 
-    $: product = product.id ? product : text.reduce((acc, cur) => {
-        console.log(cur)
-        const [label] = cur
-        const value = labelMappings[label] ?? label
-        acc[label] = value
-        return acc
-    }, {})
+    const dollar = data.icons?.icon1
+
+    $: product ??=  nullProduct
+    $: pp({product})
 
     let innerWidth
-    $: scale = Math.min((innerWidth - 64)/width, 1)
-    $: console.log({scale})
-    $: if (product.id) { 
-        refs.tagcontent.style.filter = 'none';
-        refs.tagcontent.style.opacity = 1
-    }
+    $: scale = Math.min((innerWidth - 84)/width, .75)
+    $: pp({scale})
+
 </script>
 <svelte:window bind:innerWidth/>
-{#if product}
 <container bind:this={refs.container}>
     <case  bind:this={refs.case} style="transform: scale({scale});">
         <border>
             <tag style="height: {height + 10}px; width: {width}px;">
-                <tagcontent bind:this={refs.tagcontent}>
+                <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
                     <span style="
                         top: {style.y}px; 
@@ -104,9 +105,8 @@
         <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">+</button>
         <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">-</button>
     </div>    
-
 </container>
-{/if}
+
 <style>
     container {
         position: relative;
@@ -136,31 +136,28 @@
         right: -13px;
         bottom: -30px;
         left: -13px;;
-        /* border: 1px solid #0006; */
-        box-shadow: -1px 0px 1px 1px #0002 inset;
+        border: 1px solid #0002;
+        box-shadow: -1px 0px 1px 1px #0007 inset;
         border-radius: 30px;
     }
     border {
         display: grid;
         border: 10px solid #eee;
         border-width: 15px 10px 20px 10px;
-        /* background-color:blue; */
     }
     tag {
         display: grid;
-        /* position: absolute;  */
-        /* top: 20px; */
         box-sizing: border-box;
-        /* display: grid;
-        place-items: center; */
         background-color: #ddd;
-        /* border: 2px solid black; */
         overflow: hidden;
-        /* max-width: 100vw; */
+    }
+    tagcontent.loading {
+        opacity: 0.5;
+        filter:  contrast(20%);
     }
     tagcontent {
-        filter: contrast(50%) blur(1px);
-        opacity: 0.5;
+        opacity: 1;
+        filter: contrast(50%);
         transition: all .6s linear;
     }
     span { 
