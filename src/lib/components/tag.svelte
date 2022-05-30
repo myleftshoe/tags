@@ -1,5 +1,7 @@
 <script>
+    import Skeleton from 'svelte-skeleton/Skeleton.svelte'
     import demoData from '$lib/stores/demoData.json'
+import { each, hasContext } from 'svelte/internal';
     // console.log(JSON.stringify(demoData, null, 2))
 
     export let product = {}
@@ -16,7 +18,18 @@
     $: scale = Math.min(innerWidth/width, 1)
 </script>
 <svelte:window bind:innerWidth/>
-{#if product.id}
+{#if !product.hasOwnProperty('id')}
+<container>
+    <tag style="height: {height + 80}px; width: {width}px; transform: scale({scale}, 0.85);">
+        <Skeleton height={height + 80} width={width} primaryColor="#ddd"> 
+            {#each text as [label, style], i}
+                <rect width="96" height={style['font-size']} x={style.x} y={style.y} rx={8} ry={8}/>
+            {/each}
+        </Skeleton>
+
+    </tag>
+</container>
+{:else}
 <container>
     <tag style="height: {height + 80}px; width: {width}px; transform: scale({scale}, 0.85);">
         {#each text as [label, style], i}
