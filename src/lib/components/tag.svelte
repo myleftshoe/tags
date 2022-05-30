@@ -24,13 +24,7 @@
 
     const text = Object.entries(data.text)
     console.log(text)
-    export let product = text.reduce((acc, cur) => {
-        console.log(cur)
-        const [label] = cur
-        const value = labelMappings[label] ?? label
-        acc[label] = value
-        return acc
-    }, {})
+    export let product = {}
 
 
     afterUpdate(() => {
@@ -48,6 +42,14 @@
     function selectText(e) {
         e.target.select()
     }
+
+    $: product = product.id ? product : text.reduce((acc, cur) => {
+        console.log(cur)
+        const [label] = cur
+        const value = labelMappings[label] ?? label
+        acc[label] = value
+        return acc
+    }, {})
 
     let innerWidth
     $: scale = Math.min((innerWidth - 64)/width, 1)
