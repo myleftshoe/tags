@@ -14,14 +14,14 @@
     }
 
     const fields = {
-        label3: { name: 'plucode', editable: false, },
-        label4: { name: 'name1', editable: true, },
-        label5: { name: 'name2', editable: true, },
+        label3: { name: 'plucode', editable: false, maxlength:'8'},
+        label4: { name: 'name1', editable: true, maxlength:'16'},
+        label5: { name: 'name2', editable: true, maxlength:'16'},
         label6: { name: 'price', editable: true, },
-        label8: { name: 'specification', editable: true, },
-        label9: { name: 'grade', editable: true, },
-        label10: { name: 'unit', editable: true, },
-        label11: { name: 'origin', editable: true, },
+        label8: { name: 'specification', editable: true, maxlength:'16'},
+        label9: { name: 'grade', editable: true, maxlength:'21'},
+        label10: { name: 'unit', editable: true, maxlength:'4'},
+        label11: { name: 'origin', editable: true, maxlength:'4'},
     }
 
 </script>
@@ -98,6 +98,9 @@
                                 bind:value={product[label]} 
                                 on:focus={selectText}
                                 placeholder="{labelMappings[label]}"
+                                type="text"
+                                size="{fields[label]?.maxlength || ''}"
+                                maxlength="{fields[label]?.maxlength || ''}"
                             />
                         {/if}
                     </span>
@@ -214,5 +217,6 @@
     }
     input:focus {
         background-color: #f002;
+        font-family: monospace;
     }
 </style>
