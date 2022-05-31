@@ -74,7 +74,7 @@
                             <sup>{product[label].split('.')[1] ?? ''}</sup>
                         {:else}
                             <input 
-                                value="{product[label] ?? ''}" 
+                                bind:value={product[label]} 
                                 on:focus={selectText}
                                 placeholder="{labelMappings[label]}"
                             />
@@ -110,7 +110,6 @@
         gap: 2rem;
         padding: 2rem 0;
         align-items: flex-end;
-        
     }
     container {
         position: relative;
