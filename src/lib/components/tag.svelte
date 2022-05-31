@@ -49,14 +49,14 @@
     $: product ??=  nullProduct
     $: pp({product})
 
-    let innerWidth
-    $: scale = Math.min((innerWidth - 84)/width, .75)
-    $: pp({scale})
+    // let innerWidth
+    // $: scale = Math.min((innerWidth - 84)/width, .75)
+    // $: pp({scale})
 
 </script>
-<svelte:window bind:innerWidth/>
+<!-- <svelte:window bind:innerWidth/> -->
 <container bind:this={refs.container}>
-    <case  bind:this={refs.case} style="transform: scale({scale});">
+    <case  bind:this={refs.case} style="transform: scale({.8});">
         <border>
             <tag style="height: {height + 10}px; width: {width}px;">
                 <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
@@ -112,13 +112,6 @@
         align-items: flex-end;
         
     }
-    @media (orientation: landscape) {
-        actions {
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-    }    
     container {
         position: relative;
         padding: 2rem 0;
@@ -130,6 +123,16 @@
         align-items: center; */
         overflow: hidden;
     }
+    @media (orientation: landscape) {
+        container {
+            place-items: center center;
+        }
+        actions {
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+    }    
     case {
         position: fixed;
         outline: 1px solid #0001;
