@@ -158,7 +158,7 @@
         }
     }    
     case {
-        position: fixed;
+        position: absolute;
         outline: 1px solid #0001;
         box-shadow: 10px 10px 10px #0007, -1px -1px 1px white;
         border-width: 32px 15px 32px 15px;
