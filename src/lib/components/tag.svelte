@@ -123,20 +123,19 @@
         position: relative;
         padding: 2rem 0;
         display: grid;
-        place-items: center center;
+        place-items: start center;
         width: 100vw;
         height: 100vh;
         /* flex-direction: column;
         align-items: center; */
         overflow: hidden;
-        background-color: black;
     }
     case {
-        position: absolute;
+        position: fixed;
         outline: 1px solid #0001;
         box-shadow: 10px 10px 10px #0007, -1px -1px 1px white;
         border-width: 32px 15px 32px 15px;
-        border-color: #fff;
+        border-color: #f5f7f7;
         border-radius: 32px;
         transform-origin: center center;
         transition: transform 0.1s ease-out;
@@ -155,13 +154,13 @@
     }
     border {
         display: grid;
-        border: 10px solid #eee;
+        border: 10px solid #e7e7e7;
         border-width: 15px 10px 20px 10px;
     }
     tag {
         display: grid;
         box-sizing: border-box;
-        background-color: #ddd;
+        background-color: #d7d7d7;
         overflow: hidden;
     }
     tagcontent.loading {
