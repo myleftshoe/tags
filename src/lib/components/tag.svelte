@@ -38,7 +38,7 @@
 
     const text = Object.entries(data.text)
     pp({text})
-    export let product = nullProduct
+    export let product = { ...nullProduct }
 
     function selectText(e) {
         // e.target.select()
@@ -77,7 +77,7 @@
     let [dollars, cents = ''] = product.label6.split('.')
     $: pp({dollars, cents})
 
-    $: product ??=  nullProduct
+    $: product ??=  { ...nullProduct }
     $: pp({product})
 
     $: document?.activeElement.blur()

@@ -11,7 +11,7 @@
 <script>
 
     let loggedIn = false
-    let selectedItem = {}
+    let selectedItem = { ...nullProduct }
     let originalItem = {} 
 
     const handleItemClick = (item) => (e) => {
@@ -31,19 +31,15 @@
     }
     function forceRefresh() {
         items = [ ...items ]
-        selectedItem = {}
+        selectedItem = { ...nullProduct }
     }
-
-
-    let product = nullProduct
 
     const isHex12 = (value = '') => /^([0-9A-Fa-f]{12})$/.test(value.trim())
     async function getProduct(value) {
         console.log(value)
         if (!isHex12(value)) return
         open = true
-        product = await fetchPreview(value)
-        console.log(product)
+        selectedItem = await fetchPreview(value)
     }    
 
 
@@ -112,6 +108,6 @@
 <!-- {#if !$products.length}
     <progress class="progress progress-accent"></progress>
 {/if} -->
-<Overlay bind:open closeButton on:close={() => product = nullProduct}>
-    <Tag {product}/>
+<Overlay bind:open closeButton on:close={resetItem}>
+    <Tag product={selectedItem}/>
 </Overlay>
