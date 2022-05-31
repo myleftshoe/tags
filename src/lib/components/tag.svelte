@@ -14,14 +14,14 @@
     }
 
     const fields = {
-        label3: { name: 'plucode', editable: false, maxlength:8},
-        label4: { name: 'name1', editable: true, maxlength:16},
-        label5: { name: 'name2', editable: true, maxlength:16},
+        label3: { name: 'plucode', editable: false, maxlength:8, uppercase: true, },
+        label4: { name: 'name1', editable: true, maxlength:16, uppercase: true, },
+        label5: { name: 'name2', editable: true, maxlength:16, uppercase: true, },
         label6: { name: 'price', editable: true, },
-        label8: { name: 'specification', editable: true, maxlength:16},
-        label9: { name: 'grade', editable: true, maxlength:21},
-        label10: { name: 'unit', editable: true, maxlength:4},
-        label11: { name: 'origin', editable: true, maxlength:4},
+        label8: { name: 'specification', editable: true, maxlength:16, },
+        label9: { name: 'grade', editable: true, maxlength:21, },
+        label10: { name: 'unit', editable: true, maxlength:4, },
+        label11: { name: 'origin', editable: true, maxlength:4, },
     }
 
 </script>
@@ -52,6 +52,12 @@
             console.log(e.target.id)
             e.preventDefault()
         }
+    }
+
+    function handleBlur(e) {
+        const { id, value } = e.target
+        if (fields[id].uppercase)
+            product[id]  = value.toUpperCase()
     }
 
     const dollar = data.icons?.icon1
@@ -110,6 +116,8 @@
                                 bind:value={product[label]} 
                                 on:focus={selectText}
                                 on:keypress={handleInput}
+                                on:blur={handleBlur}
+                                class:uppercase={fields[label].uppercase}
                                 placeholder="{labelMappings[label]}"
                                 type="text"
                                 size="{fields[label]?.maxlength || ''}"
@@ -227,6 +235,9 @@
         /* padding: 0 .5rem;
         transition: background-color .2s ease;
         border-radius: 5px; */
+    }
+    input.uppercase {
+        text-transform: uppercase;
     }
     input:focus {
         background-color: #f002;
