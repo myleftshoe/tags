@@ -1,0 +1,4 @@
+{
+    // Removes error: “parameter implicitly has an ‘any’ type”
+    "noImplicitAny": false
+}
