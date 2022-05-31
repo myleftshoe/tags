@@ -122,6 +122,7 @@
                                 type="text"
                                 size="{fields[label]?.maxlength || ''}"
                                 maxlength="{fields[label]?.maxlength || ''}"
+                                style="width: {fields[label]?.maxlength}ch;"
                             />
                         {/if}
                     </span>
