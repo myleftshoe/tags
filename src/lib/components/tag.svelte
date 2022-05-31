@@ -14,14 +14,14 @@
     }
 
     const fields = {
-        label3: { name: 'plucode', editable: false, maxlength:'8'},
-        label4: { name: 'name1', editable: true, maxlength:'16'},
-        label5: { name: 'name2', editable: true, maxlength:'16'},
+        label3: { name: 'plucode', editable: false, maxlength:8},
+        label4: { name: 'name1', editable: true, maxlength:16},
+        label5: { name: 'name2', editable: true, maxlength:16},
         label6: { name: 'price', editable: true, },
-        label8: { name: 'specification', editable: true, maxlength:'16'},
-        label9: { name: 'grade', editable: true, maxlength:'21'},
-        label10: { name: 'unit', editable: true, maxlength:'4'},
-        label11: { name: 'origin', editable: true, maxlength:'4'},
+        label8: { name: 'specification', editable: true, maxlength:16},
+        label9: { name: 'grade', editable: true, maxlength:21},
+        label10: { name: 'unit', editable: true, maxlength:4},
+        label11: { name: 'origin', editable: true, maxlength:4},
     }
 
 </script>
@@ -41,7 +41,17 @@
     export let product = nullProduct
 
     function selectText(e) {
-        e.target.select()
+        // e.target.select()
+    }
+
+    // COMPATIBILITY FIX: Chrome on android doesn't honor maxlength. 
+    // Still doesn't work when input value starts empty, i.e. when placeholder is shown
+    function handleInput(e) { 
+        const {id, value} = e.target
+        if (value.length > fields[id].maxlength) {
+            console.log(e.target.id)
+            e.preventDefault()
+        }
     }
 
     const dollar = data.icons?.icon1
@@ -96,8 +106,10 @@
                             </sup>
                         {:else}
                             <input 
+                                id={label}
                                 bind:value={product[label]} 
                                 on:focus={selectText}
+                                on:keypress={handleInput}
                                 placeholder="{labelMappings[label]}"
                                 type="text"
                                 size="{fields[label]?.maxlength || ''}"
