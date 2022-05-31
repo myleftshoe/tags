@@ -15,8 +15,10 @@
         dark = matches
         const theme = dark ? 'dark' : 'light'
         document.documentElement.setAttribute("data-theme", theme)
-        // update mobile appbar color consistent with color of navbar
-        themeColor = window.getComputedStyle(refs.nav).getPropertyValue('background-color')
+        setTimeout(() => { 
+            // update mobile appbar color consistent with color of navbar AFTER DOM HAS UPDATED
+            themeColor = window.getComputedStyle(refs.nav).getPropertyValue('background-color') 
+        }, 0)
     }
 
     function toggleTheme() {
