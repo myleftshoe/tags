@@ -64,6 +64,7 @@
     $: product ??=  nullProduct
     $: pp({product})
 
+    $: document?.activeElement.blur()
     // let innerWidth
     // $: scale = Math.min((innerWidth - 84)/width, .75)
     // $: pp({scale})
@@ -217,6 +218,6 @@
     }
     input:focus {
         background-color: #f002;
-        font-family: monospace;
+        /* font-family: monospace; */
     }
 </style>
