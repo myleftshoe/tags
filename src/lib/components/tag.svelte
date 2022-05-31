@@ -27,7 +27,6 @@
 </script>
 
 <script>
-    import { afterUpdate } from 'svelte'
     import demoData from '$lib/stores/demoData.json'
     import nullProduct from '$lib/stores/products'
     // pp({demoData})
@@ -41,12 +40,6 @@
     pp({text})
     export let product = nullProduct
 
-
-    // afterUpdate(() => {
-    //     const scrollWidth = refs.container.scrollWidth
-    //     refs.container.scrollLeft = (scrollWidth - innerWidth) / 2
-    // })
-
     function selectText(e) {
         e.target.select()
     }
@@ -56,12 +49,12 @@
     $: product ??=  nullProduct
     $: pp({product})
 
-    let innerWidth, innerHeight
+    let innerWidth
     $: scale = Math.min((innerWidth - 84)/width, .75)
     $: pp({scale})
 
 </script>
-<svelte:window bind:innerWidth bind:innerHeight/>
+<svelte:window bind:innerWidth/>
 <container bind:this={refs.container}>
     <case  bind:this={refs.case} style="transform: scale({scale});">
         <border>
@@ -101,12 +94,10 @@
             </tag>
         </border>
     </case>
-    <!-- <div class="flex flex-row gap-10 h-full items-end"> -->
-        <actions>
-            <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">-</button>
-            <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">+</button>
-        </actions>
-    <!-- </div>     -->
+    <actions>
+        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">-</button>
+        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">+</button>
+    </actions>
 </container>
 
 <style>
@@ -160,6 +151,7 @@
         border: 1px solid #0002;
         box-shadow: -1px 0px 1px 1px #0007 inset;
         border-radius: 30px;
+        pointer-events: none;
     }
     border {
         display: grid;
