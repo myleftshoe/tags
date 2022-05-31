@@ -46,6 +46,21 @@
 
     const dollar = data.icons?.icon1
 
+    const increment = () => {
+        dollars = (parseInt(dollars) + 1).toString()
+        if (dollars.length > 2)
+            dollars = '99'
+    }
+
+    const decrement = () => {
+        dollars = (parseInt(dollars) - 1).toString()
+        if (dollars.startsWith('-'))
+            dollars = '0'
+    }
+
+    let [dollars, cents = ''] = product.label6.split('.')
+    $: pp({dollars, cents})
+
     $: product ??=  nullProduct
     $: pp({product})
 
@@ -62,6 +77,7 @@
                 <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
                     <span style="
+                        position: absolute;
                         top: {style.y}px; 
                         left: {style.x}px; 
                         color: {style.color};
@@ -70,8 +86,13 @@
                         font-family: {style["font-family"]}, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
                     ">
                         {#if (label === 'label6')}
-                            {product[label].split('.')[0]}.
-                            <sup>{product[label].split('.')[1] ?? ''}</sup>
+                            {dollars}.
+                            <!-- <input style="width: 2ch; text-align: center;" type="tel" size="2" maxlength="2" bind:value={dollars}/>. -->
+                            <sup>
+                                <input type="tel" size="2" maxlength="2" bind:value={cents} 
+                                    style="position: absolute; top:0; font-weight: inherit; width: 2ch; text-align: center;" 
+                                />
+                            </sup>
                         {:else}
                             <input 
                                 bind:value={product[label]} 
@@ -95,8 +116,8 @@
         </border>
     </case>
     <actions>
-        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">-</button>
-        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus">+</button>
+        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={decrement}>-</button>
+        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={increment}>+</button>
     </actions>
 </container>
 
@@ -185,12 +206,13 @@
         outline: none;
     }
     input {
+        box-sizing: border-box;
         background-color: transparent;
-        /* padding: 0 .5rem; */
+        /* padding: 0 .5rem;
         transition: background-color .2s ease;
-        border-radius: 5px;
+        border-radius: 5px; */
     }
-    /* input:focus {
+    input:focus {
         background-color: #f002;
-    } */
+    }
 </style>
