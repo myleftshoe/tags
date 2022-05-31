@@ -2,33 +2,22 @@
 
     const pp = (o) => console.log(JSON.stringify(o, null, 2))
 
-    const labelMappings = {
-        label3: '0000',
-        label4: 'name 1',
-        label5: 'name 2',
-        label6: '9.99',
-        label8: 'Organic',
-        label9: 'grade',
-        label10: 'kg',
-        label11: 'VIC',
-    }
-
-    const fields = {
-        label3: { name: 'plucode', editable: false, maxlength:8, uppercase: true, },
-        label4: { name: 'name1', editable: true, maxlength:16, uppercase: true, },
-        label5: { name: 'name2', editable: true, maxlength:16, uppercase: true, },
+    const meta = {
+        label3: { name: 'plucode', editable: false, maxlength:8, uppercase: true, placeholder: '0000'},
+        label4: { name: 'name1', editable: true, maxlength:16, uppercase: true, placeholder: '', },
+        label5: { name: 'name2', editable: true, maxlength:16, uppercase: true, placeholder: '', },
         label6: { name: 'price', editable: true, },
-        label8: { name: 'specification', editable: true, maxlength:16, },
-        label9: { name: 'grade', editable: true, maxlength:21, },
-        label10: { name: 'unit', editable: true, maxlength:4, },
-        label11: { name: 'origin', editable: true, maxlength:4, },
+        label8: { name: 'specification', editable: true, maxlength:16, placeholder: 'Organic', default: 'Organic' },
+        label9: { name: 'grade', editable: true, maxlength:21, placeholder: 'Grade', },
+        label10: { name: 'unit', editable: true, maxlength:4, placeholder: 'kg/ea', default: 'kg' },
+        label11: { name: 'origin', editable: true, maxlength:4, placeholder: 'VIC', },
     }
 
 </script>
 
 <script>
     import demoData from '$lib/stores/demoData.json'
-    import nullProduct from '$lib/stores/products'
+    import { nullProduct } from '$lib/stores/products'
     // pp({demoData})
 
     let refs = {} 
@@ -48,7 +37,7 @@
     // Still doesn't work when input value starts empty, i.e. when placeholder is shown
     function handleInput(e) { 
         const {id, value} = e.target
-        if (value.length > fields[id].maxlength) {
+        if (value.length > meta[id].maxlength) {
             console.log(e.target.id)
             e.preventDefault()
         }
@@ -56,7 +45,7 @@
 
     function handleBlur(e) {
         const { id, value } = e.target
-        if (fields[id].uppercase)
+        if (meta[id].uppercase)
             product[id]  = value.toUpperCase()
     }
 
@@ -117,12 +106,12 @@
                                 on:focus={selectText}
                                 on:keypress={handleInput}
                                 on:blur={handleBlur}
-                                class:uppercase={fields[label].uppercase}
-                                placeholder="{labelMappings[label]}"
+                                class:uppercase={meta[label].uppercase}
+                                placeholder="{meta[label]?.placeholder}"
                                 type="text"
-                                size="{fields[label]?.maxlength || ''}"
-                                maxlength="{fields[label]?.maxlength || ''}"
-                                style="width: {fields[label]?.maxlength}ch;"
+                                size="{meta[label]?.maxlength || ''}"
+                                maxlength="{meta[label]?.maxlength || ''}"
+                                style="width: {meta[label]?.maxlength}ch;"
                             />
                         {/if}
                     </span>

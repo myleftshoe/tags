@@ -39,11 +39,11 @@ export default readable([], (set) => {
 
 export const nullProduct = {
     label3: '0000', 
-    label4: 'name 1',
-    label5: 'name 2',
+    label4: '',
+    label5: '',
     label6: '9.99',
     label8: 'Organic',
-    label9: 'Grade',
+    label9: '',
     label10: 'kg',
     label11: 'VIC',
 }

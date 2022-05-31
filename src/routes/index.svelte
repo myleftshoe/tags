@@ -29,6 +29,7 @@
     function resetItem() {
         Object.assign(selectedItem, originalItem)
     }
+
     function forceRefresh() {
         items = [ ...items ]
         selectedItem = { ...nullProduct }
