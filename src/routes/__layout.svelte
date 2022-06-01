@@ -41,6 +41,45 @@
         (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color)
       -->
     <meta name="theme-color" content="{themeColor}"/> 
+    <!-- 
+        Script to include Alibaba PuHuiTi fonts. Can also put the script in App.html
+        Source: https://fonts.adobe.com/fonts/alibaba-puhuiti
+
+        Alibaba PuHuiTi Light
+        font-family: alibaba-puhuiti, sans-serif;
+        font-weight: 300;
+        font-style: normal;
+        
+        Alibaba PuHuiTi Regular
+        font-family: alibaba-puhuiti, sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        
+        Alibaba PuHuiTi Medium
+        font-family: alibaba-puhuiti, sans-serif;
+        font-weight: 500;
+        font-style: normal;
+        
+        Alibaba PuHuiTi Bold
+        font-family: alibaba-puhuiti, sans-serif;
+        font-weight: 700;
+        font-style: normal;
+        
+        Alibaba PuHuiTi Heavy
+        font-family: alibaba-puhuiti, sans-serif;
+        font-weight: 900;
+        font-style: normal;
+    -->
+    <script>
+        (function(d) {
+            var config = {
+            kitId: 'ysq0rft',
+            scriptTimeout: 3000,
+            async: true
+            },
+            h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+        })(document);			
+    </script>
 </svelte:head>
 
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-50">

@@ -58,7 +58,6 @@
 <!-- <svelte:window bind:innerWidth/> -->
 <container bind:this={refs.container}>
     <case  bind:this={refs.case} style="transform: scale({.8});">
-        <border>
             <tag style="height: {height}px; width: {width}px;">
                 <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
@@ -68,8 +67,8 @@
                         left: {style.x}px; 
                         color: {style.color};
                         font-size: {style['font-size']}px; 
-                        font-weight: {style.bold ? 'bold': 'normal'}; 
-                        font-family: {style["font-family"]}, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                        font-weight: {style.bold ? '500': '400'}; 
+                        font-family: {style["font-family"]}, alibaba-puhuiti, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
                     ">
                         {#if (label === 'label6')}
                             <!-- {dollars}. -->
@@ -103,7 +102,7 @@
                                 type="text"
                                 size="{meta[label]?.maxlength || ''}"
                                 maxlength="{meta[label]?.maxlength || ''}"
-                                style="width: {meta[label]?.maxlength}ch;"
+                                style="width: {meta[label]?.maxlength}ch; font-weight: inherit;"
                             />
                         {/if}
                     </span>
@@ -119,7 +118,6 @@
                 <progress class="absolute progress w-{width} bottom-0"></progress>
             {/if} -->
             </tag>
-        </border>
     </case>
     <actions>
         <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={decrement}>-</button>
@@ -181,14 +179,11 @@
         border-radius: 30px;
         pointer-events: none;
     }
-    border {
-        display: grid;
-        border: 10px solid #e7e7e7;
-        border-width: 15px 10px 20px 10px;
-    }
     tag {
         display: grid;
-        box-sizing: border-box;
+        box-sizing: content-box;
+        border: 10px solid #e7e7e7;
+        border-width: 15px 10px 20px 10px;
         background-color: #d7d7d7;
         overflow: hidden;
     }
@@ -212,7 +207,6 @@
         outline: none;
     }
     input {
-        box-sizing: border-box;
         background-color: transparent;
         /* user-select: none; */
         /* padding: 0 .5rem;
