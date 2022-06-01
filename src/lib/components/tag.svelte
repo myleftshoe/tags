@@ -46,6 +46,16 @@
             dollars = '0'
     }
 
+    const toCss = style => `
+        position: absolute;
+        top: ${style.y}px; 
+        left: ${style.x}px; 
+        color: ${style.color};
+        font-size: ${style['font-size']}px; 
+        font-weight: ${style.bold ? '500': '400'}; 
+        font-family: ${style['font-family']}, alibaba-puhuiti, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    `
+    
     let [dollars, cents = ''] = product.label6.split('.')
 
     $: product ??=  { ...nullProduct }
@@ -61,15 +71,7 @@
             <tag style="height: {height}px; width: {width}px;">
                 <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
-                    <span style="
-                        position: absolute;
-                        top: {style.y}px; 
-                        left: {style.x}px; 
-                        color: {style.color};
-                        font-size: {style['font-size']}px; 
-                        font-weight: {style.bold ? '500': '400'}; 
-                        font-family: {style["font-family"]}, alibaba-puhuiti, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-                    ">
+                    <span style={toCss(style)}>
                         {#if (label === 'label6')}
                             <!-- {dollars}. -->
                             <input 
