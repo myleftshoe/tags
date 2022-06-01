@@ -1,11 +1,8 @@
-<script context="module" lang='ts'>
-    import { pp } from '$lib/util/prettylog'
-</script>
-
 <script>
     import demoData from '$lib/stores/demoData.json'
     import { nullProduct, meta } from '$lib/stores/products'
-    // pp({demoData})
+
+    export let product = { ...nullProduct }
 
     let refs = {} 
 
@@ -13,8 +10,7 @@
     const { height, width } = data.size
 
     const text = Object.entries(data.text)
-    pp({text})
-    export let product = { ...nullProduct }
+
 
     function selectText(e) {
         // e.target.select()
@@ -51,15 +47,12 @@
     }
 
     let [dollars, cents = ''] = product.label6.split('.')
-    $: pp({dollars, cents})
 
     $: product ??=  { ...nullProduct }
-    $: pp({product})
 
     $: document?.activeElement.blur()
     // let innerWidth
     // $: scale = Math.min((innerWidth - 84)/width, .75)
-    // $: pp({scale})
 
 </script>
 <!-- <svelte:window bind:innerWidth/> -->
