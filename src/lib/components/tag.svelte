@@ -141,7 +141,7 @@
     }
     container {
         position: relative;
-        padding: 2rem 0;
+        padding: 5rem 0;
         display: grid;
         place-items: start center;
         width: 100vw;
@@ -150,18 +150,9 @@
         align-items: center; */
         overflow: hidden;
     }
-    @media (orientation: landscape) {
-        container {
-            place-items: center center;
-        }
-        actions {
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-    }    
     case {
         position: absolute;
+        top: 2rem;
         outline: 1px solid #0001;
         box-shadow: 10px 10px 10px #0007, -1px -1px 1px white;
         border-width: 32px 15px 32px 15px;
@@ -182,6 +173,19 @@
         border-radius: 30px;
         pointer-events: none;
     }
+    @media (orientation: landscape) {
+        container {
+            place-items: center center;
+        }
+        case {
+            top: 0;
+        }
+        actions {
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+    }    
     tag {
         display: grid;
         box-sizing: content-box;
