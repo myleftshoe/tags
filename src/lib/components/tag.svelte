@@ -100,7 +100,7 @@
                                 maxlength="2" 
                                 bind:value={cents} 
                                 on:focus={selectText}
-                                style="position: absolute; top:0; width: 2ch; font-weight: inherit; text-align: center;" />
+                                style="position: absolute; top:0; width: 2ch; font-weight: inherit; text-align: left;" />
                             </sup>
                         {/if}
                     </span>
@@ -180,6 +180,7 @@
     tag {
         display: grid;
         box-sizing: content-box;
+        /* padding: 0 0 10px 5px; */
         border: 10px solid #e7e7e7;
         border-width: 15px 10px 20px 10px;
         background-color: #d7d7d7;
@@ -192,7 +193,8 @@
     tagcontent {
         opacity: 1;
         filter: contrast(50%);
-        transition: all .6s linear;
+        transition: opacity .6s linear, filter .6s linear;
+        transform: translateY(-10px);
     }
     span { 
         position: absolute;

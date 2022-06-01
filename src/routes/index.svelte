@@ -52,7 +52,7 @@
     async function getProduct(value) {
         console.log(value)
         if (!isHex12(value)) return
-        modals.tags.open = true
+        modals.tag.open = true
         selectedItem = await fetchPreview(value)
     }    
 
