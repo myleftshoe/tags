@@ -100,14 +100,19 @@
                                 maxlength="2" 
                                 bind:value={cents} 
                                 on:focus={selectText}
-                                style="position: absolute; top:0; width: 2ch; font-weight: inherit; text-align: left;" />
+                                style="
+                                    width: 2ch; 
+                                    font-weight: inherit; 
+                                    text-align: left;
+                                    transform: translateX(-0.7ch);
+                                "/>
                             </sup>
                         {/if}
                     </span>
                 {/each}
                 <span style="
-                    top: {dollar.y}px; 
-                    left: {dollar.x}px;
+                    top: {data.text['label6'].y}px; 
+                    left: calc({data.text['label6'].x}px - 1ch);
                     font-size: {dollar['font-size']}px; 
                     color: {dollar.color};
                 ">$</span>
