@@ -13,7 +13,7 @@
 
 
     function selectText(e) {
-        // e.target.select()
+        e.target.select()
     }
 
     // COMPATIBILITY FIX: Chrome on android doesn't honor maxlength. 
@@ -59,7 +59,7 @@
 <container bind:this={refs.container}>
     <case  bind:this={refs.case} style="transform: scale({.8});">
         <border>
-            <tag style="height: {height + 10}px; width: {width}px;">
+            <tag style="height: {height}px; width: {width}px;">
                 <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
                     <span style="
@@ -72,10 +72,22 @@
                         font-family: {style["font-family"]}, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
                     ">
                         {#if (label === 'label6')}
-                            {dollars}.
-                            <!-- <input style="width: 2ch; text-align: center;" type="tel" size="2" maxlength="2" bind:value={dollars}/>. -->
+                            <!-- {dollars}. -->
+                            <input 
+                                type="tel" 
+                                size="2" 
+                                maxlength="2" 
+                                bind:value={dollars}
+                                on:focus={selectText}
+                                style="width: 2ch; font-weight: inherit; text-align: right;" 
+                            />.
                             <sup>
-                                <input type="tel" size="2" maxlength="2" bind:value={cents} 
+                                <input 
+                                    type="tel" 
+                                    size="2" 
+                                    maxlength="2" 
+                                    bind:value={cents} 
+                                    on:focus={selectText}
                                     style="position: absolute; top:0; font-weight: inherit; width: 2ch; text-align: center;" 
                                 />
                             </sup>
@@ -202,6 +214,7 @@
     input {
         box-sizing: border-box;
         background-color: transparent;
+        /* user-select: none; */
         /* padding: 0 .5rem;
         transition: background-color .2s ease;
         border-radius: 5px; */
