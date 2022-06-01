@@ -7,18 +7,31 @@
     import Overlay from '$lib/components/overlay.svelte'
     import PriceModal from '$lib/components/priceModal.svelte'
     import Tag from '$lib/components/tag.svelte'
+    import { onMount } from 'svelte'
+    import Keypad  from '$lib/components/keypad.svelte'
 </script>
 <script>
 
-    let loggedIn = false
+    let loggedIn = true
     let selectedItem = { ...nullProduct }
     let originalItem = {} 
+
+
+    const modals = {
+        login: { open: false },
+        tag: { open: false },
+        price: { open: false },
+    }
+
+    onMount(() => {
+        modals.login.open = true
+    })
 
     const handleItemClick = (item) => (e) => {
         originalItem = { ...item }
         selectedItem = item
         console.log(item)
-        open = true
+        modals.tag.open = true
     }
 
     function handleClose(e) {
@@ -39,7 +52,7 @@
     async function getProduct(value) {
         console.log(value)
         if (!isHex12(value)) return
-        open = true
+        modals.tags.open = true
         selectedItem = await fetchPreview(value)
     }    
 
@@ -78,6 +91,10 @@
     {/each}
 </ul>
 
+<!-- {#if !$products.length}
+    <progress class="progress progress-accent"></progress>
+{/if} -->
+
 <!-- <Overlay closeButton on:close={resetItem} bind:open>
     <div class="flex flex-col gap-4">
         <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label5}/>
@@ -101,14 +118,11 @@
         <button class="btn btn-ghost" on:click={resetItem}>Cancel</button>
     </div>
 </Overlay> -->
-<!-- <Overlay bind:open on:close={() => console.log('close evet')}>
-    <Keypad on:submit={() => open=false}/>
-</Overlay> -->
 
+<Overlay bind:open={modals.login.open} on:close={() => console.log('close evet')}>
+    <Keypad on:submit={() => modals.login.open = false}/>
+</Overlay>
 
-<!-- {#if !$products.length}
-    <progress class="progress progress-accent"></progress>
-{/if} -->
-<Overlay bind:open closeButton on:close={resetItem}>
+<Overlay bind:open={modals.tag.open} closeButton on:close={resetItem}>
     <Tag product={selectedItem}/>
 </Overlay>
