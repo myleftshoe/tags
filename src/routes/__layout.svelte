@@ -1,7 +1,3 @@
-<script context="module">
-    const pp = (o) => console.log(JSON.stringify(o, null, 2))
-</script>
-
 <script>
     import '../app.css';
     import { onMount } from 'svelte';
@@ -37,7 +33,6 @@
         refs.search.focus();
     }
 
-    $: pp({dark})
 </script>
 
 <svelte:head>
