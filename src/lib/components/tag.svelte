@@ -66,31 +66,11 @@
 <!-- <svelte:window bind:innerWidth/> -->
 <container bind:this={refs.container}>
     <case bind:this={refs.case} style="transform: scale({.8});">
-            <tag style="height: {height}px; width: {width}px;">
-                <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
+        <tag style="height: {height}px; width: {width}px;">
+            <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
                     <span style={toCss(style)}>
-                        {#if (label === 'label6')}
-                            <!-- {dollars}. -->
-                            <input 
-                                type="tel" 
-                                size="2" 
-                                maxlength="2" 
-                                bind:value={dollars}
-                                on:focus={selectText}
-                                style="width: 2ch; font-weight: inherit; text-align: right;" 
-                            />.
-                            <sup>
-                                <input 
-                                    type="tel" 
-                                    size="2" 
-                                    maxlength="2" 
-                                    bind:value={cents} 
-                                    on:focus={selectText}
-                                    style="position: absolute; top:0; width: 2ch; font-weight: inherit; text-align: center;" 
-                                />
-                            </sup>
-                        {:else}
+                        {#if (label !== 'label6')}
                             <input 
                                 id={label}
                                 bind:value={product[label]} 
@@ -104,6 +84,24 @@
                                 maxlength="{meta[label]?.maxlength || ''}"
                                 style="width: {meta[label]?.maxlength}ch; font-weight: inherit;"
                             />
+                        {:else}
+                            <!-- {dollars}. -->
+                            <input 
+                                type="tel" 
+                                size="2" 
+                                maxlength="2" 
+                                bind:value={dollars}
+                                on:focus={selectText}
+                                style="width: 2ch; font-weight: inherit; text-align: right;" 
+                            />.
+                            <sup><input 
+                                type="tel" 
+                                size="2" 
+                                maxlength="2" 
+                                bind:value={cents} 
+                                on:focus={selectText}
+                                style="position: absolute; top:0; width: 2ch; font-weight: inherit; text-align: center;" />
+                            </sup>
                         {/if}
                     </span>
                 {/each}
@@ -117,7 +115,7 @@
             <!-- {#if !product.id}
                 <progress class="absolute progress w-{width} bottom-0"></progress>
             {/if} -->
-            </tag>
+        </tag>
     </case>
     <actions>
         <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={decrement}>-</button>
