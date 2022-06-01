@@ -8,8 +8,8 @@
 
     const data = demoData[0]
     const { height, width } = data.size
-
     const text = Object.entries(data.text)
+    const dollar = data.icons?.icon1
 
 
     function selectText(e) {
@@ -32,8 +32,6 @@
             product[id]  = value.toUpperCase()
     }
 
-    const dollar = data.icons?.icon1
-
     const increment = () => {
         dollars = (parseInt(dollars) + 1).toString()
         if (dollars.length > 2)
@@ -55,7 +53,7 @@
         font-weight: ${style.bold ? '500': '400'}; 
         font-family: ${style['font-family']}, alibaba-puhuiti, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     `
-    
+
     let [dollars, cents = ''] = product.label6.split('.')
 
     $: product ??=  { ...nullProduct }
@@ -67,7 +65,7 @@
 </script>
 <!-- <svelte:window bind:innerWidth/> -->
 <container bind:this={refs.container}>
-    <case  bind:this={refs.case} style="transform: scale({.8});">
+    <case bind:this={refs.case} style="transform: scale({.8});">
             <tag style="height: {height}px; width: {width}px;">
                 <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
@@ -89,7 +87,7 @@
                                     maxlength="2" 
                                     bind:value={cents} 
                                     on:focus={selectText}
-                                    style="position: absolute; top:0; font-weight: inherit; width: 2ch; text-align: center;" 
+                                    style="position: absolute; top:0; width: 2ch; font-weight: inherit; text-align: center;" 
                                 />
                             </sup>
                         {:else}
