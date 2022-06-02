@@ -77,6 +77,7 @@
                                 on:focus={selectText}
                                 on:keypress={handleInput}
                                 on:blur={handleBlur}
+                                tabindex={meta[label].tabindex || -1}]
                                 class:uppercase={meta[label].uppercase}
                                 placeholder="{meta[label]?.placeholder}"
                                 type="text"
@@ -90,14 +91,16 @@
                                 type="tel" 
                                 size="2" 
                                 maxlength="2" 
+                                tabindex={3}
                                 bind:value={dollars}
                                 on:focus={selectText}
-                                style="width: 2ch; font-weight: inherit; text-align: right;" 
+                                style="width: 2ch; height: 1.75ex; font-weight: inherit; text-align: right;" 
                             />.
                             <sup><input 
                                 type="tel" 
                                 size="2" 
                                 maxlength="2" 
+                                tabindex={4}
                                 bind:value={cents} 
                                 on:focus={selectText}
                                 style="
