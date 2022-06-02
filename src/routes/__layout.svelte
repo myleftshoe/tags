@@ -5,7 +5,6 @@
     import showUnbound from '$lib/stores/bound';
     import Overlay from '$lib/components/overlay.svelte'
     import Keypad  from '$lib/components/keypad.svelte'
-    import { browser } from '$app/env'
 
     const modals = {
         login: { open: true },
@@ -91,7 +90,6 @@
 
 <Overlay bind:open={modals.login.open} on:close={() => console.log('close evet')}>
     <Keypad on:submit={() => modals.login.open = false}/>
-    <progress class="progress progress-accent {browser ? 'fade' : ''}"></progress>
 </Overlay>
 
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-50">
@@ -144,12 +142,5 @@
 <style>
     :global(body) {
         overflow: auto;
-    }
-    progress { 
-        opacity: 1;
-        transition: opacity 0.5s 1s;
-    }
-    .fade { 
-        opacity: 0;
     }
 </style>
