@@ -11,11 +11,6 @@
     const text = Object.entries(data.text)
     const dollar = data.icons?.icon1
 
-
-    function selectText(e) {
-        e.target.select()
-    }
-
     // COMPATIBILITY FIX: Chrome on android doesn't honor maxlength. 
     // Still doesn't work when input value starts empty, i.e. when placeholder is shown
     function handleInput(e) { 
@@ -24,6 +19,16 @@
             console.log(e.target.id)
             e.preventDefault()
         }
+    }
+
+    function handleFocus(e) {
+        // preventScroll doesn't work on all browsers -> 
+        // save scroll pos before focus and restore after 
+        const x = refs.tagcontent.scrollX;
+        const y = refs.tagcontent.scrollY;
+        e.target.focus({preventScroll: true})
+        refs.tagcontent.scrollTo(x, y);        
+        e.target.select()        
     }
 
     function handleBlur(e) {
@@ -74,7 +79,7 @@
                             <input 
                                 id={label}
                                 bind:value={product[label]} 
-                                on:focus={selectText}
+                                on:focus|preventDefault={handleFocus}
                                 on:keypress={handleInput}
                                 on:blur={handleBlur}
                                 tabindex={meta[label].tabindex || -1}]
@@ -89,11 +94,11 @@
                             <!-- {dollars}. -->
                             <input 
                                 type="tel" 
-                                size="2" 
+                                size="2"    
                                 maxlength="2" 
                                 tabindex={3}
                                 bind:value={dollars}
-                                on:focus={selectText}
+                                on:focus|preventDefault={handleFocus}
                                 style="width: 2ch; height: 1.75ex; font-weight: inherit; text-align: right;" 
                             />.
                             <sup><input 
@@ -102,7 +107,7 @@
                                 maxlength="2" 
                                 tabindex={4}
                                 bind:value={cents} 
-                                on:focus={selectText}
+                                on:focus|preventDefault={handleFocus}
                                 style="
                                     width: 2ch; 
                                     font-weight: inherit; 
