@@ -56,7 +56,7 @@
 
     let open = false
     $: getProduct($search)
-    $: items = fuzzy($products.filter(({status}) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'Description', 'id'])
+    $: items = fuzzy($products.filter(({status}) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'label13', 'Description', 'id'])
 </script>
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}

@@ -1,6 +1,7 @@
 <script>
     import demoData from '$lib/stores/demoData.json'
     import { nullProduct, meta } from '$lib/stores/products'
+    import minew from '$lib/datasources/minew'
 
     export let product = { ...nullProduct }
 
@@ -60,6 +61,24 @@
     `
 
     let [dollars, cents = ''] = product.label6.split('.')
+
+
+    async function sendIt() {
+        let payload = {
+            id: product.id,
+            label3: product.label3, 
+            label4: product.label4.toUpperCase(),
+            label5: product.label5.toUpperCase(),
+            label6: `${dollars}.${cents}`,
+            label8: product.label8 || 'Organic',
+            label10: product.label10,
+            label13: product.label13 || 'VEGETABLES',
+        }        
+        console.log('product', JSON.stringify(product, null, 2))
+        console.log('payload', JSON.stringify(payload, null, 2))
+        await minew.post('goods?storeId=123', payload)
+    }
+
 
     $: product ??=  { ...nullProduct }
 
@@ -134,6 +153,7 @@
         <button class="btn btn-lg btn-circle btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={decrement}>-</button>
         <button class="btn btn-lg btn-circle btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={increment}>+</button>
     </actions>
+    <!-- <button on:click={sendIt}>Send It!</button> -->
 </container>
 
 <style>
@@ -234,4 +254,8 @@
         background-color: #f002;
         /* font-family: monospace; */
     }
+    /* button {
+        position: absolute;
+        top: 0;
+    } */
 </style>
