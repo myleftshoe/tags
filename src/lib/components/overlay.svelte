@@ -14,12 +14,8 @@
         open = false
     }
 
-    $: console.log({open, closeButton})
-    $: if (open) {
-        document.body.style.overflow = 'hidden'
-    }
-    $: if (browser && !open) {
-         document.body.style.overflow = 'auto'
+    $: if (browser) {
+        document.body.style.overflow = open ? 'hidden' : 'auto'
     }
 </script>
 {#if open}

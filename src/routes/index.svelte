@@ -5,27 +5,18 @@
     import { fetchPreview } from '$lib/stores/products'
     import fuzzy from '$lib/util/fuzzy'
     import Overlay from '$lib/components/overlay.svelte'
-    import PriceModal from '$lib/components/priceModal.svelte'
     import Tag from '$lib/components/tag.svelte'
-    import { onMount } from 'svelte'
-    import Keypad  from '$lib/components/keypad.svelte'
+    export const router = false;
+    export const prerender = true;
 </script>
 <script>
 
-    let loggedIn = true
     let selectedItem = { ...nullProduct }
     let originalItem = {} 
 
-
     const modals = {
-        login: { open: false },
         tag: { open: false },
-        price: { open: false },
     }
-
-    onMount(() => {
-        modals.login.open = true
-    })
 
     const handleItemClick = (item) => (e) => {
         originalItem = { ...item }
@@ -91,9 +82,9 @@
     {/each}
 </ul>
 
-<!-- {#if !$products.length}
-    <progress class="progress progress-accent"></progress>
-{/if} -->
+<Overlay bind:open={modals.tag.open} closeButton on:close={resetItem}>
+    <Tag product={selectedItem}/>
+</Overlay>
 
 <!-- <Overlay closeButton on:close={resetItem} bind:open>
     <div class="flex flex-col gap-4">
@@ -119,10 +110,3 @@
     </div>
 </Overlay> -->
 
-<Overlay bind:open={modals.login.open} on:close={() => console.log('close evet')}>
-    <Keypad on:submit={() => modals.login.open = false}/>
-</Overlay>
-
-<Overlay bind:open={modals.tag.open} closeButton on:close={resetItem}>
-    <Tag product={selectedItem}/>
-</Overlay>
