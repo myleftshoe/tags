@@ -131,21 +131,18 @@
         </tag>
     </case>
     <actions>
-        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={decrement}>-</button>
-        <button class="btn btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={increment}>+</button>
+        <button class="btn btn-lg btn-circle btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={decrement}>-</button>
+        <button class="btn btn-lg btn-circle btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={increment}>+</button>
     </actions>
 </container>
 
 <style>
     actions { 
+        position: absolute;
         display: flex;
-        height: 100%;
-        width: 100%;
-        flex-direction: row;
-        justify-content: center;
-        gap: 2rem;
-        padding: 2rem 0;
-        align-items: flex-end;
+        width: 50%;
+        justify-content: space-between;
+        bottom: 20%;
     }
     container {
         position: relative;
@@ -190,8 +187,8 @@
         }
         actions {
             justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
+            bottom: 41.25%;
+            width: 90%;
         }
     }    
     tag {
