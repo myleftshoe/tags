@@ -29,25 +29,22 @@
         Object.assign(selectedItem, originalItem)
     }
 
-    const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim())
-    async function getProduct(value) {
-        console.log(value)
-        if (!isHex12(value)) return
-        document.activeElement.blur()
-        modals.tag.open = true
-        selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
-    }    
-
-
     const dollars = (price) => price.split('.')[0]
     const cents = (price) => {
         const c = price.split('.')[1] ?? ''
         return c && `.${c}`
     }
 
+    const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim())
+    async function showTag(value) {
+        document.activeElement.blur()
+        modals.tag.open = true
+        selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
+    }    
+
     let items = []
     $:  if ($search.startsWith('#')) {
-            getProduct($search)
+            isHex12($search) && showTag($search)
         } else {
             items = fuzzy($products.filter(({status}, i) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'label13', 'Description', 'id'])
         }
