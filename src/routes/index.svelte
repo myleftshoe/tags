@@ -60,17 +60,11 @@
 </script>
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}
-        <li class="flex flex-row gap-3 justify-between py-4 px-4 text-base-content bg-base-100 active:bg-base-200" on:click={handleItemClick(item)}>
-            <div class="w-1/4 text-right pr-10" style={`${item.status === 'unbound' && 'opacity:.50'}`} >
-                <price class="text-xl" data-cents="{cents(item.price)}" data-unit="{item.label10}">{dollars(item.price)}</price>
-            </div>
-            <div class="w-3/4 flex flex-col justify-center" style={`${item.status === 'unbound' && 'opacity:.50'}`}>
-                <label for="edit-modal">
-                    {`${item.label4.trim()} ${item.label5.trim()}`.trim()}
-                    <!-- <div>{item.label5}</div>
-                    <div>{item.label4}</div> -->
-                </label>
-            </div>
+        <li class="flex flex-row gap-3 py-4 px-4 text-base-content bg-base-100 active:bg-base-200 {item.status === 'unbound' && 'opacity-50'}" on:click={handleItemClick(item)}>
+            <price class="w-1/4 text-right pr-10 text-xl" data-cents="{cents(item.price)}" data-unit="{item.label10}">{dollars(item.price)}</price>
+            <span class="w-3/4 flex flex-col justify-center">
+                {`${item.label4.trim()} ${item.label5.trim()}`.trim()}
+            </span>
         </li>
     {/each}
 </ul>
@@ -78,30 +72,6 @@
 <Overlay bind:open={modals.tag.open} closeButton on:close={resetItem}>
     <Tag product={selectedItem}/>
 </Overlay>
-
-<!-- <Overlay closeButton on:close={resetItem} bind:open>
-    <div class="flex flex-col gap-4">
-        <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label5}/>
-        <input type="text" class="input input-bordered w-full focus:input-primary text-lg" bind:value={selectedItem.label4}/>
-        <span class="flex flex-row items-center relative gap-2">
-            <span class="absolute left-4 text-xl">$</span>
-            <input id="price" type="number" class="input input-lg input-bordered w-full focus:input-primary text-right text-xl" bind:value={selectedItem.price}/>
-            <input type="text" class="input input-lg input-bordered w-full focus:input-primary text-xl" bind:value={selectedItem.label10}/>
-        </span>
-    </div>
-    <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-2/3">
-        <button class="btn" on:click={forceRefresh}>OK</button>
-        <button class="btn" on:click={resetItem}>Cancel</button>
-    </div>
-</Overlay> -->
-
-<!-- <Overlay closeButton on:close={resetItem} bind:open>
-    <PriceModal bind:open price={selectedItem.price} unit={selectedItem.label10} {selectedItem}/>
-    <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-2/3">
-        <button class="btn btn-accent" on:click={forceRefresh}>OK</button>
-        <button class="btn btn-ghost" on:click={resetItem}>Cancel</button>
-    </div>
-</Overlay> -->
 
 <style>
     price:before { 
@@ -117,5 +87,4 @@
         content: attr(data-cents)"\a"attr(data-unit);
         transform: translateX(.25ch);
     }
-
 </style>
