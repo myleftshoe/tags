@@ -54,12 +54,8 @@
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}
         <li class={item.status === 'unbound' && 'opacity-50'} on:click={handleItemClick(item)}>
-            <price class="w-1/4 text-right pr-10 text-xl" data-cents={cents(item.price)} data-unit={item.label10}
-                >{dollars(item.price)}</price
-            >
-            <span class="w-3/4 flex flex-col justify-center">
-                {`${item.label4.trim()} ${item.label5.trim()}`.trim()}
-            </span>
+            <price class="w-1/4 text-right pr-10 text-xl" data-cents={cents(item.price)} data-unit={item.label10}>{dollars(item.price)}</price>
+            <span class="w-3/4 flex flex-col justify-center">{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</span>
         </li>
     {/each}
 </ul>
