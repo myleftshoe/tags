@@ -98,7 +98,7 @@
 
 <svelte:window on:keypress|capture={handleWindowKeyPress}/>
 
-<Overlay bind:open={modals.login.open} on:close={() => console.log('close evet')}>
+<Overlay bind:open={modals.login.open}>
     <Keypad on:submit={() => modals.login.open = false}/>
 </Overlay>
 

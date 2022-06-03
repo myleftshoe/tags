@@ -44,5 +44,3 @@
         z-index: 999;
     }
 </style>
-
-<!-- <div slot="actions" class="grid grid-cols-auto-fit gap-2 w-2/3"> -->
