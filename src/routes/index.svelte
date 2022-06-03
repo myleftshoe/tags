@@ -42,11 +42,13 @@
         selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
     }    
 
+    const bound = ({status}, i) => !$showUnbound ? status === 'bound' : true 
+    
     let items = []
     $:  if ($search.startsWith('#')) {
             isHex12($search) && showTag($search)
         } else {
-            items = fuzzy($products.filter(({status}, i) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'label13', 'Description', 'id'])
+            items = fuzzy($products.filter(bound), $search.toLocaleUpperCase(), ['label4', 'label5', 'id']) //TODO: id or plucode?
         }
 </script>
 <ul class="flex flex-col divide-y divide-base-300">
