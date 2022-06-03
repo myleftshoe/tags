@@ -1,18 +1,18 @@
 <script context="module">
     import search from '$lib/stores/search'
-    import showUnbound from '$lib/stores/bound';
-    import products, {nullProduct} from '$lib/stores/products'
+    import showUnbound from '$lib/stores/bound'
+    import products, { nullProduct } from '$lib/stores/products'
     import { fetchPreview } from '$lib/stores/products'
     import fuzzy from '$lib/util/fuzzy'
     import Overlay from '$lib/components/overlay.svelte'
     import Tag from '$lib/components/tag.svelte'
-    export const router = false;
-    export const prerender = true;
+    export const router = false
+    export const prerender = true
 </script>
-<script>
 
+<script>
     let selectedItem = { ...nullProduct }
-    let originalItem = {} 
+    let originalItem = {}
 
     const modals = {
         tag: { open: false },
@@ -40,20 +40,23 @@
         document.activeElement.blur()
         modals.tag.open = true
         selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
-    }    
+    }
 
     let items = []
-    $:  if ($search.startsWith('#')) {
-            isHex12($search) && showTag($search)
-        } else {
-            items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
-            items = fuzzy(items, $search.toLocaleUpperCase(), ['label4', 'label5', 'id']) //TODO: id or plucode?
-        }
+    $: if ($search.startsWith('#')) {
+        isHex12($search) && showTag($search)
+    } else {
+        items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
+        items = fuzzy(items, $search.toLocaleUpperCase(), ['label4', 'label5', 'id']) //TODO: id or plucode?
+    }
 </script>
+
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}
-        <li class="{item.status === 'unbound' && 'opacity-50'}" on:click={handleItemClick(item)}>
-            <price class="w-1/4 text-right pr-10 text-xl" data-cents="{cents(item.price)}" data-unit="{item.label10}">{dollars(item.price)}</price>
+        <li class={item.status === 'unbound' && 'opacity-50'} on:click={handleItemClick(item)}>
+            <price class="w-1/4 text-right pr-10 text-xl" data-cents={cents(item.price)} data-unit={item.label10}
+                >{dollars(item.price)}</price
+            >
             <span class="w-3/4 flex flex-col justify-center">
                 {`${item.label4.trim()} ${item.label5.trim()}`.trim()}
             </span>
@@ -62,24 +65,24 @@
 </ul>
 
 <Overlay bind:open={modals.tag.open} closeButton on:close={resetItem}>
-    <Tag product={selectedItem}/>
+    <Tag product={selectedItem} />
 </Overlay>
 
 <style>
-    price:before { 
-        font-size: .75rem;
-        content: "$"
+    price:before {
+        font-size: 0.75rem;
+        content: '$';
     }
-    price:after { 
+    price:after {
         position: absolute;
-        font-size: .75rem;
+        font-size: 0.75rem;
         white-space: pre-line;
         line-height: 2.5ch;
         text-align: center;
-        content: attr(data-cents)"\a"attr(data-unit);
-        transform: translateX(.25ch);
+        content: attr(data-cents) '\a'attr(data-unit);
+        transform: translateX(0.25ch);
     }
     li {
-        @apply flex flex-row gap-3 py-4 px-4 text-base-content bg-base-100 active:bg-base-200  
+        @apply flex flex-row gap-3 py-4 px-4 text-base-content bg-base-100 active:bg-base-200;
     }
 </style>
