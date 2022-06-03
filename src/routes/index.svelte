@@ -25,26 +25,17 @@
         modals.tag.open = true
     }
 
-    function handleClose(e) {
-        console.log(e.target.innerText)
-        open = false
-    }
-
     function resetItem() {
         Object.assign(selectedItem, originalItem)
     }
 
-    function forceRefresh() {
-        items = [ ...items ]
-        selectedItem = { ...nullProduct }
-    }
-
-    const isHex12 = (value = '') => /^([0-9A-Fa-f]{12})$/.test(value.trim())
+    const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim())
     async function getProduct(value) {
         console.log(value)
         if (!isHex12(value)) return
+        document.activeElement.blur()
         modals.tag.open = true
-        selectedItem = await fetchPreview(value)
+        selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
     }    
 
 
@@ -54,9 +45,12 @@
         return c && `.${c}`
     }
 
-    let open = false
-    $: getProduct($search)
-    $: items = fuzzy($products.filter(({status}) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'label13', 'Description', 'id'])
+    let items = []
+    $:  if ($search.startsWith('#')) {
+            getProduct($search)
+        } else {
+            items = fuzzy($products.filter(({status}, i) => !$showUnbound ? status === 'bound' : true ), $search.toLocaleUpperCase(), ['label4', 'label5', 'label13', 'Description', 'id'])
+        }
 </script>
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item}

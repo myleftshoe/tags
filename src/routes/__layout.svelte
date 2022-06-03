@@ -34,9 +34,17 @@
     });
 
     let refs = {};
-    async function clearSearch() {
+
+    function clearSearch() {
         search.set('');
         refs.search.focus();
+    }
+
+    function handleWindowKeyPress(e) {
+        if (e.key === '#') { // && (document.activeElement !== refs.search || $search.startsWith('#'))) {
+            // Scanning using built in phone barcode scanner!!!
+            clearSearch()
+        }
     }
 
 </script>
@@ -88,6 +96,8 @@
     </script>
 </svelte:head>
 
+<svelte:window on:keypress|capture={handleWindowKeyPress}/>
+
 <Overlay bind:open={modals.login.open} on:close={() => console.log('close evet')}>
     <Keypad on:submit={() => modals.login.open = false}/>
 </Overlay>
@@ -108,7 +118,7 @@
             bind:value={$search}
             type="search"
             placeholder="Search"
-            class="input input-bordered input-sm py-5 text-base focus:input-primary"
+            class="input input-bordered input-xs py-5 text-base focus:input-primary"
         />
         <button
             class="btn btn-xs btn-circle btn-ghost absolute right-2 text-base-content bg-base-300"
