@@ -2,6 +2,7 @@
     import demoData from '$lib/stores/demoData.json'
     import { nullProduct, meta } from '$lib/stores/products'
     import minew from '$lib/datasources/minew'
+    import { uppercase, clearOnFocus } from '$lib/actions/input'
 
     export let product = { ...nullProduct }
 
@@ -22,29 +23,6 @@
         }
     }
 
-    let typed = false
-    let saved = ''
-    function handleNumericFocus(e) { 
-        if (!typed) { 
-            saved = e.target.value
-            e.target.value = ''
-            e.target.placeholder = saved
-        }
-        typed = true
-    }
-
-    function handleNumericBlur(e) {
-        const value = e.target.value.trim()
-        if (value === '' ) {
-            e.target.value = saved 
-        }
-        else {
-            e.target.value = value
-        }
-        saved = ''
-        typed = false
-    }
-
     function handleFocus(e) {
         // preventScroll doesn't work on all browsers -> 
         // save scroll pos before focus and restore after 
@@ -53,24 +31,6 @@
         e.target.focus({preventScroll: true})
         refs.tagcontent.scrollTo(x, y);        
         // e.target.select()        
-    }
-
-    function handleBlur(e) {
-        const { id, value } = e.target
-        if (meta[id].uppercase)
-            product[id]  = value.toUpperCase()
-    }
-
-    const increment = () => {
-        dollars = (parseInt(dollars) + 1).toString()
-        if (dollars.length > 2)
-            dollars = '99'
-    }
-
-    const decrement = () => {
-        dollars = (parseInt(dollars) - 1).toString()
-        if (dollars.startsWith('-'))
-            dollars = '0'
     }
 
     const toCss = style => `
@@ -120,12 +80,11 @@
                         {#if (label !== 'label6')}
                             <input 
                                 id={label}
+                                use:uppercase={meta[label].uppercase ?? false}
                                 bind:value={product[label]} 
                                 on:focus|preventDefault={handleFocus}
                                 on:keypress={handleInput}
-                                on:blur={handleBlur}
                                 tabindex={meta[label].tabindex || -1}]
-                                class:uppercase={meta[label].uppercase}
                                 placeholder="{meta[label]?.placeholder}"
                                 type="text"
                                 size="{meta[label]?.maxlength || ''}"
@@ -134,26 +93,8 @@
                             />
                         {:else}
                             <!-- {dollars}. -->
-                            <input
-                                class="dollars" 
-                                type="tel" 
-                                size="2"    
-                                maxlength="2" 
-                                tabindex={3}
-                                bind:value={dollars}
-                                on:focus={handleNumericFocus}
-                                on:blur={handleNumericBlur}
-                            />.
-                            <sup><input
-                                class="cents"
-                                type="tel" 
-                                size="2" 
-                                maxlength="2" 
-                                tabindex={4}
-                                bind:value={cents} 
-                                on:focus={handleNumericFocus}
-                                on:blur={handleNumericBlur}
-                            /></sup>
+                            <input class="dollars" type="tel" size="2" maxlength="2" tabindex={3} bind:value={dollars} use:clearOnFocus />.
+                            <sup><input class="cents" type="tel" size="2" maxlength="2" tabindex={4} bind:value={cents} use:clearOnFocus /></sup>
                         {/if}
                     </span>
                 {/each}
@@ -244,9 +185,6 @@
     }
     input {
         background-color: transparent;
-    }
-    input.uppercase {
-        text-transform: uppercase;
     }
     input:focus {
         background-color: #f002;

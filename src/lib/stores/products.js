@@ -46,7 +46,7 @@ export const meta = {
     label8: { name: 'specification', editable: true, maxlength:16, placeholder: 'Organic', default: 'Organic', },
     label9: { name: 'grade', editable: true, maxlength:21, placeholder: 'Grade', },
     label10: { name: 'unit', editable: true, maxlength:4, placeholder: 'kg', default: 'kg', tabindex: 5, },
-    label11: { name: 'origin', editable: true, maxlength:4, placeholder: 'VIC', },
+    label11: { name: 'origin', editable: true, maxlength:4, uppercase: true, placeholder: 'VIC', },
 }
 
 export const nullProduct = {
