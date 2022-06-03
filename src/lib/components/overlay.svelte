@@ -19,7 +19,7 @@
     }
 </script>
 {#if open}
-    <main in:scale={{duration: 200}} out:scale={{duration: 500}} class="bg-base-100">
+    <main in:scale={{duration: 200}} out:scale={{duration: 500}} class="bg-base-100" on:click={() => console.log('overlay click')}>
         <slot/>
         {#if (closeButton)}
             <button class="btn btn-sm btn-circle absolute right-5 top-4" on:click={close}>
@@ -41,6 +41,6 @@
         left:0;
         right: 0;
         bottom:0;
-        z-index: 999;
+        z-index: 9;
     }
 </style>
