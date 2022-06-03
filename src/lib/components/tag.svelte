@@ -22,6 +22,29 @@
         }
     }
 
+    let typed = false
+    let saved = ''
+    function handleNumericFocus(e) { 
+        if (!typed) { 
+            saved = e.target.value
+            e.target.value = ''
+            e.target.placeholder = saved
+        }
+        typed = true
+    }
+
+    function handleNumericBlur(e) {
+        const value = e.target.value.trim()
+        if (value === '' ) {
+            e.target.value = saved 
+        }
+        else {
+            e.target.value = value
+        }
+        saved = ''
+        typed = false
+    }
+
     function handleFocus(e) {
         // preventScroll doesn't work on all browsers -> 
         // save scroll pos before focus and restore after 
@@ -29,7 +52,7 @@
         const y = refs.tagcontent.scrollY;
         e.target.focus({preventScroll: true})
         refs.tagcontent.scrollTo(x, y);        
-        e.target.select()        
+        // e.target.select()        
     }
 
     function handleBlur(e) {
@@ -111,29 +134,26 @@
                             />
                         {:else}
                             <!-- {dollars}. -->
-                            <input 
+                            <input
+                                class="dollars" 
                                 type="tel" 
                                 size="2"    
                                 maxlength="2" 
                                 tabindex={3}
                                 bind:value={dollars}
-                                on:focus|preventDefault={handleFocus}
-                                style="width: 2ch; height: 1.75ex; font-weight: inherit; text-align: right;" 
+                                on:focus={handleNumericFocus}
+                                on:blur={handleNumericBlur}
                             />.
-                            <sup><input 
+                            <sup><input
+                                class="cents"
                                 type="tel" 
                                 size="2" 
                                 maxlength="2" 
                                 tabindex={4}
                                 bind:value={cents} 
-                                on:focus|preventDefault={handleFocus}
-                                style="
-                                    width: 2ch; 
-                                    font-weight: inherit; 
-                                    text-align: left;
-                                    transform: translateX(-0.7ch);
-                                "/>
-                            </sup>
+                                on:focus={handleNumericFocus}
+                                on:blur={handleNumericBlur}
+                            /></sup>
                         {/if}
                     </span>
                 {/each}
@@ -144,46 +164,40 @@
                     color: {dollar.color};
                 ">$</span>
             </tagcontent>
-            <!-- {#if !product.id}
-                <progress class="absolute progress w-{width} bottom-0"></progress>
-            {/if} -->
         </tag>
     </case>
-    <actions>
-        <button class="btn btn-lg btn-circle btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={decrement}>-</button>
-        <button class="btn btn-lg btn-circle btn-accent text-3xl w-16 focus:bg-accent active:bg-accent-focus" on:click={increment}>+</button>
-    </actions>
     <!-- <button on:click={sendIt}>Send It!</button> -->
 </container>
 
 <style>
-    actions { 
-        position: absolute;
-        display: flex;
-        width: 50%;
-        justify-content: space-between;
-        bottom: 20%;
+    .dollars { 
+        width: 2ch; 
+        height: 1.75ex; 
+        font-weight: inherit; 
+        text-align: right;
+    }
+    .cents { 
+        width: 2ch; 
+        font-weight: inherit; 
+        text-align: left;
+        transform: translateX(-0.7ch);
     }
     container {
         position: relative;
-        padding: 5rem 0;
         display: grid;
         place-items: start center;
         width: 100vw;
         height: 100vh;
-        /* flex-direction: column;
-        align-items: center; */
         overflow: hidden;
     }
     case {
         position: absolute;
-        top: 2rem;
         outline: 1px solid #0001;
         box-shadow: 10px 10px 10px #0007, -1px -1px 1px white;
         border-width: 32px 15px 32px 15px;
         border-color: #f5f7f7;
         border-radius: 32px;
-        transform-origin: center center;
+        transform-origin: top center;
         transition: transform 0.1s ease-out;
     }
     case:after {
@@ -198,19 +212,6 @@
         border-radius: 30px;
         pointer-events: none;
     }
-    @media (orientation: landscape) {
-        container {
-            place-items: center center;
-        }
-        case {
-            top: 0;
-        }
-        actions {
-            justify-content: space-between;
-            bottom: 41.25%;
-            width: 90%;
-        }
-    }    
     tag {
         display: grid;
         box-sizing: content-box;
@@ -218,13 +219,14 @@
         border: 10px solid #e7e7e7;
         border-width: 15px 10px 20px 10px;
         background-color: #d7d7d7;
-        overflow: hidden;
+        /* overflow: hidden; */
     }
     tagcontent.loading {
         opacity: 0.5;
         filter:  contrast(20%);
     }
     tagcontent {
+        position: relative;
         opacity: 1;
         filter: contrast(50%);
         transition: opacity .6s linear, filter .6s linear;
@@ -242,20 +244,11 @@
     }
     input {
         background-color: transparent;
-        /* user-select: none; */
-        /* padding: 0 .5rem;
-        transition: background-color .2s ease;
-        border-radius: 5px; */
     }
     input.uppercase {
         text-transform: uppercase;
     }
     input:focus {
         background-color: #f002;
-        /* font-family: monospace; */
     }
-    /* button {
-        position: absolute;
-        top: 0;
-    } */
 </style>

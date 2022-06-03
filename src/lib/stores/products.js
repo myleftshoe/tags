@@ -9,9 +9,9 @@ export default readable([], (set) => {
         console.log('productStore')
         // set([])
         // return
-        const response = await minew.get(`/goods?page=1&size=9999&storeId=123`)
+        const response = await minew.get(`/goods?page=1&size=20&storeId=123&fuzzy=VEGETABLES`)
         const products = response.rows
-            .filter(row => ['FRUIT', 'VEGETABLES'].includes(row.label13))
+            // .filter(row => ['FRUIT', 'VEGETABLES'].includes(row.label13))
             .map(row => ({
                 id: row.id,
                 // qrcode: row.qrcode,
