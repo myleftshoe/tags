@@ -2,7 +2,7 @@
     import demoData from '$lib/stores/demoData.json'
     import { nullProduct, meta } from '$lib/stores/products'
     import minew from '$lib/datasources/minew'
-    import { uppercase, clearOnFocus } from '$lib/actions/input'
+    import { uppercase, clearOnFocus, enforceMaxlength, preventScroll } from '$lib/actions/input'
 
     export let product = { ...nullProduct }
 
@@ -12,26 +12,6 @@
     const { height, width } = data.size
     const text = Object.entries(data.text)
     const dollar = data.icons?.icon1
-
-    // COMPATIBILITY FIX: Chrome on android doesn't honor maxlength. 
-    // Still doesn't work when input value starts empty, i.e. when placeholder is shown
-    function handleInput(e) { 
-        const {id, value} = e.target
-        if (value.length > meta[id].maxlength) {
-            console.log(e.target.id)
-            e.preventDefault()
-        }
-    }
-
-    function handleFocus(e) {
-        // preventScroll doesn't work on all browsers -> 
-        // save scroll pos before focus and restore after 
-        const x = refs.tagcontent.scrollX;
-        const y = refs.tagcontent.scrollY;
-        e.target.focus({preventScroll: true})
-        refs.tagcontent.scrollTo(x, y);        
-        // e.target.select()        
-    }
 
     const toCss = style => `
         position: absolute;
@@ -62,28 +42,23 @@
         await minew.post('goods?storeId=123', payload)
     }
 
-
     $: product ??=  { ...nullProduct }
-
     $: document?.activeElement.blur()
-    // let innerWidth
-    // $: scale = Math.min((innerWidth - 84)/width, .75)
-
 </script>
-<!-- <svelte:window bind:innerWidth/> -->
+
 <container bind:this={refs.container}>
-    <case bind:this={refs.case} style="transform: scale({.8});">
+    <case bind:this={refs.case} style="transform: scale(.8);">
         <tag style="height: {height}px; width: {width}px;">
             <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
                     <span style={toCss(style)}>
                         {#if (label !== 'label6')}
                             <input 
-                                id={label}
-                                use:uppercase={meta[label].uppercase ?? false}
                                 bind:value={product[label]} 
-                                on:focus|preventDefault={handleFocus}
-                                on:keypress={handleInput}
+                                use:uppercase={meta[label].uppercase ?? false}
+                                use:preventScroll
+                                use:enforceMaxlength
+                                id={label}
                                 tabindex={meta[label].tabindex || -1}]
                                 placeholder="{meta[label]?.placeholder}"
                                 type="text"
@@ -92,12 +67,16 @@
                                 style="width: {meta[label]?.maxlength}ch; font-weight: inherit;"
                             />
                         {:else}
-                            <!-- {dollars}. -->
+                            <!-- {price}. -->
                             <input class="dollars" type="tel" size="2" maxlength="2" tabindex={3} bind:value={dollars} use:clearOnFocus />.
                             <sup><input class="cents" type="tel" size="2" maxlength="2" tabindex={4} bind:value={cents} use:clearOnFocus /></sup>
                         {/if}
                     </span>
                 {/each}
+                <!--
+                    Dollar sign. Inputs can't have psuedo elements so not implemented with 
+                    ::before on dollar input. I.e. would need a wrapper element.
+                -->
                 <span style="
                     top: {data.text['label6'].y}px; 
                     left: calc({data.text['label6'].x}px - 1ch);
