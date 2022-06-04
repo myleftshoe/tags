@@ -131,16 +131,10 @@
             class="w-48 input input-bordered input-xs px-3 py-5 text-base focus:input-primary"
         />
         <button
-            class="no-animation btn btn-sm btn-ghost absolute right-0 h-full text-base-content hover:bg-transparent"
+            class="{$search.length === 0 ? 'invisible': '' } no-animation btn btn-sm btn-ghost absolute right-0 h-full text-base-content hover:bg-transparent"
             on:click={clearSearch}
         >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-3 w-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-            >
+            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
                 <path stroke-width="3" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
