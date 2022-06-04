@@ -57,7 +57,6 @@ async function login() {
         body: JSON.stringify(payload)
     })
     const json = await response.json()
-    console.log(json)
     const { token } = json.body
     return token
 }
