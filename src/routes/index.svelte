@@ -27,6 +27,7 @@
 
     function resetItem() {
         Object.assign(selectedItem, originalItem)
+        selectedItem = { ...nullProduct }
     }
 
     const dollars = (price) => price.split('.')[0]
