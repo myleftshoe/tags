@@ -32,7 +32,7 @@
         {#each [1,2,3,4,5,6,7,8,9,null,0] as key}
             <button on:click={select(key)}
                 disabled={!browser} 
-                class="{key === null ? 'invisible' : ''} btn btn-circle btn-lg text-accent-content bg-accent text-2xl font-normal hover:bg-accent active:bg-accent-focus" 
+                class="{key === null ? 'invisible' : ''} no-animation btn btn-circle btn-lg text-accent-content bg-accent text-2xl font-normal hover:bg-accent active:bg-accent-focus" 
             >
                 {key}
             </button>
