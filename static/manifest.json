@@ -1,16 +1,16 @@
 {
-    "short_name": "bind short_name",
-    "name": "bind name",
+    "short_name": "Tags",
+    "name": "Tags",
     "start_url": "/",
     "icons": [{
         "src": "logo_256.png",
         "type": "image/png",
         "sizes": "256x256"
     }],
-    "background_color": "#fff",
+    "background_color": "rgb(42, 48, 60)",
     "display": "standalone",
     "orientation": "portrait-primary",
     "scope": "/",
-    "theme_color": "#fff",
-    "description": "bind description"
+    "theme_color": "rgb(42, 48, 60)",
+    "description": "F&V Shelf Tags"
 }
