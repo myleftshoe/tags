@@ -29,7 +29,7 @@ function fuzzy1(array, value, fields) {
 function fuzzy2(array, value, fields) {
     if (value.length === 0) return [...array]
 
-    if (value.length <= 2) {
+    if (value.length < 2) {
         const matchedFirstChar = array.filter(item => {
             for (const field of fields) {
                 if(item[field].startsWith(value))

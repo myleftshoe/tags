@@ -43,12 +43,15 @@
     }
 
     let items = []
-    $: if ($search.startsWith('#')) {
-        isHex12($search) && showTag($search)
-    } else {
-        items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
-        items = fuzzy(items, $search.toLocaleUpperCase(), ['label4', 'label5', 'id']) //TODO: id or plucode?
-    }
+    
+    $:  if ($search.length === 0) {
+            items = []
+        } else if ($search.startsWith('#')) {
+            isHex12($search) && showTag($search)
+        } else {
+            // items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
+            items = fuzzy($products, $search.toLocaleUpperCase(), ['label4', 'label5', 'id']) //TODO: id or plucode?
+        }
 </script>
 
 <ul class="flex flex-col divide-y divide-base-300">
