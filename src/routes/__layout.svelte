@@ -41,7 +41,7 @@
     }
 
     function handleWindowKeyPress(e) {
-        if (e.key === '#') { // && (document.activeElement !== refs.search || $search.startsWith('#'))) {
+        if (e.key === '#' && (document.activeElement !== refs.search || $search.startsWith('#'))) {
             // Scanning using built in phone barcode scanner!!!
             clearSearch()
         }
