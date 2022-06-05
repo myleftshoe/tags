@@ -38,7 +38,7 @@
             </button>
         {/each}
     </keypad>
-    <button class="btn btn-link text-accent {!value && 'invisible'}" on:click={() => (value = '')}>delete</button>
+    <button class="btn btn-link text-accent z-50 {!value && 'invisible'}" on:click={() => (value = '')}>delete</button>
 </main>
 
 <style>

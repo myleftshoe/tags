@@ -5,7 +5,8 @@
     const dispatch = createEventDispatcher()
     
     export let open = false
-    export let closeButton = false    
+    export let closeButton = false
+    export let cancel = ''    
     
     if (browser) console.log(screen.width)
 
@@ -19,16 +20,19 @@
     }
 </script>
 {#if open}
-    <main in:scale={{duration: 200}} out:scale={{duration: 500}} class="bg-base-100 z-40" on:click={() => console.log('overlay click')}>
+    <main in:scale={{duration: 200}} out:scale={{duration: 500}} class="bg-base-100 z-40">
         <slot/>
         {#if (closeButton)}
             <button class="no-animation btn btn-sm btn-circle absolute right-5 top-4" on:click={close}>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
         {/if}
-        <footer on:click={close} class="grid place-items-center">
+        <actions class="absolute flex w-full justify-between items-end p-10 bottom-0 h-32">
+            {#if cancel}
+                <button class="no-animation btn btn-link z-50" on:click={close}>{cancel}</button>
+            {/if}
             <slot name='actions'/>
-        </footer>
+        </actions>
     </main>
 {/if}
 <style>

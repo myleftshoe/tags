@@ -25,23 +25,6 @@
 
     let [dollars, cents = ''] = product.label6.split('.')
 
-
-    async function sendIt() {
-        let payload = {
-            id: product.id,
-            label3: product.label3, 
-            label4: product.label4.toUpperCase(),
-            label5: product.label5.toUpperCase(),
-            label6: `${dollars}.${cents}`,
-            label8: product.label8 || 'Organic',
-            label10: product.label10,
-            label13: product.label13 || 'VEGETABLES',
-        }        
-        console.log('product', JSON.stringify(product, null, 2))
-        console.log('payload', JSON.stringify(payload, null, 2))
-        await minew.post('goods?storeId=123', payload)
-    }
-
     $: product ??=  { ...nullProduct }
     $: document?.activeElement.blur()
 </script>
@@ -105,7 +88,6 @@
             </tagcontent>
         </tag>
     </case>
-    <!-- <button on:click={sendIt}>Send It!</button> -->
 </container>
 
 <style>
