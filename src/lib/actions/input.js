@@ -1,6 +1,6 @@
-export function uppercase(node, apply = true) {
+export function uppercase(node, use = true) {
 
-    if (!apply) return
+    if (!use) return
 
     function handleBlur() {
         node.value = node.value.toUpperCase();
@@ -64,7 +64,9 @@ export function enforceMaxlength(node, length = 0) {
 }
 
 
-export function clearOnFocus(node) {
+export function clearOnFocus(node, use = true) {
+
+    if (!use) return
 
     let changed = false
     let initialValue = ''

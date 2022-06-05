@@ -45,11 +45,13 @@
                                 bind:value={product[label]} 
                                 use:uppercase={meta[label].uppercase ?? false}
                                 use:preventScroll
+                                use:clearOnFocus={label === 'label10'}
                                 use:enforceMaxlength
                                 id={label}
                                 tabindex={meta[label].tabindex || -1}]
                                 placeholder="{meta[label]?.placeholder}"
                                 type="text"
+                                autocapitalize="{meta[label].uppercase ? 'characters' : label === 'label10' ? 'none' : 'words'}"
                                 size="{meta[label]?.maxlength || ''}"
                                 maxlength="{meta[label]?.maxlength || ''}"
                                 style="width: {meta[label]?.maxlength}ch; font-weight: inherit;"
@@ -58,8 +60,7 @@
                             <!-- {price}. -->
                             <input 
                                 class="dollars" 
-                                type="number" 
-                                enterkeyhint="next"
+                                type="number"
                                 inputmode="numeric"
                                 size="2" 
                                 maxlength="2" 
@@ -67,17 +68,19 @@
                                 on:change={handlePriceChange}
                                 bind:value={dollars} 
                                 use:clearOnFocus 
+                                use:enforceMaxlength 
                             />.
                             <sup><input 
                                 class="cents" 
                                 type="number" 
-                                enterkeyhint="next"
                                 inputmode="numeric"
                                 size="2" 
                                 maxlength="2" 
                                 tabindex={4} 
                                 on:change={handlePriceChange}
-                                bind:value={cents} use:clearOnFocus 
+                                bind:value={cents} 
+                                use:clearOnFocus
+                                use:enforceMaxlength 
                             /></sup>
                         {/if}
                     </span>
