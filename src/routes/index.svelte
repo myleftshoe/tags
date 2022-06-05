@@ -23,6 +23,7 @@
     const handleItemClick = (item) => (e) => {
         originalItem = { ...item }
         selectedItem = item
+        prevScannedItem = { ...selectedItem }
         console.log(item)
         modals.tag.open = true
     }
@@ -39,7 +40,7 @@
         return c && `.${c}`
     }
 
-    const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim())
+    const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim()) // first char is #
     const getName = ({label4 = '', label5 = ''} = {}) => `${label4.trim()} ${label5.trim()}`.trim() 
 
     async function showTag(value) {
