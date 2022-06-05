@@ -48,7 +48,7 @@
 
         if (isHex12(value)) {
             selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
-            if (prevScannedItem?.macAddress) {
+            if (prevScannedItem?.id) {
                 // Previous was a scan. 
                 if (confirm(`Bind ${getName(prevScannedItem)} [${prevScannedItem.id}] [${prevScannedItem.macAddress}] to ${getName(selectedItem)} [${selectedItem.macAddress}]?`)) {
                     minew.bind(selectedItem.macAddress, prevScannedItem.id)
@@ -57,11 +57,7 @@
             prevScannedItem = { ...selectedItem }
             return
         }
-
-
     }
-
-
 
     let items = []
     
