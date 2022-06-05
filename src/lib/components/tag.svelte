@@ -68,8 +68,27 @@
                             />
                         {:else}
                             <!-- {price}. -->
-                            <input class="dollars" type="tel" size="2" maxlength="2" tabindex={3} bind:value={dollars} use:clearOnFocus />.
-                            <sup><input class="cents" type="tel" size="2" maxlength="2" tabindex={4} bind:value={cents} use:clearOnFocus /></sup>
+                            <input 
+                                class="dollars" 
+                                type="number" 
+                                enterkeyhint="next"
+                                inputmode="numeric"
+                                size="2" 
+                                maxlength="2" 
+                                tabindex={3} 
+                                bind:value={dollars} 
+                                use:clearOnFocus 
+                            />.
+                            <sup><input 
+                                class="cents" 
+                                type="number" 
+                                enterkeyhint="next"
+                                inputmode="numeric"
+                                size="2" 
+                                maxlength="2" 
+                                tabindex={4} 
+                                bind:value={cents} use:clearOnFocus 
+                            /></sup>
                         {/if}
                     </span>
                 {/each}
