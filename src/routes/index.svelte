@@ -3,6 +3,7 @@
     import showUnbound from '$lib/stores/bound'
     import products, { nullProduct } from '$lib/stores/products'
     import { fetchPreview } from '$lib/stores/products'
+    import minew from '$lib/datasources/minew'
     import fuzzy from '$lib/util/fuzzy'
     import Overlay from '$lib/components/overlay.svelte'
     import Tag from '$lib/components/tag.svelte'
@@ -12,6 +13,7 @@
 
 <script>
     let selectedItem = { ...nullProduct }
+    let prevScannedItem = null
     let originalItem = {}
 
     const modals = {
@@ -28,6 +30,7 @@
     function resetItem() {
         Object.assign(selectedItem, originalItem)
         selectedItem = { ...nullProduct }
+        prevScannedItem = null
     }
 
     const dollars = (price) => price.split('.')[0]
@@ -37,11 +40,28 @@
     }
 
     const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim())
+    const getName = ({label4 = '', label5 = ''} = {}) => `${label4.trim()} ${label5.trim()}`.trim() 
+
     async function showTag(value) {
         document.activeElement.blur()
         modals.tag.open = true
-        selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
+
+        if (isHex12(value)) {
+            selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
+            if (prevScannedItem?.macAddress) {
+                // Previous was a scan. 
+                if (confirm(`Bind ${getName(prevScannedItem)} [${prevScannedItem.id}] [${prevScannedItem.macAddress}] to ${getName(selectedItem)} [${selectedItem.macAddress}]?`)) {
+                    minew.bind(selectedItem.macAddress, prevScannedItem.id)
+                }
+            }
+            prevScannedItem = { ...selectedItem }
+            return
+        }
+
+
     }
+
+
 
     let items = []
     
