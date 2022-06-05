@@ -1,7 +1,6 @@
 <script>
     import demoData from '$lib/stores/demoData.json'
     import { nullProduct, meta } from '$lib/stores/products'
-    import minew from '$lib/datasources/minew'
     import { uppercase, clearOnFocus, enforceMaxlength, preventScroll } from '$lib/actions/input'
 
     export let product = { ...nullProduct }
