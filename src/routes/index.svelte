@@ -102,7 +102,7 @@
 <Overlay bind:open={modals.tag.open} on:close={resetItem} cancel="← Go Back">
     <Tag product={selectedItem} />
     <svelte:fragment slot="actions">
-        <button class="no-animation btn btn-accent z-50" on:click={() => sendIt(selectedItem)}>Send It!</button>
+        <button class="no-animation btn btn-accent" on:click={() => sendIt(selectedItem)}>Send It!</button>
     </svelte:fragment>
 </Overlay>
 

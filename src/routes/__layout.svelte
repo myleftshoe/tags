@@ -31,6 +31,9 @@
         const matchMediaList = window.matchMedia("(prefers-color-scheme: dark)")
         matchMediaList.addEventListener('change', setTheme);        
         setTheme(matchMediaList)
+        if ("virtualKeyboard" in navigator) {
+            navigator.virtualKeyboard.overlaysContent = true;
+        }        
     });
 
     let refs = {};
@@ -98,11 +101,7 @@
 
 <svelte:window on:keypress|capture={handleWindowKeyPress}/>
 
-<Overlay bind:open={modals.login.open}>
-    <Keypad on:submit={() => modals.login.open = false}/>
-</Overlay>
-    
-<nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-30">
+<nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-20">
     <div class="navbar-start">
         <button class="no-animation btn btn-ghost btn-circle">
             <label class="swap">
@@ -150,6 +149,10 @@
         </button>
     </div>
 </nav>
+
+<Overlay bind:open={modals.login.open}>
+    <Keypad on:submit={() => modals.login.open = false}/>
+</Overlay>
 
 <slot />
 
