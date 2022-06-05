@@ -45,9 +45,10 @@
             label3: product.label3, 
             label4: product.label4.toUpperCase(),
             label5: product.label5.toUpperCase(),
-            label6: `${dollars}.${cents}`,
+            label6: product.label6,
             label8: product.label8 || 'Organic',
             label10: product.label10,
+            label11: product.label11,
             label13: product.label13 || 'VEGETABLES',
         }        
         console.log('product', JSON.stringify(product, null, 2))
@@ -55,7 +56,6 @@
         originalItem = { ...product }
         items = [...items]
         await minew.post('goods?storeId=123', payload)
-
     }
 
     const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim()) // first char is #

@@ -13,6 +13,11 @@
     const text = Object.entries(data.text)
     const dollar = data.icons?.icon1
 
+    function handlePriceChange() {
+        product.label6 = `${dollars}.${cents}`
+        console.log('price', product.label6)
+    }
+
     const toCss = style => `
         position: absolute;
         top: ${style.y}px; 
@@ -59,6 +64,7 @@
                                 size="2" 
                                 maxlength="2" 
                                 tabindex={3} 
+                                on:change={handlePriceChange}
                                 bind:value={dollars} 
                                 use:clearOnFocus 
                             />.
@@ -70,6 +76,7 @@
                                 size="2" 
                                 maxlength="2" 
                                 tabindex={4} 
+                                on:change={handlePriceChange}
                                 bind:value={cents} use:clearOnFocus 
                             /></sup>
                         {/if}
