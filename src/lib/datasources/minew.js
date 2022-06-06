@@ -6,9 +6,7 @@ import { MINEW_USERNAME, MINEW_PASSWORD } from '$lib/env'
 const fetcher = new Fetcher(`https://esl.minew.com:9090/V1`)
 let token
 
-
 async function get(path) {
-    console.log('get')
     token = await login()
     const headers = { 'Authorization': `Bearer ${token}` } 
     const response = await fetcher.fetch(path, { headers })
@@ -16,9 +14,10 @@ async function get(path) {
 }
 
 async function post(path, payload) {
+    token = await login()
     const headers = { 
         "content-type": 'application/json',
-        "Authorization": `Bearer ${await token}` 
+        "Authorization": `Bearer ${token}` 
     }
     const options = { 
         method: 'POST', 
@@ -32,9 +31,10 @@ async function post(path, payload) {
 }
 
 async function put(path, payload) {
+    token = await login()
     const headers = { 
         "content-type": 'application/json',
-        "Authorization": `Bearer ${await token}` 
+        "Authorization": `Bearer ${token}` 
     }
     const options = { 
         method: 'PUT', 
