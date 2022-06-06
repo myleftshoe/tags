@@ -3,9 +3,7 @@
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();    
 
-    const sleep = (ms) => new Promise(function (resolve) {
-        setTimeout(resolve, ms);
-    });
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
     let value = ''
 
