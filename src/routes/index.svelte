@@ -74,6 +74,7 @@
                 }
             }
             prevScannedItem = { ...selectedItem }
+            originalItem = { ...selectedItem }
             return
         }
     }

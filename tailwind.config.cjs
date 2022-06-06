@@ -10,7 +10,7 @@ module.exports = {
         rtl: false,
         prefix: '',
         darkTheme: 'dark',
-        themes: [ 'dark', 'light' ],
+        themes: [ 'light', 'dark' ],
     },
     theme: {
         extend: {
