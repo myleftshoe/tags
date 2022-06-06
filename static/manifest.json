@@ -1,6 +1,6 @@
 {
-    "short_name": "Tags",
-    "name": "Tags",
+    "short_name": "TMTags",
+    "name": "TMTags",
     "start_url": "/",
     "icons": [{
         "src": "logo_256.png",
@@ -12,5 +12,5 @@
     "orientation": "portrait-primary",
     "scope": "/",
     "theme_color": "rgb(42, 48, 60)",
-    "description": "F&V Shelf Tags"
+    "description": "TM Shelf Tags"
 }

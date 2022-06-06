@@ -27,9 +27,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
         {/if}
-        <actions class="fixed flex w-full justify-between p-10 bottom-0 h-32 z-40">
+        <actions class="fixed flex w-full justify-between px-4 py-10 bottom-0 h-32 z-40 text-base">
             {#if cancel}
-                <button class="no-animation btn btn-link" on:click={close}>{cancel}</button>
+                <button class="no-animation btn btn-ghost gap-2" style="font-size: inherit;" on:click={close}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="24" height="24" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>            
+                    <span>{cancel}</span>
+                </button>
             {/if}
             <slot name='actions'/>
         </actions>

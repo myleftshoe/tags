@@ -78,6 +78,8 @@
         }
     }
 
+    $: changed = JSON.stringify(selectedItem) !== JSON.stringify(originalItem)
+
     let items = []
     
     $:  if ($search.length === 0) {
@@ -99,10 +101,13 @@
     {/each}
 </ul>
 
-<Overlay bind:open={modals.tag.open} on:close={resetItem} cancel="← Go Back">
-    <Tag product={selectedItem} />
+<Overlay bind:open={modals.tag.open} on:close={resetItem} cancel="Go Back">
+    <Tag bind:product={selectedItem} />
     <svelte:fragment slot="actions">
-        <button class="no-animation btn btn-accent" on:click={() => sendIt(selectedItem)}>Send It!</button>
+        <button disabled={!changed} class="no-animation btn btn-primary gap-2" style="font-size: inherit;" on:click={() => sendIt(selectedItem)}>
+            <span>Send It!</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg>
+        </button>
     </svelte:fragment>
 </Overlay>
 
