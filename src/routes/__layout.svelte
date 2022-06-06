@@ -46,9 +46,15 @@
     function handleWindowKeyPress(e) {
         if (e.key === '#' && (document.activeElement !== refs.search || $search.startsWith('#'))) {
             // Scanning using built in phone barcode scanner!!!
+            refs.search.setAttribute('virtualkeyboardpolicy', 'manual')
             modals.login.open = false
             clearSearch()
         }
+    }
+
+    function handleSubmit() {
+        modals.login.open = false        
+        refs.search.setAttribute('virtualkeyboardpolicy', 'auto')
     }
 
 </script>
@@ -126,6 +132,7 @@
         <input
             bind:this={refs.search}
             bind:value={$search}
+            id="search"
             type="search"
             placeholder="Search"
             class="w-48 input input-bordered input-xs px-3 py-5 text-base focus:input-primary"
@@ -152,7 +159,7 @@
 </nav>
 
 <Overlay bind:open={modals.login.open}>
-    <Keypad on:submit={() => modals.login.open = false}/>
+    <Keypad on:submit={handleSubmit}/>
 </Overlay>
 
 <slot />

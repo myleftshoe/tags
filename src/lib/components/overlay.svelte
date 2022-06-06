@@ -1,5 +1,6 @@
 <script>
     import { browser } from '$app/env'
+    import { onMount } from 'svelte'
     import { createEventDispatcher } from 'svelte'
     import { scale } from 'svelte/transition'
     const dispatch = createEventDispatcher()
@@ -8,9 +9,19 @@
     export let closeButton = false
     export let cancel = ''    
     
-    if (browser) console.log(screen.width)
+    let mounted = false
+    let searchRef
+    onMount(() => {
+        mounted = true
+        searchRef = document.getElementById('search')
+    })
+
+    function handleOpen() {
+        searchRef.setAttribute('virtualkeyboardpolicy', 'manual')
+    }
 
     function close(e) {
+        searchRef.setAttribute('virtualkeyboardpolicy', 'auto')
         dispatch('close', e.target.innerText)
         open = false
     }
@@ -18,6 +29,7 @@
     $: if (browser) {
         document.body.style.overflow = open ? 'hidden' : 'auto'
     }
+    $: if (mounted && open) handleOpen()
 </script>
 {#if open}
     <main in:scale={{duration: 250}} out:scale={{duration: 500}} class="bg-base-100 z-30">
