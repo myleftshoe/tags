@@ -5,6 +5,11 @@
     import showUnbound from '$lib/stores/bound';
     import Overlay from '$lib/components/overlay.svelte'
     import Keypad  from '$lib/components/keypad.svelte'
+    import SOffline from "$lib/components/s-offline.svelte"
+    
+    const handleNetworkChange = ({ detail }) => {
+        console.log("event details: ", detail);
+    }
 
     const modals = {
         login: { open: true },
@@ -108,8 +113,14 @@
 
 <svelte:window on:keypress|capture={handleWindowKeyPress}/>
 
+
+
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-20">
-    <div class="navbar-start">
+        <SOffline pingUrl="https://bitly.com" on:detectedCondition={handleNetworkChange}>
+            <span slot="online" class="absolute -top-1 left-0 text-green-500">●</span>
+            <span slot="offline" class="absolute -top-1 left-0 text-red-500">●</span>
+        </SOffline>
+        <div class="navbar-start">
         <button class="no-animation btn btn-ghost btn-circle">
             <label class="swap">
                 <input type="checkbox" bind:checked={$showUnbound}/>
