@@ -69,7 +69,7 @@
             selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
             if (prevScannedItem?.id) {
                 // Previous was a scan. 
-                if (confirm(`Bind ${getName(prevScannedItem)} [${prevScannedItem.id}] [${prevScannedItem.macAddress}] to ${getName(selectedItem)} [${selectedItem.macAddress}]?`)) {
+                if (confirm(`Change tag ${selectedItem.macAddress}?\n\n${getName(selectedItem)} @${selectedItem.label6}\nto\n${getName(prevScannedItem)} @${prevScannedItem.label6}`)) {
                     minew.bind(selectedItem.macAddress, prevScannedItem.id)
                 }
             }
