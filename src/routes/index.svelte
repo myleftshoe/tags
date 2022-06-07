@@ -90,8 +90,8 @@
         else {
             selectedItem = { ...scannedItem }
             originalItem = { ...selectedItem }
+            modals.tag.open = true
         }
-        modals.tag.open = true
     }
 
     $: changed = JSON.stringify(selectedItem) !== JSON.stringify(originalItem)
