@@ -62,6 +62,9 @@
         refs.search.setAttribute('virtualkeyboardpolicy', 'auto')
     }
 
+    function handlePointerDown() {
+        refs.search.blur()
+    }
 </script>
 
 <svelte:head>
@@ -112,8 +115,7 @@
 </svelte:head>
 
 <svelte:window on:keypress|capture={handleWindowKeyPress}/>
-
-
+<svelte:body on:pointerdown|capture={handlePointerDown}/>
 
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-20">
         <SOffline pingUrl="https://bitly.com" on:detectedCondition={handleNetworkChange}>
