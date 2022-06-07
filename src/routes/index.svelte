@@ -84,7 +84,9 @@
         scannedItem = await fetchPreview(mac.slice(1)) // remove # prefix
         if (selectedItem.id) {
             // Previous was a scan.
-            modals.confirm.open = true
+            if (JSON.stringify(scannedItem) !== JSON.stringify(selectedItem)) {
+                modals.confirm.open = true
+            }
         }
         else {
             selectedItem = { ...scannedItem }
