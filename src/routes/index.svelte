@@ -14,8 +14,9 @@
 
 <script>
     let selectedItem = { ...nullProduct }
-    let prevScannedItem = { ...nullProduct }
-    let originalItem = {}
+    let scannedItem = { ...nullProduct }
+    let previousItem = { ...nullProduct }
+    let originalItem = { ...nullProduct }
 
     const modals = {
         tag: { open: false },
@@ -24,21 +25,28 @@
 
     const handleItemClick = (item) => (e) => {
         originalItem = { ...item }
-        selectedItem = item
-        prevScannedItem = { ...selectedItem }
+        selectedItem = { ...item }
+        previousItem = { ...item }
         modals.tag.open = true
     }
 
     function resetItem() {
         Object.assign(selectedItem, originalItem)
         selectedItem = { ...nullProduct }
-        prevScannedItem = { ...nullProduct }
+        previousItem = { ...nullProduct }
+        originalItem = { ...nullProduct }
+        scannedItem = { ...nullProduct }
+        modals.tag.open = false
     }
 
     function bind() {
         originalItem = { ...selectedItem }
         modals.confirm.open = false
-        minew.bind(selectedItem.macAddress, prevScannedItem.id)        
+        minew.bind(scannedItem.macAddress, previousItem.id)
+        previousItem = { ...scannedItem  }
+        selectedItem = { ...scannedItem }
+        originalItem = { ...scannedItem }
+        scannedItem = { ...nullProduct }
     }
 
     function cancelBind() {
@@ -78,15 +86,16 @@
         document.activeElement.blur()
         modals.tag.open = true
         if (isHex12(value)) {
-            selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
-            if (prevScannedItem?.id) {
+            scannedItem = await fetchPreview(value.slice(1)) // remove # prefix
+            if (previousItem.id) {
                 // Previous was a scan.
                 modals.confirm.open = true
-                return
             }
-            prevScannedItem = { ...selectedItem }
-            originalItem = { ...selectedItem }
-            return
+            else {
+                selectedItem = { ...scannedItem }
+                previousItem = { ...selectedItem }
+                originalItem = { ...selectedItem }
+            }
         }
     }
 
@@ -130,8 +139,8 @@
             <span>{`Change tag ${selectedItem.macAddress || ''}?`}</span>
         </span>
         <div class="grid grid-cols-5 items-end w-full place-end-end">
-            <span class="col-span-1">from:</span><span class="col-span-4">{`${getName(selectedItem)} ($${selectedItem.label6})`}</span>
-            <span class="col-span-1">to:</span><span class="col-span-4">{`${getName(prevScannedItem)} ($${prevScannedItem.label6})`}</span>
+            <span class="col-span-1">from:</span><span class="col-span-4">{`${getName(scannedItem)} ($${scannedItem.label6})`}</span>
+            <span class="col-span-1">to:</span><span class="col-span-4">{`${getName(previousItem)} ($${previousItem.label6})`}</span>
         </div>
         <div class="gap-10 w-full justify-center">
             <button class="btn btn-ghost btn-active px-10" on:click={cancelBind}>No</button>
