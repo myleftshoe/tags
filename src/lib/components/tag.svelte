@@ -27,8 +27,9 @@
         font-family: ${style['font-family']}, alibaba-puhuiti, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     `
 
-    let [dollars, cents = ''] = product.label6.split('.')
-
+    let dollars
+    let cents
+    $: [dollars, cents = ''] = product.label6.split('.')
     $: product ??=  { ...nullProduct }
     $: document?.activeElement.blur()
 </script>

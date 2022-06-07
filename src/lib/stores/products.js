@@ -21,7 +21,6 @@ export default readable([], (set) => {
                 label5: row.label5.trim(),
                 label6: row.label6,
                 name: getName(row),
-                price: row.label6,
                 label8: row.label8,
                 label9: row.label9,
                 label10: row.label10,
@@ -67,7 +66,6 @@ export async function fetchPreview(macAddress) {
     const product = response.body?.goods ?? {}
     return { 
         macAddress, 
-        name: getName(product),
         ...product
     }
 }
