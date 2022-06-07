@@ -80,7 +80,6 @@
     async function handleMac(mac) {
         if (!isHex12(mac)) return
         document.activeElement.blur()
-        modals.tag.open = true
         scannedItem = await fetchPreview(mac.slice(1)) // remove # prefix
         if (selectedItem.id) {
             // Previous was a scan.
@@ -92,6 +91,7 @@
             selectedItem = { ...scannedItem }
             originalItem = { ...selectedItem }
         }
+        modals.tag.open = true
     }
 
     $: changed = JSON.stringify(selectedItem) !== JSON.stringify(originalItem)
