@@ -15,7 +15,6 @@
 <script>
     let selectedItem = { ...nullProduct }
     let scannedItem = { ...nullProduct }
-    let previousItem = { ...nullProduct }
     let originalItem = { ...nullProduct }
 
     const modals = {
@@ -26,24 +25,20 @@
     const handleItemClick = (item) => (e) => {
         originalItem = { ...item }
         selectedItem = { ...item }
-        previousItem = { ...item }
         modals.tag.open = true
     }
 
     function resetItem() {
         Object.assign(selectedItem, originalItem)
         selectedItem = { ...nullProduct }
-        previousItem = { ...nullProduct }
         originalItem = { ...nullProduct }
         scannedItem = { ...nullProduct }
         modals.tag.open = false
     }
 
     function bind() {
-        originalItem = { ...selectedItem }
         modals.confirm.open = false
-        minew.bind(scannedItem.macAddress, previousItem.id)
-        previousItem = { ...scannedItem  }
+        minew.bind(scannedItem.macAddress, selectedItem.id)
         selectedItem = { ...scannedItem }
         originalItem = { ...scannedItem }
         scannedItem = { ...nullProduct }
@@ -51,7 +46,7 @@
 
     function cancelBind() {
         modals.confirm.open = false
-        originalItem = { ...selectedItem }
+        scannedItem = { ...nullProduct }
     }
 
     const dollars = (price) => price.split('.')[0]
@@ -60,21 +55,21 @@
         return c && `.${c}`
     }
 
-    async function sendIt(product) {
+    async function sendIt(item) {
         let payload = {
-            id: product.id,
-            label3: product.label3, 
-            label4: product.label4.toUpperCase(),
-            label5: product.label5.toUpperCase(),
-            label6: product.label6,
-            label8: product.label8 || 'Organic',
-            label10: product.label10,
-            label11: product.label11,
-            label13: product.label13 || 'VEGETABLES',
+            id: item.id,
+            label3: item.label3, 
+            label4: item.label4.toUpperCase(),
+            label5: item.label5.toUpperCase(),
+            label6: item.label6,
+            label8: item.label8 || 'Organic',
+            label10: item.label10,
+            label11: item.label11,
+            label13: item.label13 || 'VEGETABLES',
         }        
-        console.log('product', JSON.stringify(product, null, 2))
+        console.log('item', JSON.stringify(item, null, 2))
         console.log('payload', JSON.stringify(payload, null, 2))
-        originalItem = { ...product }
+        originalItem = { ...item }
         items = [...items]
         await minew.post('goods?storeId=123', payload)
     }
@@ -82,20 +77,18 @@
     const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim()) // first char is #
     const getName = ({label4 = '', label5 = ''} = {}) => `${label4.trim()} ${label5.trim()}`.trim() 
 
-    async function showTag(value) {
+    async function handleMac(mac) {
+        if (!isHex12(mac)) return
         document.activeElement.blur()
         modals.tag.open = true
-        if (isHex12(value)) {
-            scannedItem = await fetchPreview(value.slice(1)) // remove # prefix
-            if (previousItem.id) {
-                // Previous was a scan.
-                modals.confirm.open = true
-            }
-            else {
-                selectedItem = { ...scannedItem }
-                previousItem = { ...selectedItem }
-                originalItem = { ...selectedItem }
-            }
+        scannedItem = await fetchPreview(mac.slice(1)) // remove # prefix
+        if (selectedItem.id) {
+            // Previous was a scan.
+            modals.confirm.open = true
+        }
+        else {
+            selectedItem = { ...scannedItem }
+            originalItem = { ...selectedItem }
         }
     }
 
@@ -106,7 +99,7 @@
     $:  if ($search.length === 0) {
             items = []
         } else if ($search.startsWith('#')) {
-            isHex12($search) && showTag($search)
+            isHex12($search) && handleMac($search)
         } else {
             // items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
             items = fuzzy($products, $search.toLocaleUpperCase(), ['label4', 'label5', 'id']) //TODO: id or plucode?
@@ -140,7 +133,7 @@
         </span>
         <div class="grid grid-cols-5 items-end w-full place-end-end">
             <span class="col-span-1">from:</span><span class="col-span-4">{`${getName(scannedItem)} ($${scannedItem.label6})`}</span>
-            <span class="col-span-1">to:</span><span class="col-span-4">{`${getName(previousItem)} ($${previousItem.label6})`}</span>
+            <span class="col-span-1">to:</span><span class="col-span-4">{`${getName(selectedItem)} ($${selectedItem.label6})`}</span>
         </div>
         <div class="gap-10 w-full justify-center">
             <button class="btn btn-ghost btn-active px-10" on:click={cancelBind}>No</button>
