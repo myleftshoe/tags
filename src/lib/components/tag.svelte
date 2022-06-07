@@ -12,8 +12,8 @@
     const text = Object.entries(data.text)
     const dollar = data.icons?.icon1
 
-    function handlePriceChange() {
-        product.label6 = `${dollars}.${cents}`
+    function handlePriceChange(e) {
+        product.label6 = `${refs.dollars.value}.${refs.cents.value}`
         console.log('price', product.label6)
     }
 
@@ -26,11 +26,11 @@
         font-weight: ${style.bold ? '500': '400'}; 
         font-family: ${style['font-family']}, alibaba-puhuiti, Roboto, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     `
-    
-    let [dollars, cents = ''] = product.label6.split('.')
 
-    $: product ??= { ...nullProduct }
     $: document?.activeElement.blur()
+    $: product ??= { ...nullProduct }
+    $: [dollars, cents = ''] = product.label6.split('.')
+
 </script>
 
 <container bind:this={refs.container}>
@@ -57,7 +57,8 @@
                             />
                         {:else}
                             <!-- {price}. -->
-                            <input 
+                            <input
+                                bind:this={refs.dollars} 
                                 class="dollars" 
                                 type="number"
                                 inputmode="numeric"
@@ -65,11 +66,12 @@
                                 maxlength="2" 
                                 tabindex={3} 
                                 on:change={handlePriceChange}
-                                bind:value={dollars} 
+                                value={dollars} 
                                 use:clearOnFocus 
                                 use:enforceMaxlength 
                             />.
                             <sup><input 
+                                bind:this={refs.cents} 
                                 class="cents" 
                                 type="number" 
                                 inputmode="numeric"
@@ -77,7 +79,7 @@
                                 maxlength="2" 
                                 tabindex={4} 
                                 on:change={handlePriceChange}
-                                bind:value={cents} 
+                                value={cents} 
                                 use:clearOnFocus
                                 use:enforceMaxlength 
                             /></sup>
