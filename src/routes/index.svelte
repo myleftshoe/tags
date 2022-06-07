@@ -1,4 +1,5 @@
 <script context="module">
+    import { slide } from 'svelte/transition'
     import search from '$lib/stores/search'
     import showUnbound from '$lib/stores/bound'
     import products, { nullProduct } from '$lib/stores/products'
@@ -13,11 +14,12 @@
 
 <script>
     let selectedItem = { ...nullProduct }
-    let prevScannedItem = null
+    let prevScannedItem = { ...nullProduct }
     let originalItem = {}
 
     const modals = {
         tag: { open: false },
+        confirm: { open: false },
     }
 
     const handleItemClick = (item) => (e) => {
@@ -30,7 +32,12 @@
     function resetItem() {
         Object.assign(selectedItem, originalItem)
         selectedItem = { ...nullProduct }
-        prevScannedItem = null
+        prevScannedItem = { ...nullProduct }
+    }
+
+    function cancelBind() {
+        modals.confirm.open = false
+        originalItem = { ...selectedItem }
     }
 
     const dollars = (price) => price.split('.')[0]
@@ -64,14 +71,12 @@
     async function showTag(value) {
         document.activeElement.blur()
         modals.tag.open = true
-
         if (isHex12(value)) {
             selectedItem = await fetchPreview(value.slice(1)) // remove # prefix
             if (prevScannedItem?.id) {
-                // Previous was a scan. 
-                if (confirm(`Change tag ${selectedItem.macAddress}?\n\n${getName(selectedItem)} @${selectedItem.label6}\nto\n${getName(prevScannedItem)} @${prevScannedItem.label6}`)) {
-                    minew.bind(selectedItem.macAddress, prevScannedItem.id)
-                }
+                // Previous was a scan.
+                modals.confirm.open = true
+                return
             }
             prevScannedItem = { ...selectedItem }
             originalItem = { ...selectedItem }
@@ -111,6 +116,23 @@
         </button>
     </svelte:fragment>
 </Overlay>
+
+{#if modals.confirm.open}
+    <confirm transition:slide class="alert alert-warning fixed bottom-0 rounded-b-none px-5 z-50 flex flex-col items-start">
+        <span >
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            <span>{`Change tag ${selectedItem.macAddress || ''}?`}</span>
+        </span>
+        <div class="grid grid-cols-5 items-end w-full place-end-end">
+            <span class="col-span-1">from:</span><span class="col-span-4">{`${getName(selectedItem)} ($${selectedItem.label6})`}</span>
+            <span class="col-span-1">to:</span><span class="col-span-4">{`${getName(prevScannedItem)} ($${prevScannedItem.label6})`}</span>
+        </div>
+        <div class="gap-10 w-full justify-center">
+            <button class="btn btn-ghost btn-active px-10" on:click={cancelBind}>No</button>
+            <button class="btn btn-accent px-10" on:click={() => { minew.bind(selectedItem.macAddress, prevScannedItem.id) }}>Yes</button>
+        </div>
+    </confirm>
+{/if}
 
 <style>
     price:before {

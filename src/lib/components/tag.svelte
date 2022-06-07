@@ -159,7 +159,7 @@
         position: relative;
         opacity: 1;
         filter: contrast(50%);
-        transition: opacity .6s linear, filter .6s linear;
+        /* transition: opacity .6s linear, filter .6s linear; */
         transform: translateY(-10px);
     }
     span { 
