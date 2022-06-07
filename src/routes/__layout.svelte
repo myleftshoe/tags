@@ -181,5 +181,6 @@
 <style>
     :global(body) {
         overflow: auto;
+        overscroll-behavior-y: contain;
     }
 </style>
