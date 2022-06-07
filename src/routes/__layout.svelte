@@ -146,6 +146,7 @@
             id="search"
             type="search"
             placeholder="Search"
+            autocapitalize="none"
             class="w-48 input input-bordered input-xs px-3 py-5 text-base focus:input-primary"
         />
         <button
