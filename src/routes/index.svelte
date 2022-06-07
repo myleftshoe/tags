@@ -35,6 +35,12 @@
         prevScannedItem = { ...nullProduct }
     }
 
+    function bind() {
+        originalItem = { ...selectedItem }
+        modals.confirm.open = false
+        minew.bind(selectedItem.macAddress, prevScannedItem.id)        
+    }
+
     function cancelBind() {
         modals.confirm.open = false
         originalItem = { ...selectedItem }
@@ -129,7 +135,7 @@
         </div>
         <div class="gap-10 w-full justify-center">
             <button class="btn btn-ghost btn-active px-10" on:click={cancelBind}>No</button>
-            <button class="btn btn-accent px-10" on:click={() => { minew.bind(selectedItem.macAddress, prevScannedItem.id) }}>Yes</button>
+            <button class="btn btn-accent px-10" on:click={bind}>Yes</button>
         </div>
     </confirm>
 {/if}
