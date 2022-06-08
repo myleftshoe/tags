@@ -24,7 +24,7 @@
 
     const handleItemClick = (item) => (e) => {
         originalItem = { ...item }
-        selectedItem = { ...item }
+        selectedItem = item
         modals.tag.open = true
     }
 
@@ -39,7 +39,7 @@
     function bind() {
         modals.confirm.open = false
         minew.bind(scannedItem.macAddress, selectedItem.id)
-        selectedItem = { ...scannedItem }
+        selectedItem = scannedItem
         originalItem = { ...scannedItem }
         scannedItem = { ...nullProduct }
     }
@@ -89,7 +89,7 @@
             }
         }
         else {
-            selectedItem = { ...scannedItem }
+            selectedItem = scannedItem
             originalItem = { ...selectedItem }
             // modals.tag.open = true  // uncomment to open it lazily, ie wait for fetch
         }
