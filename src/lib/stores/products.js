@@ -1,37 +1,32 @@
-import { readable } from 'svelte/store'
+import { writable } from 'svelte/store'
 import minew from '$lib/datasources/minew'
 import translate from '$lib/util/translations'
 import { alpha } from '$lib/util/sort'
 
+export async function fetchProducts() {
+    const response = await minew.get(`/goods?page=1&size=99999&storeId=123`)
+    const products = response.rows.map(row => ({
+        id: row.id,
+        // qrcode: row.qrcode,
+        // barcode: row.barcode,
+        label3: row.label3,
+        label4: row.label4.trim(),
+        label5: row.label5.trim(),
+        label6: row.label6,
+        name: getName(row),
+        label8: row.label8,
+        label9: row.label9,
+        label10: row.label10,
+        label11: row.label11,
+        label13: row.label13,
+        status: translate(row.status) || row.status,
+    })).sort(alpha('name'))
+    return Promise.resolve(products)
+}
 
-export default readable([], (set) => {
-    (async function asyncWrapper() {
-        console.log('productStore')
-        // set([])
-        // return
-        const response = await minew.get(`/goods?page=1&size=99999&storeId=123`)
-        const products = response.rows.map(row => ({
-            id: row.id,
-            // qrcode: row.qrcode,
-            // barcode: row.barcode,
-            label3: row.label3,
-            label4: row.label4.trim(),
-            label5: row.label5.trim(),
-            label6: row.label6,
-            name: getName(row),
-            label8: row.label8,
-            label9: row.label9,
-            label10: row.label10,
-            label11: row.label11,
-            label13: row.label13,
-            status: translate(row.status) || row.status,
-        })).sort(alpha('name'))
-    
-        // console.table(products)
-        set(products)
-    })()
+export default writable([], (set) => {
+    fetchProducts().then(set)
 })
-
 
 export const meta = {
     label3: { name: 'plucode', editable: false, maxlength:8, uppercase: true, placeholder: '0000', },

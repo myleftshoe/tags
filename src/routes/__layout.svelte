@@ -2,7 +2,7 @@
     import '../app.css';
     import { onMount } from 'svelte';
     import search from '$lib/stores/search';
-    import showUnbound from '$lib/stores/bound';
+    import products, { fetchProducts } from '$lib/stores/products';
     import Overlay from '$lib/components/overlay.svelte'
     import Keypad  from '$lib/components/keypad.svelte'
     import SOffline from "$lib/components/s-offline.svelte"
@@ -65,6 +65,11 @@
     function handlePointerDown() {
         refs.search.blur()
     }
+
+    async function reloadProducts() {
+        products.set(await fetchProducts())
+    }
+
 </script>
 
 <svelte:head>
@@ -118,27 +123,15 @@
 <svelte:body on:pointerdown|capture={handlePointerDown}/>
 
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-20">
-        <SOffline pingUrl="https://bitly.com" on:detectedCondition={handleNetworkChange}>
-            <span slot="online" class="absolute -top-1 left-0 text-green-500">●</span>
-            <span slot="offline" class="absolute -top-1 left-0 text-red-500">●</span>
-        </SOffline>
-        <div class="navbar-start">
-        <button class="no-animation btn btn-ghost btn-circle">
-            <label class="swap">
-                <input type="checkbox" bind:checked={$showUnbound}/>
-                <svg class="swap-on h-5 w-5 stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z"/>
-                    <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
-                    <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
-                </svg>
-                <svg class="swap-off h-5 w-5 stroke-current" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
-                    <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />  
-                    <line x1="16" y1="21" x2="16" y2="19" />
-                    <line x1="19" y1="16" x2="21" y2="16" />  <line x1="3" y1="8" x2="5" y2="8" />
-                    <line x1="8" y1="3" x2="8" y2="5" />
-                </svg>
-            </label>
+    <SOffline pingUrl="https://bitly.com" on:detectedCondition={handleNetworkChange}>
+        <span slot="online" class="absolute -top-1 left-0 text-green-500">●</span>
+        <span slot="offline" class="absolute -top-1 left-0 text-red-500">●</span>
+    </SOffline>
+    <div class="navbar-start">
+        <button class="no-animation transition-colors btn btn-ghost btn-circle active:bg-base-300 focus:bg-transparent" on:click={reloadProducts}>
+            <svg class="fill-current transition-transform active:rotate-90" xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
+            </svg>
         </button>
     </div>
     <div class="relative">
@@ -161,7 +154,7 @@
         </button>
     </div>
     <div class="navbar-end">
-        <button class="no-animation btn btn-ghost btn-circle swap swap-rotate {dark ? 'swap-active' : ''}" on:click={toggleTheme}>
+        <button class="no-animation btn btn-ghost btn-circle swap swap-rotate active:bg-base-300 focus:bg-transparent {dark ? 'swap-active' : ''}" on:click={toggleTheme}>
             <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
             </svg>
