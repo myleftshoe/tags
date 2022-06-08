@@ -14,7 +14,7 @@
 
 <script>
     let selectedItem = { ...nullProduct }
-    let scannedItem = { ...nullProduct }
+    let scannedItem = null
     let originalItem = { ...nullProduct }
 
     const modals = {
@@ -32,7 +32,7 @@
         Object.assign(selectedItem, originalItem)
         selectedItem = { ...nullProduct }
         originalItem = { ...nullProduct }
-        scannedItem = { ...nullProduct }
+        scannedItem = null
         modals.tag.open = false
     }
 
@@ -41,12 +41,12 @@
         minew.bind(scannedItem.macAddress, selectedItem.id)
         selectedItem = scannedItem
         originalItem = { ...scannedItem }
-        scannedItem = { ...nullProduct }
+        scannedItem = null
     }
 
     function cancelBind() {
         modals.confirm.open = false
-        scannedItem = { ...nullProduct }
+        scannedItem = null
     }
 
     const dollars = (price) => price.split('.')[0]
@@ -70,7 +70,7 @@
         console.log('item', JSON.stringify(item, null, 2))
         console.log('payload', JSON.stringify(payload, null, 2))
         originalItem = { ...item }
-        items = [...items]
+        // items = [...items]
         await minew.post('goods?storeId=123', payload)
     }
 
@@ -152,16 +152,18 @@
 
 <style>
     price:before {
-        font-size: 0.75rem;
         content: '$';
+        vertical-align: text-bottom;
+        font-size: 0.75rem;
+        letter-spacing: 0.25ex;
     }
     price:after {
+        content: attr(data-cents) '\a'attr(data-unit);
         position: absolute;
         font-size: 0.75rem;
         white-space: pre-line;
         line-height: 2.5ch;
         text-align: center;
-        content: attr(data-cents) '\a'attr(data-unit);
         transform: translateX(0.25ch);
     }
     li {
