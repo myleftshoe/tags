@@ -123,7 +123,7 @@
 <svelte:body on:pointerdown|capture={handlePointerDown}/>
 
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-20">
-    <SOffline pingUrl="https://bitly.com" on:detectedCondition={handleNetworkChange}>
+    <SOffline pingUrl="https://esl.minew.com" on:detectedCondition={handleNetworkChange}>
         <span slot="online" class="absolute -top-1 left-0 text-green-500">●</span>
         <span slot="offline" class="absolute -top-1 left-0 text-red-500">●</span>
     </SOffline>
