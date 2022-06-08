@@ -41,11 +41,11 @@
                     <span style={toCss(style)}>
                         {#if (label !== 'label6')}
                             <input 
-                                bind:value={product[label]} 
-                                use:uppercase={meta[label].uppercase ?? false}
+                                use:uppercase
                                 use:preventScroll
                                 use:clearOnFocus={label === 'label10'}
                                 use:enforceMaxlength
+                                bind:value={product[label]}
                                 id={label}
                                 tabindex={meta[label].tabindex || -1}]
                                 placeholder="{meta[label]?.placeholder}"

@@ -2,16 +2,17 @@ export function uppercase(node, use = true) {
 
     if (!use) return
 
-    function handleBlur() {
+    function handleInput() {
         node.value = node.value.toUpperCase();
     }
-
+    
     node.style.textTransform = 'uppercase'
-    node.addEventListener('blur', handleBlur)
+    node.setAttribute('autocapitalize', 'characters')
+    node.addEventListener('input', handleInput)
 
     return {
         destroy() {
-            node.removeEventListener('blur', handleBlur)
+            node.removeEventListener('input', handleInput)
         }
     }
 }
