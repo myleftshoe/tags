@@ -105,7 +105,12 @@
             isHex12($search) && handleMac($search)
         } else {
             // items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
-            items = fuzzy($products, $search.toLocaleUpperCase(), ['label4', 'label5', 'id']) //TODO: id or plucode?
+            const fuzzed = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
+            const filtered = fuzzed.filter(row => ['FRUIT', 'VEGETABLES'].includes(row.label13))
+            items = (filtered.length > 0) ? filtered : fuzzed
+            console.log('unfiltered', $products.length)
+            console.log('fuzzed', items.length)
+            console.log('filtered', filtered.length)
         }
 </script>
 

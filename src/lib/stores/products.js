@@ -9,27 +9,23 @@ export default readable([], (set) => {
         console.log('productStore')
         // set([])
         // return
-        const response = await minew.get(`/goods?page=1&size=9999&storeId=123`)
-        const products = response.rows
-            .filter(row => ['FRUIT', 'VEGETABLES'].includes(row.label13))
-            .map(row => ({
-                id: row.id,
-                // qrcode: row.qrcode,
-                // barcode: row.barcode,
-                label3: row.label3,
-                label4: row.label4.trim(),
-                label5: row.label5.trim(),
-                label6: row.label6,
-                name: getName(row),
-                label8: row.label8,
-                label9: row.label9,
-                label10: row.label10,
-                label11: row.label11,
-                label13: row.label13,
-                status: translate(row.status) || row.status,
-            }))
-            // .filter(row => row.status === 'bound')
-            .sort(alpha('name'))
+        const response = await minew.get(`/goods?page=1&size=99999&storeId=123`)
+        const products = response.rows.map(row => ({
+            id: row.id,
+            // qrcode: row.qrcode,
+            // barcode: row.barcode,
+            label3: row.label3,
+            label4: row.label4.trim(),
+            label5: row.label5.trim(),
+            label6: row.label6,
+            name: getName(row),
+            label8: row.label8,
+            label9: row.label9,
+            label10: row.label10,
+            label11: row.label11,
+            label13: row.label13,
+            status: translate(row.status) || row.status,
+        })).sort(alpha('name'))
     
         // console.table(products)
         set(products)
