@@ -12,6 +12,17 @@
     const { height, width } = data.size
     const text = Object.entries(data.text)
 
+    function formatPrice(price) {
+        const [d, c = ''] = price.replace(',','.').split('.')
+        const dollars = Number(d.trim()).toString()
+        const cents = c.trim().length ? c.trim().padEnd(2, '0') : ''
+        return cents !== '' ? [dollars, cents].join('.') : dollars
+    }
+
+    function handlePriceChange(e) {
+        product.label6 = formatPrice(e.target.value)
+    }
+
     let editingPrice = false;
     function handlePriceFocus(e) {
         editingPrice = true
@@ -80,6 +91,7 @@
                                         bind:value={product[label]} 
                                         use:clearOnFocus 
                                         use:enforceMaxlength
+                                        on:change={handlePriceChange}
                                     />
                                 {/if}
                             </price>
