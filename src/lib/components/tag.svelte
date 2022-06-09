@@ -41,7 +41,7 @@
                     <span style={toCss(style)}>
                         {#if (label !== 'label6')}
                             <input 
-                                use:uppercase
+                                use:uppercase={meta[label].uppercase || false}
                                 use:preventScroll
                                 use:clearOnFocus={label === 'label10'}
                                 use:enforceMaxlength
