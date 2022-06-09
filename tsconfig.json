@@ -1,4 +1,6 @@
 {
-    // Removes error: “parameter implicitly has an ‘any’ type”
-    "noImplicitAny": false
+    "compilerOptions": {
+        // Removes error: “parameter implicitly has an ‘any’ type”
+        "noImplicitAny": false
+    }
 }
