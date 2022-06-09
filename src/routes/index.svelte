@@ -76,6 +76,7 @@
 
     const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim()) // first char is #
     const getName = ({label4 = '', label5 = ''} = {}) => `${label4.trim()} ${label5.trim()}`.trim() 
+    const getNameReversed = ({label4 = '', label5 = ''} = {}) => `${label5.trim()} ${label4.trim()}`.trim() 
 
     async function handleMac(mac) {
         if (!isHex12(mac)) return
@@ -137,12 +138,8 @@
     <confirm transition:slide class="alert alert-warning fixed bottom-0 rounded-b-none px-5 z-50 flex flex-col items-start">
         <span >
             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-            <span>{`Change tag ${selectedItem.macAddress || ''}?`}</span>
+            <span>{`Change the tag you just scanned (${getNameReversed(scannedItem)} $${scannedItem.label6}) to the product above (${getNameReversed(selectedItem)} $${selectedItem.label6})?`}</span>
         </span>
-        <div class="grid grid-cols-5 items-end w-full place-end-end">
-            <span class="col-span-1">from:</span><span class="col-span-4">{`${getName(scannedItem)} ($${scannedItem.label6})`}</span>
-            <span class="col-span-1">to:</span><span class="col-span-4">{`${getName(selectedItem)} ($${selectedItem.label6})`}</span>
-        </div>
         <div class="gap-10 w-full justify-center">
             <button class="btn btn-ghost btn-active px-10" on:click={cancelBind}>No</button>
             <button class="btn btn-accent px-10" on:click={bind}>Yes</button>
