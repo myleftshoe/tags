@@ -56,33 +56,36 @@
                                 style="width: {meta[label]?.maxlength}ch; font-weight: inherit;"
                             />
                         {:else}
-                            <!-- {price}. -->
-                            <input
-                                bind:this={refs.dollars} 
-                                class="dollars" 
-                                type="number"
-                                inputmode="numeric"
-                                size="2" 
-                                maxlength="2" 
-                                tabindex={3} 
-                                on:change={handlePriceChange}
-                                value={dollars} 
-                                use:clearOnFocus 
-                                use:enforceMaxlength 
-                            />.
-                            <sup><input 
-                                bind:this={refs.cents} 
-                                class="cents" 
-                                type="number" 
-                                inputmode="numeric"
-                                size="2" 
-                                maxlength="2" 
-                                tabindex={4} 
-                                on:change={handlePriceChange}
-                                value={cents} 
-                                use:clearOnFocus
-                                use:enforceMaxlength 
-                            /></sup>
+                            <price>
+                                <dollars data-dot={cents.length ? "true": "false"}>
+                                    <input
+                                        bind:this={refs.dollars} 
+                                        class="dollars" 
+                                        type="number"
+                                        inputmode="numeric"
+                                        size="2" 
+                                        maxlength="2" 
+                                        tabindex={3} 
+                                        on:change={handlePriceChange}
+                                        value={dollars} 
+                                        use:clearOnFocus 
+                                        use:enforceMaxlength 
+                                    />
+                                </dollars>
+                                <sup><input 
+                                    bind:this={refs.cents} 
+                                    class="cents" 
+                                    type="number" 
+                                    inputmode="numeric"
+                                    size="2" 
+                                    maxlength="2" 
+                                    tabindex={4} 
+                                    on:change={handlePriceChange}
+                                    value={cents} 
+                                    use:clearOnFocus
+                                    use:enforceMaxlength 
+                                /></sup>
+                            </price>                            
                         {/if}
                     </span>
                 {/each}
@@ -102,6 +105,13 @@
 </container>
 
 <style>
+    dollars::after {
+        content: ".";
+        visibility: hidden;
+    }
+    dollars[data-dot=true]::after {
+        visibility: visible;
+    }
     .dollars { 
         width: 2ch; 
         height: 1.75ex; 
