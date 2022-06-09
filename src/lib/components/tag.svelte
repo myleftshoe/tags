@@ -1,8 +1,8 @@
 <script>
-    import demoData from '$lib/stores/demoData.json'
-    import { nullProduct, meta } from '$lib/stores/products'
-    import { uppercase, clearOnFocus, enforceMaxlength, preventScroll } from '$lib/actions/input'
     import { afterUpdate } from 'svelte'
+    import { uppercase, clearOnFocus, enforceMaxlength, preventScroll } from '$lib/actions/input'
+    import { nullProduct, meta } from '$lib/stores/products'
+    import demoData from '$lib/stores/demoData.json'
 
     export let product = { ...nullProduct }
 
@@ -11,20 +11,17 @@
     const data = demoData[0]
     const { height, width } = data.size
     const text = Object.entries(data.text)
-    const dollar = data.icons?.icon1
 
     let editingPrice = false;
     function handlePriceFocus(e) {
-        // refs.dollars.blur()
         editingPrice = true
+    }
+    function handlePriceBlur(e) {
+        editingPrice = false
     }
     afterUpdate(() => {
         editingPrice && refs.price.focus()  
     })
-    function handlePriceBlur(e) {
-        // refs.dollars.blur()
-        editingPrice = false
-    }
 
     const toCss = style => `
         position: absolute;
@@ -65,40 +62,29 @@
                                 style="width: {meta[label]?.maxlength}ch; font-weight: inherit;"
                             />
                         {:else}
-                        <price >
-                            {#if !editingPrice}
+                            <price>
+                                {#if !editingPrice}
                                     <dollars class:dot={Boolean(cents.length)} tabindex={3} on:focus={handlePriceFocus} style="visiblity: {editingPrice ? 'hidden' : 'visible'}">{dollars}</dollars>
-                                    <cents tabindex={4} on:focus={handlePriceFocus} style="visiblity: {editingPrice ? 'hidden' : 'visible'}"><sup>{cents}</sup></cents>
-                            {:else}
-                                <input
-                                    bind:this={refs.price}
-                                    class="price" 
-                                    type="text"
-                                    inputmode="numeric"
-                                    size="5" 
-                                    maxlength="5" 
-                                    tabindex={3} 
-                                    on:blur={handlePriceBlur}
-                                    bind:value={product[label]} 
-                                    use:clearOnFocus 
-                                    use:enforceMaxlength
-                                />
-                            {/if}
-                        </price>
-
+                                    <cents tabindex={4} on:focus={handlePriceFocus} style="visiblity: {editingPrice ? 'hidden' : 'visible'}"><sup bind:this={refs.sup}>{cents}</sup></cents>
+                                {:else}
+                                    <input
+                                        bind:this={refs.price}
+                                        class="price" 
+                                        type="text"
+                                        inputmode="numeric"
+                                        size="5" 
+                                        maxlength="5" 
+                                        tabindex={3} 
+                                        on:blur={handlePriceBlur}
+                                        bind:value={product[label]} 
+                                        use:clearOnFocus 
+                                        use:enforceMaxlength
+                                    />
+                                {/if}
+                            </price>
                         {/if}
                     </span>
                 {/each}
-                <!--
-                    Dollar sign. Inputs can't have psuedo elements so not implemented with 
-                    ::before on dollar input. I.e. would need a wrapper element.
-                -->
-                <span style="
-                    top: {data.text['label6'].y}px; 
-                    left: calc({data.text['label6'].x}px - 1ch);
-                    font-size: {dollar['font-size']}px; 
-                    color: {dollar.color};
-                ">$</span>
             </tagcontent>
         </tag>
     </case>
@@ -159,14 +145,9 @@
         position: absolute;
         display:flex;
     }
-    sup { 
-        font-size: .6em;
-    }
     input { 
         border: none; 
         outline: none;
-    }
-    input {
         background-color: transparent;
     }
     input:focus {
@@ -175,12 +156,18 @@
     price { 
         display: flex;
         align-items: center;
-        line-height: 1em;
-        height: 1.25em;
+        line-height: 2ex;
+        height: 2ex;
+        transform: translate(-.2ch, .15ex);
     }
     .price { 
         width: 5ch; 
         font-weight: inherit; 
+    }
+    price::before {
+        content: "$";
+        position: absolute;
+        left: -1ch;
     }
     dollars::after {
         content: ".";
@@ -188,5 +175,16 @@
     }
     dollars.dot::after {
         visibility: visible;
+    }
+    @keyframes animateCents {
+        from { transform: scale(1.25); } 
+        to { transform: scale(1); }
+    }
+    cents {
+        animation: animateCents .1s ease;
+        transform-origin: top left;
+    }
+    sup {
+		font-size: 0.6em;
     }
 </style>
