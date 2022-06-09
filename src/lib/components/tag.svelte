@@ -64,14 +64,15 @@
                         {:else}
                             <price>
                                 {#if !editingPrice}
-                                    <dollars class:dot={Boolean(cents.length)} tabindex={3} on:focus={handlePriceFocus} style="visiblity: {editingPrice ? 'hidden' : 'visible'}">{dollars}</dollars>
+                                    <dollars contenteditable="true" class:dot={Boolean(cents.length)} tabindex={3} on:focus={handlePriceFocus} style="visiblity: {editingPrice ? 'hidden' : 'visible'}">{dollars}</dollars>
                                     <cents tabindex={4} on:focus={handlePriceFocus} style="visiblity: {editingPrice ? 'hidden' : 'visible'}"><sup bind:this={refs.sup}>{cents}</sup></cents>
                                 {:else}
                                     <input
                                         bind:this={refs.price}
                                         class="price" 
                                         type="text"
-                                        inputmode="numeric"
+                                        inputmode="decimal"
+                                        pattern="[0-9]*"
                                         size="5" 
                                         maxlength="5" 
                                         tabindex={3} 
