@@ -1,14 +1,16 @@
 <script>
     import '../app.css';
-    import { onMount } from 'svelte';
+    import { onMount } from 'svelte'
+    import { fly } from 'svelte/transition'
     import search from '$lib/stores/search';
-    import products, { fetchProducts } from '$lib/stores/products';
+    import products, { fetchProducts } from '$lib/stores/products'
     import Overlay from '$lib/components/overlay.svelte'
     import Keypad  from '$lib/components/keypad.svelte'
     import SOffline from "$lib/components/s-offline.svelte"
+    import { sleep } from '$lib/util/sleep'
     
     const handleNetworkChange = ({ detail }) => {
-        console.log("event details: ", detail);
+        console.warn("event details: ", detail);
     }
 
     const modals = {
@@ -66,8 +68,15 @@
         refs.search.blur()
     }
 
+    let alert = false
     async function reloadProducts() {
-        products.set(await fetchProducts())
+        try {
+            products.set(await fetchProducts())
+        } catch(e) {
+            alert = true
+            await sleep(6000)
+            alert = false
+        }
     }
 
 </script>
@@ -124,12 +133,12 @@
 
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-20">
     <SOffline pingUrl="https://esl.minew.com" on:detectedCondition={handleNetworkChange}>
-        <span slot="online" class="absolute -top-1 left-0 text-green-500">●</span>
-        <span slot="offline" class="absolute -top-1 left-0 text-red-500">●</span>
+        <span slot="online" class="absolute -top-1 left-0 text-green-500 select-none">●</span>
+        <span slot="offline" class="absolute -top-1 left-0 text-red-500 select-none">●</span>
     </SOffline>
     <div class="navbar-start">
         <button class="no-animation transition-colors btn btn-ghost btn-circle active:bg-base-300 focus:bg-transparent" on:click={reloadProducts}>
-            <svg class="fill-current transition-transform active:rotate-90" xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24">
+            <svg class="fill-current transition-transform active:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24">
                 <path d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
             </svg>
         </button>
@@ -170,6 +179,15 @@
 </Overlay>
 
 <slot />
+
+{#if alert}
+<div transition:fly class="alert alert-warning shadow-lg absolute top-16">
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        <p>Can't login to esl.minew.com. No internet or the server is down.</p>
+    </div>
+</div>
+{/if}
 
 <style>
     :global(body) {

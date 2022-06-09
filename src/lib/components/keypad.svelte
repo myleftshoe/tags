@@ -1,9 +1,10 @@
 <script>
     import { browser } from '$app/env'
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher } from 'svelte'
+    import { sleep } from '$lib/util/sleep'
+
     const dispatch = createEventDispatcher();    
 
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
     let value = ''
 
