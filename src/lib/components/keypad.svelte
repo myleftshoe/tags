@@ -38,7 +38,7 @@
         {/each}
     </keypad>
     <button class="btn btn-link text-accent z-50 {!value && 'invisible'}" on:click={() => (value = '')}>delete</button>
-    <footer class="absolute bottom-0 text-sm text-base-content opacity-50 select-none">*or scan a tag to start</footer>
+    <footer class="grid place-content-center w-full absolute bottom-4 text-sm text-base-content opacity-50 select-none">*or scan a tag to start</footer>
 </main>
 
 <style>
