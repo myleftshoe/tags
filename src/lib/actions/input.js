@@ -45,21 +45,29 @@ export function preventScroll(node, scrollContainer = document.body) {
 
 // COMPATIBILITY FIX: Chrome on android doesn't honor maxlength. 
 // Still doesn't work when input value starts empty, i.e. when placeholder is shown
-export function enforceMaxlength(node, length = 0) {
+export function maxlength(node, length = 0) {
+    
+    if (!length) return 
 
-    function handleKeypress(e) {
-        const { value, maxlength } = e.target
-        const limit = parseInt(length || maxlength)
-        if (value.length > limit) {
+    node.size = length
+    node.maxlength = length
+    node.style.width = `${length}ch`
+    
+    function handleInput(e) {
+        // e.data contains the key pressed.
+        // For non-printable chars e.data is null.
+        const key = e.data || ''
+        const value = node.value + key
+        if (value.length > length) {
             e.preventDefault()
         }
     }
 
-    node.addEventListener('keypress', handleKeypress)
+    node.addEventListener('beforeinput', handleInput)
 
     return {
         destroy() {
-            node.removeEventListener('input', handleKeypress)
+            node.removeEventListener('beforeinput', handleInput)
         }
     }
 }

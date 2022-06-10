@@ -32,7 +32,7 @@ export const meta = {
     label3: { name: 'plucode', editable: false, maxlength:8, uppercase: true, placeholder: '0000', },
     label4: { name: 'name1', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 2, },
     label5: { name: 'name2', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 1, },
-    label6: { name: 'price', editable: true, placeholder: '9.99', },
+    label6: { name: 'price', editable: true, maxlength:5, placeholder: '9.99', },
     label8: { name: 'specification', editable: true, maxlength:16, placeholder: 'Organic', default: 'Organic', },
     label9: { name: 'grade', editable: true, maxlength:21, placeholder: 'Grade', },
     label10: { name: 'unit', editable: true, maxlength:4, placeholder: 'kg', default: 'kg', tabindex: 5, },

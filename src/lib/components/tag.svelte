@@ -1,6 +1,6 @@
 <script>
     import { afterUpdate } from 'svelte'
-    import { uppercase, clearOnFocus, enforceMaxlength, preventScroll } from '$lib/actions/input'
+    import { uppercase, clearOnFocus, maxlength, preventScroll } from '$lib/actions/input'
     import { nullProduct, meta } from '$lib/stores/products'
     import demoData from '$lib/stores/demoData.json'
 
@@ -61,16 +61,13 @@
                                 use:uppercase={meta[label].uppercase || false}
                                 use:preventScroll
                                 use:clearOnFocus={label === 'label10'}
-                                use:enforceMaxlength
+                                use:maxlength={meta[label]?.maxlength}
                                 bind:value={product[label]}
                                 id={label}
                                 tabindex={meta[label].tabindex || -1}]
                                 placeholder="{meta[label]?.placeholder}"
                                 type="text"
                                 autocapitalize="{meta[label].uppercase ? 'characters' : label === 'label10' ? 'none' : 'words'}"
-                                size="{meta[label]?.maxlength || ''}"
-                                maxlength="{meta[label]?.maxlength || ''}"
-                                style="width: {meta[label]?.maxlength}ch; font-weight: inherit;"
                             />
                         {:else}
                             <price>
@@ -80,17 +77,14 @@
                                 {:else}
                                     <input
                                         bind:this={refs.price}
-                                        class="price" 
                                         type="text"
                                         inputmode="decimal"
                                         pattern="[0-9]*"
-                                        size="5" 
-                                        maxlength="5" 
                                         tabindex={3} 
                                         on:blur={handlePriceBlur}
                                         bind:value={product[label]} 
                                         use:clearOnFocus 
-                                        use:enforceMaxlength
+                                        use:maxlength={meta[label]?.maxlength}
                                         on:change={handlePriceChange}
                                     />
                                 {/if}
@@ -162,6 +156,7 @@
         border: none; 
         outline: none;
         background-color: transparent;
+        font-weight: inherit;
     }
     input:focus {
         background-color: #f002;
@@ -172,10 +167,6 @@
         line-height: 2ex;
         height: 2ex;
         transform: translate(-.2ch, .15ex);
-    }
-    .price { 
-        width: 5ch; 
-        font-weight: inherit; 
     }
     price::before {
         content: "$";
