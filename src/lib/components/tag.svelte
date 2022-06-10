@@ -67,7 +67,7 @@
                                 tabindex={meta[label].tabindex || -1}]
                                 placeholder="{meta[label]?.placeholder}"
                                 type="text"
-                                autocapitalize="{meta[label].uppercase ? 'characters' : label === 'label10' ? 'none' : 'words'}"
+                                autocapitalize="{label === 'label10' ? 'none' : 'words'}"
                             />
                         {:else}
                             <price>
