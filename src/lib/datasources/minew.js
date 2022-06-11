@@ -4,7 +4,7 @@ import { MINEW_USERNAME, MINEW_PASSWORD } from '$lib/env'
 // TODO: remove credentials
 
 const fetcher = new Fetcher(`https://esl.minew.com:9090/V1`)
-let token
+let token = ''
 
 async function get(path) {
     token = await login()
@@ -76,10 +76,9 @@ async function login() {
         body: JSON.stringify(payload)
     })
     const json = await response.json()
-    const { token } = json.body
+    token = json?.body?.token ?? ''
     if (!token) {
         console.warn('Login failed!')
-        token = ''
     }
     return token
 }
