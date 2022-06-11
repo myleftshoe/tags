@@ -13,6 +13,25 @@ async function get(path) {
     return response.json()
 }
 
+async function batchPost(path, payloads) {
+    token = await login()
+    const headers = { 
+        "content-type": 'application/json',
+        "Authorization": `Bearer ${token}` 
+    }
+    for (const payload of payloads) {
+        const options = { 
+            method: 'POST', 
+            headers, 
+            body: JSON.stringify(payload) 
+            // body: JSON.stringify(sample) 
+        }
+        const response = fetcher.fetch(path, options)
+        // const json = await response.json()
+        // return json
+    }
+}
+
 async function post(path, payload) {
     token = await login()
     const headers = { 
@@ -58,6 +77,10 @@ async function login() {
     })
     const json = await response.json()
     const { token } = json.body
+    if (!token) {
+        console.warn('Login failed!')
+        token = ''
+    }
     return token
 }
 
@@ -100,5 +123,5 @@ async function bind(macAddress = "ac233fd0b591", id = 2084) {
 }
 
 
-export default { get, post, put, bind, login }
+export default { get, post, batchPost, put, bind, login }
 export { bind }
