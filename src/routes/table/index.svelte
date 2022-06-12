@@ -134,8 +134,14 @@
                         <li><button>@BULK</button></li>
                     </ul>
                 </div>
-                <span class="badge badge-lg border-0 bg-accent text-accent-content">
-                    {$products.length} products
+                <span class="badge badge-lg border-0 bg-base-100 text-accent-content">
+                    <div class="text-sm breadcrumbs">
+                        <ul>
+                            <li>{$products.length} products</li>
+                            <li>{$products.length - items.length} filtered</li> 
+                            <li>{checkedCount} selected</li> 
+                        </ul>
+                    </div>                
                 </span>
             </div>
             <!-- actions -->
@@ -167,7 +173,7 @@
             <div class="relative">
                 <table class="table table-zebra table-fixed table-compact w-full z-0 p-8 rounded-lg">
                     <thead on:click={handleTHeadClick}>
-                        <th class="w-16 text-center">
+                        <th class="w-12 text-right">
                             <input
                                 bind:this={refs.selectAll}
                                 type="checkbox"
@@ -192,7 +198,7 @@
                                 on:click={() => editProduct(item)}
                                 class="cursor-pointer {item === selectedItem ? 'active' : ''}"
                             >
-                                <td class="w-16 text-center" on:click|stopPropagation>
+                                <td class="w-12 text-right" on:click|stopPropagation>
                                     <input
                                         data-id={item.id}
                                         type="checkbox"
