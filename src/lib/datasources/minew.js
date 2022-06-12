@@ -49,6 +49,27 @@ async function post(path, payload) {
     return json
 }
 
+
+async function batchDelete(path, payload) {
+    token = await login()
+    const headers = { 
+        "content-type": 'application/json',
+        "Authorization": `Bearer ${token}` 
+    }
+    console.warn(payload)
+    // return
+    const options = { 
+        method: 'DELETE', 
+        headers, 
+        body: JSON.stringify(payload) 
+        // body: JSON.stringify(sample) 
+    }
+    const response = await fetcher.fetch(path, options)
+    const json = await response.json()
+    return json
+}
+
+
 async function put(path, payload) {
     token = await login()
     const headers = { 
@@ -122,5 +143,5 @@ async function bind(macAddress = "ac233fd0b591", id = 2084) {
 }
 
 
-export default { get, post, batchPost, put, bind, login }
+export default { get, post, batchPost, batchDelete, put, bind, login }
 export { bind }
