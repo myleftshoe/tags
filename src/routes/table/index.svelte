@@ -72,6 +72,12 @@
         refs.addModal.show()
     }
 
+    function handleModalClose(e) {
+        if (e.target.returnValue === 'default') {
+            console.log("Confirm pressed!")
+        }
+
+    }
     let items = []
 
     $: console.warn($products.length)
@@ -150,17 +156,13 @@
     </div>
 </div>
 
-<!-- {#if modals.add} -->
-<Modal bind:this={refs.addModal}>
-    <svelte:fragment slot="title">add product</svelte:fragment>
+<Modal bind:this={refs.addModal} on:close={handleModalClose}>
     <AddProduct product={selectedItem}/>
     <svelte:fragment slot="actions">
         <button form="form" class="btn" value="cancel">Cancel</button>
         <button form="form" class="btn btn-primary" value="default">Confirm</button>
     </svelte:fragment>
 </Modal>
-
-<!-- {/if} -->
 
 <style>
     th {
