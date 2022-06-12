@@ -217,6 +217,6 @@
 
 <style>
     th {
-        @apply bg-primary text-primary-content sticky top-0 cursor-pointer shadow-2xl;
+        @apply bg-primary text-primary-content sticky top-0 cursor-pointer shadow-2xl py-3;
     }
 </style>
