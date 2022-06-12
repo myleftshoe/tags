@@ -61,15 +61,21 @@
 
     let selectedItem = {}
 
+    function addProduct() {
+        refs.addModal.title = 'Add Product'
+        refs.addModal.show()
+    }
+
     function editProduct(item) {
         selectedItem = item
+        refs.addModal.title = 'Edit Product'
         refs.addModal.show()
     }
 
     let items = []
 
     $: console.warn($products.length)
-    $: items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id', ''])
+    $: items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id' ])
 </script>
 <div class="absolute inset-0 bg-base-300">
     <div class="absolute inset-12 top-24">
@@ -87,7 +93,7 @@
                 </ul>
             </div>
             <span class="badge badge-lg bg-accent text-accent-content">
-            {$products.length} products
+                {$products.length} products
             </span>
         </div>            
             <!-- actions -->
@@ -95,7 +101,7 @@
                 <li><button on:click={getSelectedItems}>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                 </button></li>
-                <li><button on:click={refs.addModal.show}>
+                <li><button on:click={addProduct}>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </button></li>
                 <li><button>
@@ -123,8 +129,8 @@
                     <tbody>
                         {#each items as item (item.id) }
                             <tr on:click={() => editProduct(item)} class="cursor-pointer {item === selectedItem ? 'active' : ''}">
-                                <td class="w-16 text-center">
-                                    <input data-id="{item.id}" type="checkbox" data-checkbox="item" class="checkbox checkbox-sm" checked={false} on:change={handleCheckboxChange} on:click|stopPropagation/>
+                                <td class="w-16 text-center" on:click|stopPropagation>
+                                    <input data-id="{item.id}" type="checkbox" data-checkbox="row" class="checkbox checkbox-sm" checked={false} on:change={handleCheckboxChange}/>
                                 </td>
                                 <td class="w-20 text-center">{item.id}</td>
                                 <td class="w-20 text-center">{item.label3}</td>
@@ -146,7 +152,12 @@
 
 <!-- {#if modals.add} -->
 <Modal bind:this={refs.addModal}>
+    <svelte:fragment slot="title">add product</svelte:fragment>
     <AddProduct product={selectedItem}/>
+    <svelte:fragment slot="actions">
+        <button form="form" class="btn" value="cancel">Cancel</button>
+        <button form="form" class="btn btn-primary" value="default">Confirm</button>
+    </svelte:fragment>
 </Modal>
 
 <!-- {/if} -->
