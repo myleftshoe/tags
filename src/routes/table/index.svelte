@@ -1,18 +1,26 @@
 <script>
+    import {browser} from '$app/env'
     import products, { nullProduct } from '$lib/stores/products'
     import search from '$lib/stores/search'
     import fuzzy from '$lib/util/fuzzy'
     import minew from '$lib/datasources/minew'
     import { alpha, num } from '$lib/util/sort'
     import Modal from '$lib/components/modal.svelte'
+    import Confirm from '$lib/components/confirm.svelte'
     import AddProduct from '$lib/components/addProduct.svelte'
 
     let sort = { by: 'label4', desc: false }
 
+    let checkedCount = 0
+
     let refs = {}
 
+    function getChecked() {
+        return [...document.querySelectorAll('input[data-checkbox="row"]:checked')]
+    }
+
     function getSelectedItems(e) {
-        const checkboxes = document.querySelectorAll('input[data-checkbox="row"]:checked')
+        const checkboxes = getChecked()
         console.log(checkboxes)
         const ids = [...checkboxes].map(({ dataset }) => dataset.id)
         console.log(ids)
@@ -36,11 +44,13 @@
         ;[...checkboxes].forEach((checkbox) => {
             checkbox.checked = e.target.checked
         })
+        checkedCount = getChecked().length
     }
 
     function handleCheckboxChange(e) {
         const checkboxes = [...document.querySelectorAll('[data-checkbox="row"]')]
         refs.selectAll.indeterminate = checkboxes.some(({ checked }) => checked !== refs.selectAll.checked)
+        checkedCount = getChecked().length
     }
 
     function handleTHeadClick(e) {
@@ -73,12 +83,17 @@
         refs.addModal.show()
     }
 
+    function deleteProducts() {
+        checkedCount && refs.confirmModal.show()
+    }
+
     function handleModalClose(e) {
         if (e.target.returnValue === 'default') {
             console.log('Confirm pressed!')
             console.log(selectedItem)
         }
     }
+
     let items = []
 
     $: console.warn($products.length)
@@ -121,14 +136,13 @@
                             <path d="M11 19V13H5V11H11V5H13V11H19V13H13V19Z" />
                         </svg >
                     </button>
-                </li>
                 <li>
-                    <button>
+                    <button class="btn bg-base-100 border-0" disabled={!checkedCount} on:click={deleteProducts}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" width="24" >
                             <path d="M7 21Q6.175 21 5.588 20.413Q5 19.825 5 19V6H4V4H9V3H15V4H20V6H19V19Q19 19.825 18.413 20.413Q17.825 21 17 21ZM17 6H7V19Q7 19 7 19Q7 19 7 19H17Q17 19 17 19Q17 19 17 19ZM9 17H11V8H9ZM13 17H15V8H13ZM7 6V19Q7 19 7 19Q7 19 7 19Q7 19 7 19Q7 19 7 19Z" />
                         </svg>
                     </button>
-                </li>
+                </li>                                        
             </ul>
         </div>
         <!-- table -->
@@ -196,6 +210,10 @@
         <button form="form" class="btn btn-primary" value="default">Confirm</button>
     </svelte:fragment>
 </Modal>
+
+<Confirm bind:this={refs.confirmModal} on:close={handleModalClose}>
+    Are you sure you want to delete {checkedCount} items
+</Confirm>
 
 <style>
     th {

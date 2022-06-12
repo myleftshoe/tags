@@ -22,5 +22,4 @@
     actions {
         @apply flex w-full justify-center gap-10 mt-10
     }
-    
 </style>
