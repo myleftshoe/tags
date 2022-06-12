@@ -117,7 +117,7 @@
                         <li><button>@BULK</button></li>
                     </ul>
                 </div>
-                <span class="badge badge-lg bg-accent text-accent-content">
+                <span class="badge badge-lg border-0 bg-accent text-accent-content">
                     {$products.length} products
                 </span>
             </div>
