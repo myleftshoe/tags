@@ -45,12 +45,21 @@
             checkbox.checked = e.target.checked
         })
         checkedCount = getChecked().length
+        for (const item of items) {
+            item.checked = e.target.checked
+        }
+        // items = [...items]
+        // console.table(items)
     }
 
     function handleCheckboxChange(e) {
         const checkboxes = [...document.querySelectorAll('[data-checkbox="row"]')]
         refs.selectAll.indeterminate = checkboxes.some(({ checked }) => checked !== refs.selectAll.checked)
         checkedCount = getChecked().length
+
+        const item = $products.find(product => product.id === e.target.dataset.id)
+        item.checked = e.target.checked
+        // console.log(item)
     }
 
     function handleTHeadClick(e) {
@@ -93,6 +102,14 @@
             console.log(selectedItem)
         }
     }
+
+    function handleConfirmClose(e) {
+        if (e.target.returnValue === 'default') {
+            console.log('Confirm pressed!')
+            console.log(selectedItem)
+        }
+    }
+
 
     let items = []
 
@@ -181,7 +198,7 @@
                                         type="checkbox"
                                         data-checkbox="row"
                                         class="checkbox checkbox-sm"
-                                        checked={false}
+                                        bind:checked={item.checked}
                                         on:change={handleCheckboxChange}
                                     />
                                 </td>
@@ -211,7 +228,7 @@
     </svelte:fragment>
 </Modal>
 
-<Confirm bind:this={refs.confirmModal} on:close={handleModalClose}>
+<Confirm bind:this={refs.confirmModal} on:close={handleConfirmClose}>
     Are you sure you want to delete {checkedCount} items
 </Confirm>
 
