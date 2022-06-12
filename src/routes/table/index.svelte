@@ -1,5 +1,5 @@
 <script>
-    import {browser} from '$app/env'
+    import {fade} from 'svelte/transition'
     import products, { nullProduct } from '$lib/stores/products'
     import search from '$lib/stores/search'
     import fuzzy from '$lib/util/fuzzy'
@@ -118,7 +118,7 @@
 </script>
 
 <div class="absolute inset-0 bg-base-300">
-    <div class="absolute inset-12 top-24">
+    <div class="absolute inset-12 top-28">
         <div class="w-full flex justify-between items-center">
             <!-- Department -->
             <div>
@@ -169,9 +169,9 @@
             </ul>
         </div>
         <!-- table -->
-        <div class="absolute inset-y-16 overflow-auto">
-            <div class="relative">
-                <table class="table table-zebra table-fixed table-compact w-full z-0 p-8 rounded-lg">
+        <div class="absolute top-20 bottom-0 overflow-y-scroll bg-base-100 rounded-lg">
+            <div class="relative ">
+                <table class="table table-zebra table-fixed table-compact w-full rounded-lg">
                     <thead on:click={handleTHeadClick}>
                         <th class="w-12 text-right">
                             <input
@@ -198,7 +198,7 @@
                                 on:click={() => editProduct(item)}
                                 class="cursor-pointer {item === selectedItem ? 'active' : ''}"
                             >
-                                <td class="w-12 text-right" on:click|stopPropagation>
+                                <td class="w-12 pt-3 text-right" on:click|stopPropagation>
                                     <input
                                         data-id={item.id}
                                         type="checkbox"
@@ -218,6 +218,29 @@
                                 <td class="w-20 text-left" on:click={sort()}>{item.status}</td>
                             </tr>
                         {/each}
+                        {#each new Array(4).fill('') as empty, i}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="checkbox checkbox-sm invisible"/>
+                                </td>
+                                <td/>
+                                <td/>
+                                <td/>
+                                <td/>
+                                <td/>
+                                <td/>
+                                <td/>
+                                <td/>
+                            </tr>
+                        {/each}
+                        {#if (!items.length)}
+                            <div transition:fade class="absolute w-full grid place-content-center place-items-center h-64">
+                                <div class="alert max-w-xs px-8">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>No matching products found.</span>
+                                </div>
+                            </div>
+                        {/if}
                     </tbody>
                 </table>
             </div>
@@ -240,6 +263,6 @@
 
 <style>
     th {
-        @apply bg-primary text-primary-content sticky top-0 cursor-pointer shadow-2xl py-3;
+        @apply bg-primary text-primary-content sticky top-0 py-4 cursor-pointer shadow-2xl
     }
 </style>
