@@ -4,14 +4,18 @@ import translate from '$lib/util/translations'
 import { alpha } from '$lib/util/sort'
 
 export async function fetchProducts() {
-    const response = await minew.get(`/goods?page=1&size=99999&storeId=123`)
+    const response = await minew.get(`/goods?page=1&size=99999&storeId=123&fuzzy=${encodeURIComponent('@FRUIT&VEG')}`)
+    if (response.errcode && response.errcode !== 200) {
+        console.warn(response)
+        return Promise.resolve([])
+    }
     const products = response.rows.map(row => ({
         id: row.id,
         // qrcode: row.qrcode,
         // barcode: row.barcode,
         label3: row.label3,
-        label4: row.label4.trim(),
-        label5: row.label5.trim(),
+        label4: row.label4?.trim() ?? '',
+        label5: row.label5?.trim() ?? '',
         label6: row.label6,
         name: getName(row),
         label8: row.label8,
@@ -19,8 +23,12 @@ export async function fetchProducts() {
         label10: row.label10,
         label11: row.label11,
         label13: row.label13,
+        label18: row.label18 || '',
         status: translate(row.status) || row.status,
-    })).sort(alpha('name'))
+    }))
+    // .filter(row => row.status === "bound")
+    .sort(alpha('name'))
+    .slice(0,20)
     return Promise.resolve(products)
 }
 
@@ -29,14 +37,16 @@ export default writable([], (set) => {
 })
 
 export const meta = {
-    label3: { name: 'plucode', editable: false, maxlength:8, uppercase: true, placeholder: '0000', },
-    label4: { name: 'name1', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 2, },
+    id: {hidden: true},
+    name: {hidden: true},
     label5: { name: 'name2', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 1, },
+    label4: { name: 'name1', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 2, },
     label6: { name: 'price', editable: true, maxlength:5, placeholder: '9.99', },
-    label8: { name: 'specification', editable: true, maxlength:16, placeholder: 'Organic', default: 'Organic', },
-    label9: { name: 'grade', editable: true, maxlength:21, placeholder: 'Grade', },
     label10: { name: 'unit', editable: true, maxlength:4, placeholder: 'kg', default: 'kg', tabindex: 5, },
+    label8: { name: 'specification', editable: true, maxlength:16, placeholder: 'Organic', default: 'Organic', },
     label11: { name: 'origin', editable: true, maxlength:4, uppercase: true, placeholder: 'VIC', },
+    label3: { name: 'plucode', editable: false, maxlength:8, uppercase: true, placeholder: '0000', },
+    label9: { name: 'grade', editable: true, maxlength:21, placeholder: 'Grade', },
 }
 
 export const nullProduct = {
@@ -62,5 +72,5 @@ export async function fetchPreview(macAddress) {
 }
 
 function getName({label4 = '', label5 = ''} = {}) {
-    return `${label4.trim()} ${label5.trim()}`.trim()
+    return `${label4?.trim() ?? ''} ${label5?.trim() ?? ''}`.trim()
 } 
