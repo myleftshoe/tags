@@ -56,8 +56,6 @@ async function batchDelete(path, payload) {
         "content-type": 'application/json',
         "Authorization": `Bearer ${token}` 
     }
-    console.warn(payload)
-    // return
     const options = { 
         method: 'DELETE', 
         headers, 

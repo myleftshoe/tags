@@ -105,9 +105,7 @@
 
     function handleConfirmClose(e) {
         if (e.target.returnValue === 'default') {
-            console.log('Confirm pressed!')
             const idsToDelete = $products.filter(product => product.checked).map(product => product.id)
-            console.table(idsToDelete)
             minew.batchDelete('goods?storeId=123', idsToDelete)
         }
     }
