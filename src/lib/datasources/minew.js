@@ -4,13 +4,32 @@ import { MINEW_USERNAME, MINEW_PASSWORD } from '$lib/env'
 // TODO: remove credentials
 
 const fetcher = new Fetcher(`https://esl.minew.com:9090/V1`)
-let token
+let token = ''
 
 async function get(path) {
     token = await login()
     const headers = { 'Authorization': `Bearer ${token}` } 
     const response = await fetcher.fetch(path, { headers })
     return response.json()
+}
+
+async function batchPost(path, payloads) {
+    token = await login()
+    const headers = { 
+        "content-type": 'application/json',
+        "Authorization": `Bearer ${token}` 
+    }
+    for (const payload of payloads) {
+        const options = { 
+            method: 'POST', 
+            headers, 
+            body: JSON.stringify(payload) 
+            // body: JSON.stringify(sample) 
+        }
+        const response = fetcher.fetch(path, options)
+        // const json = await response.json()
+        // return json
+    }
 }
 
 async function post(path, payload) {
@@ -29,6 +48,25 @@ async function post(path, payload) {
     const json = await response.json()
     return json
 }
+
+
+async function batchDelete(path, payload) {
+    token = await login()
+    const headers = { 
+        "content-type": 'application/json',
+        "Authorization": `Bearer ${token}` 
+    }
+    const options = { 
+        method: 'DELETE', 
+        headers, 
+        body: JSON.stringify(payload) 
+        // body: JSON.stringify(sample) 
+    }
+    const response = await fetcher.fetch(path, options)
+    const json = await response.json()
+    return json
+}
+
 
 async function put(path, payload) {
     token = await login()
@@ -57,7 +95,10 @@ async function login() {
         body: JSON.stringify(payload)
     })
     const json = await response.json()
-    const { token } = json.body
+    token = json?.body?.token ?? ''
+    if (!token) {
+        console.warn('Login failed!')
+    }
     return token
 }
 
@@ -100,5 +141,5 @@ async function bind(macAddress = "ac233fd0b591", id = 2084) {
 }
 
 
-export default { get, post, put, bind, login }
+export default { get, post, batchPost, batchDelete, put, bind, login }
 export { bind }
