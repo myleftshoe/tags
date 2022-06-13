@@ -121,13 +121,23 @@
         }
     }
 
+    function loadMore() {
+        if (startIndex + maxItems > items.length) return
+        startIndex += maxItems
+        console.log(startIndex)
+    }
 
+    let maxItems = 10
+    let startIndex = 0
+
+    let _items = []
     let items = []
 
     $: console.warn($products.length)
-    $: items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
+    $: _items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
+    $: items = items.concat(_items.slice(startIndex, startIndex + maxItems))
 </script>
-
+<button class="btn fixed z-50 bottom-0 left-64" on:click={loadMore}>load more</button>
 <div class="absolute inset-0 bg-base-300">
     <div class="absolute inset-12 top-28">
         <div class="w-full flex justify-between items-center">
