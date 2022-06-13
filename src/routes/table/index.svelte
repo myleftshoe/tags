@@ -68,7 +68,7 @@
         // console.log(item)
     }
 
-    function handleTHeadClick(e) {
+    function sortRows(e) {
         const { key, type } = e.target.dataset
         if (!key) return
         const fn = type === 'number' ? num : alpha
@@ -193,7 +193,7 @@
         <div class="absolute top-20 bottom-0 overflow-y-scroll bg-base-100 rounded-lg">
             <div class="relative ">
                 <table class="table table-zebra table-fixed table-compact w-full rounded-lg">
-                    <thead on:click={handleTHeadClick}>
+                    <thead on:click={sortRows}>
                         <th class="w-12 text-right">
                             <input bind:this={refs.selectAll}
                                 type="checkbox"
