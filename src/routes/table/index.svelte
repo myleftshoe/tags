@@ -140,12 +140,12 @@
     let maxItems = 20
     let startIndex = 0
 
-    let _items = []
+    let fuzzed = []
     let items = []
 
-    $: console.warn($products.length)
-    $: _items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
-    $: items = [...items].concat(_items.slice(startIndex, startIndex + maxItems))
+    $: $products, $search, items = []
+    $: fuzzed = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
+    $: items = [...items].concat(fuzzed.slice(startIndex, startIndex + maxItems))
 </script>
 
 <div class="absolute inset-0 bg-base-300">
