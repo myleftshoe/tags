@@ -9,19 +9,19 @@
       <slot/>
     </content>
     <form class="actions" method="dialog">
-        <button class="btn" value="cancel">Cancel</button>
-        <button class="btn btn-accent" value="default">Confirm</button>
+        <button class="btn w-32" value="cancel">Cancel</button>
+        <button class="btn btn-accent w-32" value="default">Confirm</button>
     </form>
 </dialog>
 <style>
     /* dialog::backdrop { background-color: red;} */
     dialog {
-        @apply rounded-box bg-warning shadow-xl max-w-xs py-5 px-10
+        @apply rounded-box bg-warning shadow-xl max-w-sm py-5 px-10
     }
     content {
       @apply flex flex-row gap-2 justify-center items-center
     }
     .actions {
-        @apply flex w-full justify-center gap-10 mt-5
+        @apply flex w-full justify-center gap-12 mt-5
     }
 </style>

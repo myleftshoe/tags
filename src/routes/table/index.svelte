@@ -263,8 +263,8 @@
 <Modal bind:this={refs.addModal} on:close={handleModalClose}>
     <AddProduct product={selectedItem} />
     <svelte:fragment slot="actions">
-        <button form="form" class="btn" value="cancel">Cancel</button>
-        <button form="form" class="btn btn-primary" value="default">Confirm</button>
+        <button form="form" class="btn w-32" value="cancel">Cancel</button>
+        <button form="form" class="btn btn-primary w-32" value="default">Confirm</button>
     </svelte:fragment>
 </Modal>
 

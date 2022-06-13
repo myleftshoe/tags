@@ -20,6 +20,6 @@
         @apply uppercase block text-2xl text-accent font-bold w-full text-center  p-2 pb-5 
     }
     actions {
-        @apply flex w-full justify-center gap-10 mt-10
+        @apply flex w-full justify-center gap-12 mt-10
     }
 </style>
