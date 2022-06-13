@@ -9,7 +9,7 @@
       <slot/>
     </content>
     <form class="actions" method="dialog">
-        <button class="btn" value="cancel" on:click={close}>Cancel</button>
+        <button class="btn" value="cancel">Cancel</button>
         <button class="btn btn-accent" value="default">Confirm</button>
     </form>
 </dialog>
