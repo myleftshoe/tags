@@ -24,7 +24,17 @@
     async function postOne(product) {
         const { name, status, checked, ...payload } = { ...product, label18: '@FRUIT&VEG' }
         if (!payload.id) {
-            payload.id = new UID().value
+            let id
+            let response
+            // check for uid collisions
+            do {
+                id = new UID().value
+                console.log(id)
+                response = await minew.get(`goods/check?storeId=123&barcode=${id}`)
+                console.log(`goods/check?storeId=123&barcode=${id}`)
+                console.log(response)
+            } while (response.errcode == 10000701)
+            payload.id = id
         }
         console.log('payload', JSON.stringify(payload, null, 2))
         minew.post('goods?storeId=123', payload)
