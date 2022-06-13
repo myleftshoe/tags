@@ -21,21 +21,6 @@
         return [...document.querySelectorAll('input[data-checkbox="row"]:checked')]
     }
 
-    function getSelectedItems(e) {
-        const checkboxes = getChecked()
-        console.log(checkboxes)
-        const ids = [...checkboxes].map(({ dataset }) => dataset.id)
-        console.log(ids)
-        const selectedItems = items
-            .filter(({ id }) => ids.includes(id))
-            .map(({ name, status, ...extracted }) => ({ ...extracted, label18: '@FRUIT&VEG' }))
-        console.table(selectedItems)
-        // postMany(selectedItems)
-        // [...checkboxes].forEach(checkbox => {
-        //     checkbox.checked = e.target.checked
-        // })
-    }
-
     async function postOne(product) {
         const { name, status, checked, ...payload } = { ...product, label18: '@FRUIT&VEG' }
         if (!payload.id) {
