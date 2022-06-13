@@ -79,9 +79,9 @@
             sort.desc = false
         }
 
-        items.sort(fn(key))
-        sort.desc && items.reverse()
-        items = [...items]
+        let _products = [...$products].sort(fn(key))    
+        sort.desc && _products.reverse()
+        products.set(_products)
     }
 
     let selectedItem = {}
@@ -169,7 +169,7 @@
                     <div class="text-sm breadcrumbs">
                         <ul>
                             <li>{$products.length} products</li>
-                            <li>{$products.length - items.length} filtered</li>
+                            <li>{$products.length - fuzzed.length} filtered</li>
                             <li>{checkedCount} selected</li>
                         </ul>
                     </div>
