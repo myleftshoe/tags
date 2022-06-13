@@ -29,31 +29,22 @@
             .filter(({ id }) => ids.includes(id))
             .map(({ name, status, ...extracted }) => ({ ...extracted, label18: '@FRUIT&VEG' }))
         console.table(selectedItems)
-        sendIt(selectedItems)
+        postMany(selectedItems)
         // [...checkboxes].forEach(checkbox => {
         //     checkbox.checked = e.target.checked
         // })
     }
 
-    function getNextId(prefix = 'FRV') {
-        const maxId = $products.filter(({id}) => id.startsWith('FRV')).reduce((a,b)=>a.id>b.id?a:b, []).id ?? 'FRV00000'
-        const numericPart = maxId.replace(/\D/g,'')
-        const nextId = `FRV${(Number(numericPart) + 1).toString().padStart(5,0)}`
-        return nextId
-    }
-
-    async function post(product) {
+    async function postOne(product) {
         const { name, status, checked, ...payload } = { ...product, label18: '@FRUIT&VEG' }
         if (!payload.id) {
-            // payload.id = getNextId()
             payload.id = new UID().value
         }
-        // payload.label3 = ''
         console.log('payload', JSON.stringify(payload, null, 2))
-        // minew.post('goods?storeId=123', payload)
+        minew.post('goods?storeId=123', payload)
     }
 
-    async function sendIt(payload) {
+    async function postMany(payload) {
         console.log('payload', JSON.stringify(payload, null, 2))
         minew.batchPost('goods?storeId=123', payload)
     }
@@ -119,7 +110,7 @@
         if (e.target.returnValue === 'default') {
             console.log('Confirm pressed!')
             console.log(selectedItem)
-            post(selectedItem)
+            postOne(selectedItem)
         }
     }
 
