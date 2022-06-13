@@ -17,14 +17,14 @@ export async function fetchProducts() {
         label4: row.label4?.trim() ?? '',
         label5: row.label5?.trim() ?? '',
         label6: row.label6 ?? '',
-        name: getName(row),
+        name: getName(row) ?? '',
         label8: row.label8 ?? '',
         label9: row.label9 ?? '',
         label10: row.label10 ?? '',
         label11: row.label11 ?? '',
         label13: row.label13 ?? '',
-        label18: row.label18 || '',
-        status: translate(row.status) || row.status,
+        label18: row.label18 ?? '',
+        status: translate(row.status) || row.status || '',
     }))
     // .filter(row => row.status === "bound")
     .sort(alpha('name'))
