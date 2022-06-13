@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte'
-    import {fade} from 'svelte/transition'
+    import { fade } from 'svelte/transition'
     import products, { nullProduct } from '$lib/stores/products'
     import search from '$lib/stores/search'
     import fuzzy from '$lib/util/fuzzy'
@@ -68,7 +68,7 @@
         refs.selectAll.indeterminate = checkboxes.some(({ checked }) => checked !== refs.selectAll.checked)
         checkedCount = getChecked().length
 
-        const item = $products.find(product => product.id === e.target.dataset.id)
+        const item = $products.find((product) => product.id === e.target.dataset.id)
         item.checked = e.target.checked
         // console.log(item)
     }
@@ -117,20 +117,20 @@
 
     function handleConfirmClose(e) {
         if (e.target.returnValue === 'default') {
-            const idsToDelete = $products.filter(product => product.checked).map(product => product.id)
+            const idsToDelete = $products.filter((product) => product.checked).map((product) => product.id)
             minew.batchDelete('goods?storeId=123', idsToDelete)
         }
     }
 
     onMount(() => {
         const observer = new IntersectionObserver(([scrollTrigger]) => {
-            if(scrollTrigger.intersectionRatio > 0) {
+            if (scrollTrigger.intersectionRatio > 0) {
                 loadMore()
             }
         })
         observer.observe(refs.scrollTrigger)
     })
-    
+
     function loadMore() {
         if (startIndex + maxItems > items.length) return
         startIndex += maxItems
@@ -144,7 +144,7 @@
         startIndex = 0
         items = []
     }
-    
+
     let fuzzed = []
     let items = []
 
@@ -161,9 +161,15 @@
                 <div class="dropdown">
                     <button tabindex="0" class="btn btn-ghost">
                         <span class="px-2">@FRUIT&VEG</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                        >
                             <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                        </svg >
+                        </svg>
                     </button>
                     <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                         <li><button>@FRUIT&VEG</button></li>
@@ -174,22 +180,23 @@
                     <div class="text-sm breadcrumbs">
                         <ul>
                             <li>{$products.length} products</li>
-                            <li>{$products.length - items.length} filtered</li> 
-                            <li>{checkedCount} selected</li> 
+                            <li>{$products.length - items.length} filtered</li>
+                            <li>{checkedCount} selected</li>
                         </ul>
-                    </div>                
+                    </div>
                 </span>
             </div>
             <!-- actions -->
             <div class="btn-group shadow-md">
                 <button class="btn bg-base-100 btn-ghost" on:click={addProduct}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" width="24" >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" width="24">
                         <path d="M11 19V13H5V11H11V5H13V11H19V13H13V19Z" />
-                    </svg >
+                    </svg>
                 </button>
                 <button class="btn bg-base-100 btn-ghost" disabled={!checkedCount} on:click={deleteProducts}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" width="24" >
-                        <path d="M7 21Q6.175 21 5.588 20.413Q5 19.825 5 19V6H4V4H9V3H15V4H20V6H19V19Q19 19.825 18.413 20.413Q17.825 21 17 21ZM17 6H7V19Q7 19 7 19Q7 19 7 19H17Q17 19 17 19Q17 19 17 19ZM9 17H11V8H9ZM13 17H15V8H13ZM7 6V19Q7 19 7 19Q7 19 7 19Q7 19 7 19Q7 19 7 19Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" width="24">
+                        <path d="M7 21Q6.175 21 5.588 20.413Q5 19.825 5 19V6H4V4H9V3H15V4H20V6H19V19Q19 19.825 18.413 20.413Q17.825 21 17 21ZM17 6H7V19Q7 19 7 19Q7 19 7 19H17Q17 19 17 19Q17 19 17 19ZM9 17H11V8H9ZM13 17H15V8H13ZM7 6V19Q7 19 7 19Q7 19 7 19Q7 19 7 19Q7 19 7 19Z"
+                        />
                     </svg>
                 </button>
             </div>
@@ -245,37 +252,24 @@
                             </tr>
                         {/each}
                         <tr bind:this={refs.scrollTrigger}>
-                            <td>
-                                <input type="checkbox" class="checkbox checkbox-sm invisible"/>
-                            </td>
-                            <td/>
-                            <td/>
-                            <td/>
-                            <td/>
-                            <td/>
-                            <td/>
-                            <td/>
-                            <td/>
+                            <td> <input type="checkbox" class="checkbox checkbox-sm invisible" /> </td>
+                            <td /><td /><td /><td /><td /><td /><td /><td />
                         </tr>
                         {#each new Array(4).fill('') as empty, i}
                             <tr>
-                                <td>
-                                    <input type="checkbox" class="checkbox checkbox-sm invisible"/>
-                                </td>
-                                <td/>
-                                <td/>
-                                <td/>
-                                <td/>
-                                <td/>
-                                <td/>
-                                <td/>
-                                <td/>
+                                <td> <input type="checkbox" class="checkbox checkbox-sm invisible" /> </td> <td />
+                                <td /><td /><td /><td /><td /><td /><td />
                             </tr>
                         {/each}
-                        {#if (!items.length)}
-                            <div transition:fade class="absolute w-full grid place-content-center place-items-center h-64">
+                        {#if !items.length}
+                            <div
+                                transition:fade
+                                class="absolute w-full grid place-content-center place-items-center h-64"
+                            >
                                 <div class="alert max-w-xs px-8">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info flex-shrink-0 w-6 h-6" >
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg >
                                     <span>No matching products found.</span>
                                 </div>
                             </div>
@@ -302,6 +296,6 @@
 
 <style>
     th {
-        @apply bg-primary text-primary-content sticky top-0 py-4 cursor-pointer shadow-2xl
+        @apply bg-primary text-primary-content sticky top-0 py-4 cursor-pointer shadow-2xl;
     }
 </style>
