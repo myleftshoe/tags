@@ -30,7 +30,7 @@
             .filter(({ id }) => ids.includes(id))
             .map(({ name, status, ...extracted }) => ({ ...extracted, label18: '@FRUIT&VEG' }))
         console.table(selectedItems)
-        postMany(selectedItems)
+        // postMany(selectedItems)
         // [...checkboxes].forEach(checkbox => {
         //     checkbox.checked = e.target.checked
         // })
