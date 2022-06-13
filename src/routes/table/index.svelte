@@ -146,13 +146,7 @@
                 <div class="dropdown">
                     <button tabindex="0" class="btn btn-ghost">
                         <span class="px-2">@FRUIT&VEG</span>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" >
                             <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
                         </svg>
                     </button>
@@ -180,8 +174,7 @@
                 </button>
                 <button class="btn bg-base-100 btn-ghost" disabled={!checkedCount} on:click={deleteProducts}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" width="24">
-                        <path d="M7 21Q6.175 21 5.588 20.413Q5 19.825 5 19V6H4V4H9V3H15V4H20V6H19V19Q19 19.825 18.413 20.413Q17.825 21 17 21ZM17 6H7V19Q7 19 7 19Q7 19 7 19H17Q17 19 17 19Q17 19 17 19ZM9 17H11V8H9ZM13 17H15V8H13ZM7 6V19Q7 19 7 19Q7 19 7 19Q7 19 7 19Q7 19 7 19Z"
-                        />
+                        <path d="M7 21Q6.175 21 5.588 20.413Q5 19.825 5 19V6H4V4H9V3H15V4H20V6H19V19Q19 19.825 18.413 20.413Q17.825 21 17 21ZM17 6H7V19Q7 19 7 19Q7 19 7 19H17Q17 19 17 19Q17 19 17 19ZM9 17H11V8H9ZM13 17H15V8H13ZM7 6V19Q7 19 7 19Q7 19 7 19Q7 19 7 19Q7 19 7 19Z" />
                     </svg>
                 </button>
             </div>
@@ -236,25 +229,25 @@
                                 <td class="w-20 text-left" on:click={sort()}>{item.status}</td>
                             </tr>
                         {/each}
+                        <!-- scroll trigger -->
                         <tr bind:this={refs.scrollTrigger}>
                             <td> <input type="checkbox" class="checkbox checkbox-sm invisible" /> </td>
                             <td /><td /><td /><td /><td /><td /><td /><td />
                         </tr>
+                        <!-- empty rows -->
                         {#each new Array(4).fill('') as empty, i}
                             <tr>
                                 <td> <input type="checkbox" class="checkbox checkbox-sm invisible" /> </td> <td />
                                 <td /><td /><td /><td /><td /><td /><td />
                             </tr>
                         {/each}
+                        <!-- No products alert -->
                         {#if !items.length}
-                            <div
-                                transition:fade
-                                class="absolute w-full grid place-content-center place-items-center h-64"
-                            >
+                            <div transition:fade class="absolute w-full grid place-content-center place-items-center h-64" >
                                 <div class="alert max-w-xs px-8">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info flex-shrink-0 w-6 h-6" >
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg >
+                                    </svg >
                                     <span>No matching products found.</span>
                                 </div>
                             </div>
