@@ -185,8 +185,7 @@
                 <table class="table table-zebra table-fixed table-compact w-full rounded-lg">
                     <thead on:click={handleTHeadClick}>
                         <th class="w-12 text-right">
-                            <input
-                                bind:this={refs.selectAll}
+                            <input bind:this={refs.selectAll}
                                 type="checkbox"
                                 data-checkbox="header"
                                 class="checkbox checkbox-sm"
@@ -205,10 +204,7 @@
                     </thead>
                     <tbody>
                         {#each items as item (item.id)}
-                            <tr
-                                on:click={() => editProduct(item)}
-                                class="cursor-pointer {item === selectedItem ? 'active' : ''}"
-                            >
+                            <tr on:click={() => editProduct(item)} class="cursor-pointer {item === selectedItem ? 'active' : ''}" >
                                 <td class="w-12 pt-3 text-right" on:click|stopPropagation>
                                     <input
                                         data-id={item.id}
