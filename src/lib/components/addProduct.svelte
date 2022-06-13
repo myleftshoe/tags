@@ -16,6 +16,7 @@
             </span>
         {/if}
     {/each}
+    <a class="link text-right text-accent text-sm" target="_blank" rel="noopener noreferrer" href="https://www.ifpsglobal.com/PLU-Codes/PLU-codes-Search">Lookup PLU Code</a>
 </form>
 <style>
     label { 
