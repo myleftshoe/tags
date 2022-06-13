@@ -3,6 +3,7 @@
     import products, { nullProduct } from '$lib/stores/products'
     import search from '$lib/stores/search'
     import fuzzy from '$lib/util/fuzzy'
+    import UID from '$lib/util/uid'
     import minew from '$lib/datasources/minew'
     import { alpha, num } from '$lib/util/sort'
     import Modal from '$lib/components/modal.svelte'
@@ -32,6 +33,24 @@
         // [...checkboxes].forEach(checkbox => {
         //     checkbox.checked = e.target.checked
         // })
+    }
+
+    function getNextId(prefix = 'FRV') {
+        const maxId = $products.filter(({id}) => id.startsWith('FRV')).reduce((a,b)=>a.id>b.id?a:b, []).id ?? 'FRV00000'
+        const numericPart = maxId.replace(/\D/g,'')
+        const nextId = `FRV${(Number(numericPart) + 1).toString().padStart(5,0)}`
+        return nextId
+    }
+
+    async function post(product) {
+        const { name, status, checked, ...payload } = { ...product, label18: '@FRUIT&VEG' }
+        if (!payload.id) {
+            // payload.id = getNextId()
+            payload.id = new UID().value
+        }
+        // payload.label3 = ''
+        console.log('payload', JSON.stringify(payload, null, 2))
+        // minew.post('goods?storeId=123', payload)
     }
 
     async function sendIt(payload) {
@@ -100,6 +119,7 @@
         if (e.target.returnValue === 'default') {
             console.log('Confirm pressed!')
             console.log(selectedItem)
+            post(selectedItem)
         }
     }
 
