@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte'
     import {fade} from 'svelte/transition'
     import products, { nullProduct } from '$lib/stores/products'
     import search from '$lib/stores/search'
@@ -121,13 +122,22 @@
         }
     }
 
+    onMount(() => {
+        const observer = new IntersectionObserver(([scrollTrigger]) => {
+            if(scrollTrigger.intersectionRatio > 0) {
+                loadMore()
+            }
+        })
+        observer.observe(refs.scrollTrigger)
+    })
+    
     function loadMore() {
         if (startIndex + maxItems > items.length) return
         startIndex += maxItems
         console.log(startIndex)
     }
 
-    let maxItems = 10
+    let maxItems = 20
     let startIndex = 0
 
     let _items = []
@@ -135,9 +145,9 @@
 
     $: console.warn($products.length)
     $: _items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
-    $: items = items.concat(_items.slice(startIndex, startIndex + maxItems))
+    $: items = [...items].concat(_items.slice(startIndex, startIndex + maxItems))
 </script>
-<button class="btn fixed z-50 bottom-0 left-64" on:click={loadMore}>load more</button>
+
 <div class="absolute inset-0 bg-base-300">
     <div class="absolute inset-12 top-28">
         <div class="w-full flex justify-between items-center">
@@ -239,6 +249,19 @@
                                 <td class="w-20 text-left" on:click={sort()}>{item.status}</td>
                             </tr>
                         {/each}
+                        <tr bind:this={refs.scrollTrigger}>
+                            <td>
+                                <input type="checkbox" class="checkbox checkbox-sm invisible"/>
+                            </td>
+                            <td/>
+                            <td/>
+                            <td/>
+                            <td/>
+                            <td/>
+                            <td/>
+                            <td/>
+                            <td/>
+                        </tr>
                         {#each new Array(4).fill('') as empty, i}
                             <tr>
                                 <td>
