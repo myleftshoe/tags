@@ -136,6 +136,7 @@
     let startIndex = 0
 
     function reset() {
+        console.log('resetting ')
         startIndex = 0
         items = []
     }
@@ -221,7 +222,7 @@
                                         type="checkbox"
                                         data-checkbox="row"
                                         class="checkbox checkbox-sm"
-                                        bind:checked={item.checked}
+                                        checked={item.checked}
                                         on:change={handleCheckboxChange}
                                     />
                                 </td>
