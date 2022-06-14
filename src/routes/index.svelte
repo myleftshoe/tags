@@ -103,11 +103,11 @@
     }
 
     function handleModalClose(e) {
-        if (e.target.returnValue === 'default') {
-            console.log('Confirm pressed!')
-            console.log(selectedItem)
-            postOne(selectedItem)
-        }
+        if (e.target.returnValue !== 'default') return
+        console.log('Confirm pressed!')
+        console.log(selectedItem)
+        products.set($products)
+        postOne(selectedItem)
     }
 
     function handleConfirmClose(e) {
@@ -118,35 +118,21 @@
     }
 
     onMount(() => {
-        const observer = new IntersectionObserver(([scrollTrigger]) => {
-            if (scrollTrigger.intersectionRatio > 0) {
-                loadMore()
-            }
-        })
-        observer.observe(refs.scrollTrigger)
+        const callback = ([entry]) => entry.isIntersecting && loadMore()
+        new IntersectionObserver(callback).observe(refs.scrollTrigger)
     })
 
     function loadMore() {
-        if (startIndex + maxItems > items.length) return
-        startIndex += maxItems
-        console.log(startIndex)
+        if (displayedItems > items.length) return
+        displayedItems += chunkSize
     }
 
-    let maxItems = 20
-    let startIndex = 0
+    let chunkSize = 20
+    let displayedItems = 20
 
-    function reset() {
-        console.log('resetting ')
-        startIndex = 0
-        items = []
-    }
-
-    let fuzzed = []
     let items = []
 
-    $: $products, $search, reset()
-    $: fuzzed = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
-    $: items = [...items].concat(fuzzed.slice(startIndex, startIndex + maxItems))
+    $: items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
 </script>
 
 <div class="absolute inset-0 bg-base-300">
@@ -170,7 +156,7 @@
                     <div class="text-sm breadcrumbs">
                         <ul>
                             <li>{$products.length} products</li>
-                            <li>{$products.length - fuzzed.length} filtered</li>
+                            <li>{$products.length - items.length} filtered</li>
                             <li>{checkedCount} selected</li>
                         </ul>
                     </div>
@@ -214,8 +200,11 @@
                         <th class="w-24 text-left" data-key="status">Status</th>
                     </thead>
                     <tbody>
-                        {#each items as item (item.id)}
-                            <tr on:click={() => editProduct(item)} class="cursor-pointer {item === selectedItem ? 'active' : ''}" >
+                        {#each items as item, i (item.id)}
+                            <tr on:click={() => editProduct(item)} 
+                                class="cursor-pointer {item === selectedItem ? 'active' : ''}" 
+                                style="display: {i > displayedItems ? 'none': 'table-row'}"
+                            >
                                 <td class="w-12 pt-3 text-right" on:click|stopPropagation>
                                     <input
                                         data-id={item.id}

@@ -102,46 +102,36 @@
 
 
     onMount(() => {
-        const observer = new IntersectionObserver(([scrollTrigger]) => {
-            if(scrollTrigger.intersectionRatio > 0) {
-                loadMore()
-            }
-        })
-        observer.observe(refs.scrollTrigger)
+        const callback = ([entry]) => entry.isIntersecting && loadMore()
+        new IntersectionObserver(callback).observe(refs.scrollTrigger)
     })
-    
+
     function loadMore() {
-        if (startIndex + maxItems > items.length) return
-        startIndex += maxItems
-        console.log(startIndex)
+        if (displayedItems > items.length) return
+        displayedItems += chunkSize
     }
 
-    let maxItems = 15
-    let startIndex = 0
-
-    function reset() {
-        startIndex = 0
-        items = []
-    }
-
-    $: changed = JSON.stringify(selectedItem) !== JSON.stringify(originalItem)
-
+    let chunkSize = 20
+    let displayedItems = 20
+        
     let items = []
     
-    $:  $products, $search, reset()
+    $:  changed = JSON.stringify(selectedItem) !== JSON.stringify(originalItem)
     $:  if ($search.startsWith('#')) {
             isHex12($search) && handleMac($search)
         } 
         else {
             // items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
-            const fuzzed = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
-            items = [...items].concat(fuzzed.slice(startIndex, startIndex + maxItems))
+            items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
         }
 </script>
 
 <ul class="flex flex-col divide-y divide-base-300">
-    {#each items as item (item.id)}
-        <li class={item.status === 'unbound' && 'opacity-50'} on:click={handleItemClick(item)}>
+    {#each items as item, i (item.id)}
+        <li on:click={handleItemClick(item)}
+            class={item.status === 'unbound' && 'opacity-50'} 
+            style="display: {i > displayedItems ? 'none': ''}"
+        >
             <price class="w-1/4 text-right pr-10 text-xl" data-cents={cents(item.label6)} data-unit={item.label10}>{dollars(item.label6)}</price>
             <span class="w-3/4 flex flex-col justify-center">{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</span>
         </li>
