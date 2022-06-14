@@ -61,14 +61,15 @@
     async function sendIt(item) {
         let payload = {
             id: item.id,
-            label3: item.label3, 
-            label4: item.label4.toUpperCase(),
-            label5: item.label5.toUpperCase(),
-            label6: item.label6,
+            label3: item.label3 ?? '', 
+            label4: item.label4.toUpperCase() ?? '',
+            label5: item.label5.toUpperCase() ?? '',
+            label6: item.label6 ?? '',
             label8: item.label8 || 'Organic',
-            label10: item.label10,
-            label11: item.label11,
+            label10: item.label10 ?? '',
+            label11: item.label11 ?? '',
             label13: item.label13 || 'VEGETABLES',
+            label18: '@FRUIT&VEG'
         }        
         console.log('item', JSON.stringify(item, null, 2))
         console.log('payload', JSON.stringify(payload, null, 2))
