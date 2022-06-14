@@ -1,169 +1,285 @@
-<script context="module">
-    import { slide } from 'svelte/transition'
-    import search from '$lib/stores/search'
-    import showUnbound from '$lib/stores/bound'
-    import products, { nullProduct } from '$lib/stores/products'
-    import { fetchPreview } from '$lib/stores/products'
-    import minew from '$lib/datasources/minew'
-    import fuzzy from '$lib/util/fuzzy'
-    import Overlay from '$lib/components/overlay.svelte'
-    import Tag from '$lib/components/tag.svelte'
-    export const router = false
-    export const prerender = true
-</script>
-
 <script>
-    let selectedItem = { ...nullProduct }
-    let scannedItem = null
-    let originalItem = { ...nullProduct }
+    import { onMount } from 'svelte'
+    import { fade } from 'svelte/transition'
+    import products, { nullProduct } from '$lib/stores/products'
+    import search from '$lib/stores/search'
+    import fuzzy from '$lib/util/fuzzy'
+    import UID from '$lib/util/uid'
+    import minew from '$lib/datasources/minew'
+    import { alpha, num } from '$lib/util/sort'
+    import Modal from '$lib/components/modal.svelte'
+    import Confirm from '$lib/components/confirm.svelte'
+    import AddProduct from '$lib/components/addProduct.svelte'
 
-    const modals = {
-        tag: { open: false },
-        confirm: { open: false },
+    let sort = { by: 'label4', desc: false }
+
+    let checkedCount = 0
+
+    let refs = {}
+
+    function getChecked() {
+        return [...document.querySelectorAll('input[data-checkbox="row"]:checked')]
     }
 
-    const handleItemClick = (item) => (e) => {
-        originalItem = { ...item }
-        selectedItem = item
-        modals.tag.open = true
-    }
-
-    function resetItem() {
-        Object.assign(selectedItem, originalItem)
-        selectedItem = { ...nullProduct }
-        originalItem = { ...nullProduct }
-        scannedItem = null
-        modals.tag.open = false
-    }
-
-    function bind() {
-        modals.confirm.open = false
-        minew.bind(scannedItem.macAddress, selectedItem.id)
-        selectedItem = scannedItem
-        originalItem = { ...scannedItem }
-        scannedItem = null
-    }
-
-    function cancelBind() {
-        modals.confirm.open = false
-        scannedItem = null
-    }
-
-    const dollars = (price) => price.split('.')[0]
-    const cents = (price) => {
-        const c = price.split('.')[1] ?? ''
-        return c && `.${c}`
-    }
-
-    async function sendIt(item) {
-        let payload = {
-            id: item.id,
-            label3: item.label3, 
-            label4: item.label4.toUpperCase(),
-            label5: item.label5.toUpperCase(),
-            label6: item.label6,
-            label8: item.label8 || 'Organic',
-            label10: item.label10,
-            label11: item.label11,
-            label13: item.label13 || 'VEGETABLES',
-        }        
-        console.log('item', JSON.stringify(item, null, 2))
+    async function postOne(product) {
+        const { name, status, checked, ...payload } = { ...product, label18: '@FRUIT&VEG' }
+        if (!payload.id) {
+            let id
+            let response
+            // check for uid collisions
+            do {
+                id = new UID().value
+                console.log(id)
+                response = await minew.get(`goods/check?storeId=123&barcode=${id}`)
+                console.log(`goods/check?storeId=123&barcode=${id}`)
+                console.log(response)
+            } while (response.errcode == 10000701)
+            payload.id = id
+        }
         console.log('payload', JSON.stringify(payload, null, 2))
-        originalItem = { ...item }
+        minew.post('goods?storeId=123', payload)
+    }
+
+    async function postMany(payload) {
+        console.log('payload', JSON.stringify(payload, null, 2))
+        minew.batchPost('goods?storeId=123', payload)
+    }
+
+    function selectAll(e) {
+        const checkboxes = document.querySelectorAll('[data-checkbox="row"]')
+        ;[...checkboxes].forEach((checkbox) => {
+            checkbox.checked = e.target.checked
+        })
+        checkedCount = getChecked().length
+        for (const item of items) {
+            item.checked = e.target.checked
+        }
         // items = [...items]
-        await minew.post('goods?storeId=123', payload)
+        // console.table(items)
     }
 
-    const isHex12 = (value = '') => /^#([0-9A-Fa-f]{12})$/.test(value.trim()) // first char is #
-    const getName = ({label4 = '', label5 = ''} = {}) => `${label4.trim()} ${label5.trim()}`.trim() 
-    const getNameReversed = ({label4 = '', label5 = ''} = {}) => `${label5.trim()} ${label4.trim()}`.trim() 
+    function handleCheckboxChange(e) {
+        const checkboxes = [...document.querySelectorAll('[data-checkbox="row"]')]
+        refs.selectAll.indeterminate = checkboxes.some(({ checked }) => checked !== refs.selectAll.checked)
+        checkedCount = getChecked().length
 
-    async function handleMac(mac) {
-        if (!isHex12(mac)) return
-        document.activeElement.blur()
-        modals.tag.open = true // open it eagely, i.e. it will show nullProduct them update
-        scannedItem = await fetchPreview(mac.slice(1)) // remove # prefix
-        if (selectedItem.id) {
-            // Previous was a scan.
-            if (JSON.stringify(scannedItem) !== JSON.stringify(selectedItem)) {
-                modals.confirm.open = true
-            }
-        }
-        else {
-            selectedItem = scannedItem
-            originalItem = { ...selectedItem }
-            // modals.tag.open = true  // uncomment to open it lazily, ie wait for fetch
-        }
+        const item = $products.find((product) => product.id === e.target.dataset.id)
+        item.checked = e.target.checked
+        // console.log(item)
     }
 
-    $: changed = JSON.stringify(selectedItem) !== JSON.stringify(originalItem)
-
-    let items = []
-    
-    $:  if ($search.length === 0) {
-            items = []
-        } else if ($search.startsWith('#')) {
-            isHex12($search) && handleMac($search)
+    function sortRows(e) {
+        const { key, type } = e.target.dataset
+        if (!key) return
+        const fn = type === 'number' ? num : alpha
+        if (sort.by === key) {
+            sort.desc = !sort.desc
         } else {
-            // items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
-            const fuzzed = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
-            const filtered = fuzzed.filter(row => ['FRUIT', 'VEGETABLES'].includes(row.label13))
-            items = (filtered.length > 0) ? filtered : fuzzed
-            console.log('unfiltered', $products.length)
-            console.log('fuzzed', items.length)
-            console.log('filtered', filtered.length)
+            sort.by = key
+            sort.desc = false
         }
+
+        let _products = [...$products].sort(fn(key))    
+        sort.desc && _products.reverse()
+        products.set(_products)
+    }
+
+    let selectedItem = {}
+
+    function addProduct() {
+        selectedItem = { ...nullProduct }
+        refs.addModal.title = 'Add Product'
+        refs.addModal.show()
+    }
+
+    function editProduct(item) {
+        selectedItem = item
+        refs.addModal.title = 'Edit Product'
+        refs.addModal.show()
+    }
+
+    function deleteProducts() {
+        checkedCount && refs.confirmModal.show()
+    }
+
+    function handleModalClose(e) {
+        if (e.target.returnValue === 'default') {
+            console.log('Confirm pressed!')
+            console.log(selectedItem)
+            postOne(selectedItem)
+        }
+    }
+
+    function handleConfirmClose(e) {
+        if (e.target.returnValue === 'default') {
+            const idsToDelete = $products.filter((product) => product.checked).map((product) => product.id)
+            minew.batchDelete('goods?storeId=123', idsToDelete)
+        }
+    }
+
+    onMount(() => {
+        const observer = new IntersectionObserver(([scrollTrigger]) => {
+            if (scrollTrigger.intersectionRatio > 0) {
+                loadMore()
+            }
+        })
+        observer.observe(refs.scrollTrigger)
+    })
+
+    function loadMore() {
+        if (startIndex + maxItems > items.length) return
+        startIndex += maxItems
+        console.log(startIndex)
+    }
+
+    let maxItems = 20
+    let startIndex = 0
+
+    function reset() {
+        startIndex = 0
+        items = []
+    }
+
+    let fuzzed = []
+    let items = []
+
+    $: $products, $search, reset()
+    $: fuzzed = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
+    $: items = [...items].concat(fuzzed.slice(startIndex, startIndex + maxItems))
 </script>
 
-<ul class="flex flex-col divide-y divide-base-300">
-    {#each items as item}
-        <li class={item.status === 'unbound' && 'opacity-50'} on:click={handleItemClick(item)}>
-            <price class="w-1/4 text-right pr-10 text-xl" data-cents={cents(item.label6)} data-unit={item.label10}>{dollars(item.label6)}</price>
-            <span class="w-3/4 flex flex-col justify-center">{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</span>
-        </li>
-    {/each}
-</ul>
-
-<Overlay bind:open={modals.tag.open} on:close={resetItem} cancel="Go Back">
-    <Tag bind:product={selectedItem} />
-    <svelte:fragment slot="actions">
-        <button disabled={!changed} class="no-animation btn btn-primary gap-2" style="font-size: inherit;" on:click={() => sendIt(selectedItem)}>
-            <span>Send It!</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg>
-        </button>
-    </svelte:fragment>
-</Overlay>
-
-{#if modals.confirm.open}
-    <confirm transition:slide class="alert alert-warning fixed bottom-0 rounded-b-none px-5 z-50 flex flex-col items-start">
-        <span >
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-            <span>{`Change the tag you just scanned (${getNameReversed(scannedItem)} $${scannedItem.label6}) to the product above (${getNameReversed(selectedItem)} $${selectedItem.label6})?`}</span>
-        </span>
-        <div class="gap-10 w-full justify-center">
-            <button class="btn btn-ghost btn-active px-10" on:click={cancelBind}>No</button>
-            <button class="btn btn-accent px-10" on:click={bind}>Yes</button>
+<div class="absolute inset-0 bg-base-300">
+    <div class="absolute inset-12 top-28">
+        <div class="w-full flex justify-between items-center">
+            <!-- Department -->
+            <div>
+                <div class="dropdown">
+                    <button tabindex="0" class="btn btn-ghost">
+                        <span class="px-2">@FRUIT&VEG</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" >
+                            <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                        </svg>
+                    </button>
+                    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><button>@FRUIT&VEG</button></li>
+                        <li><button>@BULK</button></li>
+                    </ul>
+                </div>
+                <span class="badge badge-lg border-0 bg-base-100 text-accent-content">
+                    <div class="text-sm breadcrumbs">
+                        <ul>
+                            <li>{$products.length} products</li>
+                            <li>{$products.length - fuzzed.length} filtered</li>
+                            <li>{checkedCount} selected</li>
+                        </ul>
+                    </div>
+                </span>
+            </div>
+            <!-- actions -->
+            <div class="btn-group shadow-md">
+                <button class="btn bg-base-100 btn-ghost" on:click={addProduct}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" width="24">
+                        <path d="M11 19V13H5V11H11V5H13V11H19V13H13V19Z" />
+                    </svg>
+                </button>
+                <button class="btn bg-base-100 btn-ghost" disabled={!checkedCount} on:click={deleteProducts}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" height="24" width="24">
+                        <path d="M7 21Q6.175 21 5.588 20.413Q5 19.825 5 19V6H4V4H9V3H15V4H20V6H19V19Q19 19.825 18.413 20.413Q17.825 21 17 21ZM17 6H7V19Q7 19 7 19Q7 19 7 19H17Q17 19 17 19Q17 19 17 19ZM9 17H11V8H9ZM13 17H15V8H13ZM7 6V19Q7 19 7 19Q7 19 7 19Q7 19 7 19Q7 19 7 19Z" />
+                    </svg>
+                </button>
+            </div>
         </div>
-    </confirm>
-{/if}
+        <!-- table -->
+        <div class="absolute top-20 bottom-0 overflow-y-scroll bg-base-100 rounded-lg">
+            <div class="relative ">
+                <table class="table table-zebra table-fixed table-compact w-full rounded-lg">
+                    <thead on:click={sortRows}>
+                        <th class="w-12 text-right">
+                            <input bind:this={refs.selectAll}
+                                type="checkbox"
+                                data-checkbox="header"
+                                class="checkbox checkbox-sm"
+                                checked={false}
+                                on:change={selectAll}
+                            />
+                        </th>
+                        <th class="w-16 text-center" data-key="id" data-type="number">ID</th>
+                        <th class="w-16 text-center" data-key="label3" data-type="number">PLU</th>
+                        <th class="w-56 text-left" data-key="name">Product</th>
+                        <th class="w-20 text-right" data-key="label6" data-type="number">Price</th>
+                        <th class="w-16 text-left" data-key="label10">Unit</th>
+                        <th class="w-32 text-left" data-key="label13">Category</th>
+                        <th class="w-32 text-left" data-key="label18">Department</th>
+                        <th class="w-24 text-left" data-key="status">Status</th>
+                    </thead>
+                    <tbody>
+                        {#each items as item (item.id)}
+                            <tr on:click={() => editProduct(item)} class="cursor-pointer {item === selectedItem ? 'active' : ''}" >
+                                <td class="w-12 pt-3 text-right" on:click|stopPropagation>
+                                    <input
+                                        data-id={item.id}
+                                        type="checkbox"
+                                        data-checkbox="row"
+                                        class="checkbox checkbox-sm"
+                                        bind:checked={item.checked}
+                                        on:change={handleCheckboxChange}
+                                    />
+                                </td>
+                                <td class="w-20 text-center">{item.id}</td>
+                                <td class="w-20 text-center">{item.label3}</td>
+                                <td class="w-24 text-left">{`${item.label4} ${item.label5}`}</td>
+                                <td class="w-20 text-right">${item.label6}</td>
+                                <td class="w-16 text-left">{item.label10}</td>
+                                <td class="w-32 text-left">{item.label13}</td>
+                                <td class="w-32 text-left">{item.label18}</td>
+                                <td class="w-20 text-left" on:click={sort()}>{item.status}</td>
+                            </tr>
+                        {/each}
+                        <!-- scroll trigger -->
+                        <tr bind:this={refs.scrollTrigger}>
+                            <td> <input type="checkbox" class="checkbox checkbox-sm invisible" /> </td>
+                            <td /><td /><td /><td /><td /><td /><td /><td />
+                        </tr>
+                        <!-- empty rows -->
+                        {#each new Array(4).fill('') as empty, i}
+                            <tr>
+                                <td> <input type="checkbox" class="checkbox checkbox-sm invisible" /> </td> <td />
+                                <td /><td /><td /><td /><td /><td /><td />
+                            </tr>
+                        {/each}
+                        <!-- No products alert -->
+                        {#if !items.length}
+                            <div transition:fade class="absolute w-full grid place-content-center place-items-center h-64" >
+                                <div class="alert max-w-xs px-8">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info flex-shrink-0 w-6 h-6" >
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg >
+                                    <span>No matching products found.</span>
+                                </div>
+                            </div>
+                        {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /table -->
+    </div>
+</div>
+
+<Modal bind:this={refs.addModal} on:close={handleModalClose}>
+    <AddProduct product={selectedItem} />
+    <svelte:fragment slot="actions">
+        <button form="form" class="btn w-32" value="cancel">Cancel</button>
+        <button form="form" class="btn btn-primary w-32" value="default">Confirm</button>
+    </svelte:fragment>
+</Modal>
+
+<Confirm bind:this={refs.confirmModal} on:close={handleConfirmClose}>
+    Are you sure you want to delete {checkedCount} items
+</Confirm>
 
 <style>
-    price:before {
-        content: '$';
-        vertical-align: text-bottom;
-        font-size: 0.75rem;
-        letter-spacing: 0.25ex;
-    }
-    price:after {
-        content: attr(data-cents) '\a'attr(data-unit);
-        position: absolute;
-        font-size: 0.75rem;
-        white-space: pre-line;
-        line-height: 2.5ch;
-        text-align: center;
-        transform: translateX(0.25ch);
-    }
-    li {
-        @apply flex flex-row gap-3 py-4 px-4 text-base-content bg-base-100 active:bg-base-200;
+    th {
+        @apply bg-primary text-primary-content sticky top-0 py-4 cursor-pointer shadow-2xl;
     }
 </style>

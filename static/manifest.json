@@ -1,7 +1,7 @@
 {
     "short_name": "TMTags",
     "name": "TMTags",
-    "start_url": "/",
+    "start_url": "/app",
     "icons": [{
         "src": "logo512.png",
         "sizes": "512x512",
@@ -20,7 +20,7 @@
     "background_color": "rgb(42, 48, 60)",
     "display": "standalone",
     "orientation": "portrait-primary",
-    "scope": "/",
+    "scope": "/app",
     "theme_color": "rgb(42, 48, 60)",
     "description": "TM Shelf Tags"
 }
