@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte'
     import { fade } from 'svelte/transition'
-    import products, { nullProduct } from '$lib/stores/products'
+    import products, { nullProduct, reload} from '$lib/stores/products'
     import search from '$lib/stores/search'
     import fuzzy from '$lib/util/fuzzy'
     import UID from '$lib/util/uid'
@@ -102,19 +102,20 @@
         checkedCount && refs.confirmModal.show()
     }
 
-    function handleModalClose(e) {
+    async function handleModalClose(e) {
         if (e.target.returnValue !== 'default') return
         console.log('Confirm pressed!')
         console.log(selectedItem)
         products.set($products)
-        postOne(selectedItem)
+        await postOne(selectedItem)
+        reload()
     }
 
-    function handleConfirmClose(e) {
-        if (e.target.returnValue === 'default') {
-            const idsToDelete = $products.filter((product) => product.checked).map((product) => product.id)
-            minew.batchDelete('goods?storeId=123', idsToDelete)
-        }
+    async function handleConfirmClose(e) {
+        if (e.target.returnValue !== 'default') return
+        const idsToDelete = $products.filter((product) => product.checked).map((product) => product.id)
+        await minew.batchDelete('goods?storeId=123', idsToDelete)
+        reload()
     }
 
     onMount(() => {
@@ -201,7 +202,7 @@
                     </thead>
                     <tbody>
                         {#each items as item, i (item.id)}
-                            <tr on:click={() => editProduct(item)} 
+                            <tr on:click={() => editProduct(item)}
                                 class="cursor-pointer {item === selectedItem ? 'active' : ''}" 
                                 style="display: {i > displayedItems ? 'none': 'table-row'}"
                             >

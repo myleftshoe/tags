@@ -32,9 +32,14 @@ export async function fetchProducts() {
     return Promise.resolve(products)
 }
 
-export default writable([], (set) => {
+const products = writable([], (set) => {
     fetchProducts().then(set)
 })
+
+export default products
+
+export const reload = async () => products.set(await fetchProducts())
+
 
 export const meta = {
     id: {hidden: true},
@@ -58,6 +63,8 @@ export const nullProduct = {
     label9: '',
     label10: 'kg',
     label11: 'VIC',
+    label13: '', 
+    label18: '@FRUIT&VEG',
 }
 
 export async function fetchPreview(macAddress) {

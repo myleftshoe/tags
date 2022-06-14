@@ -3,7 +3,7 @@
     import { onMount } from 'svelte'
     import { fly } from 'svelte/transition'
     import search from '$lib/stores/search';
-    import products, { fetchProducts } from '$lib/stores/products'
+    import { reload } from '$lib/stores/products'
     import Overlay from '$lib/components/overlay.svelte'
     import Keypad  from '$lib/components/keypad.svelte'
     import SOffline from "$lib/components/s-offline.svelte"
@@ -71,7 +71,7 @@
     let alert = false
     async function reloadProducts() {
         try {
-            products.set(await fetchProducts())
+            await reload()
         } catch(e) {
             alert = true
             await sleep(6000)
