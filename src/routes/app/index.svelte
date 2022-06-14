@@ -1,7 +1,7 @@
 <script context="module">
     import { onMount } from 'svelte'
     import { slide } from 'svelte/transition'
-    import search from '$lib/stores/search'
+    import search, { searchRef } from '$lib/stores/search'
     import products, { nullProduct } from '$lib/stores/products'
     import { fetchPreview } from '$lib/stores/products'
     import minew from '$lib/datasources/minew'
@@ -100,6 +100,26 @@
     }
 
 
+    function handlePointerdown() {
+        // closes virtual keyboard
+        $searchRef.blur()
+    }
+
+    let prevClickedElement = null
+
+    function handleFocusout(e) {
+        prevClickedElement = null
+    }
+
+    function stopFirstClick(e) {
+        if (prevClickedElement === e.currentTarget) {
+            prevClickedElement = null
+            return
+        }
+        e.stopImmediatePropagation()
+        prevClickedElement = e.currentTarget
+    }
+
     onMount(() => {
         const callback = ([entry]) => entry.isIntersecting && loadMore()
         new IntersectionObserver(callback).observe(refs.scrollTrigger)
@@ -116,7 +136,7 @@
     let items = []
     
     $:  changed = JSON.stringify(selectedItem) !== JSON.stringify(originalItem)
-    $:  if ($search.startsWith('#')) {
+    $:  if ($search.startsWith('#')) {  
             isHex12($search) && handleMac($search)
         } 
         else {
@@ -124,9 +144,11 @@
         }
 </script>
 
-<ul class="flex flex-col divide-y divide-base-300">
+<ul tabIndex="-1" class="flex flex-col divide-y divide-base-300" on:pointerdown={handlePointerdown} on:focusout={handleFocusout}>
     {#each items as item, i (item.id)}
-        <li on:click={handleItemClick(item)}
+        <li  
+            on:click={stopFirstClick} 
+            on:click={handleItemClick(item)}
             class={item.status === 'unbound' && 'opacity-50'} 
             style="display: {i > displayedItems ? 'none': ''}"
         >

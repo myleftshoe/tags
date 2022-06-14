@@ -2,7 +2,7 @@
     import '../app.css';
     import { onMount } from 'svelte'
     import { fly } from 'svelte/transition'
-    import search from '$lib/stores/search';
+    import search, { searchRef } from '$lib/stores/search';
     import { reload } from '$lib/stores/products'
     import Overlay from '$lib/components/overlay.svelte'
     import Keypad  from '$lib/components/keypad.svelte'
@@ -47,13 +47,13 @@
 
     function clearSearch() {
         search.set('');
-        refs.search.focus();
+        $searchRef.focus();
     }
 
     function handleWindowKeyPress(e) {
-        if (e.key === '#' && (document.activeElement !== refs.search || $search.startsWith('#'))) {
+        if (e.key === '#' && (document.activeElement !== $searchRef || $search.startsWith('#'))) {
             // Scanning using built in phone barcode scanner!!!
-            refs.search.setAttribute('virtualkeyboardpolicy', 'manual')
+            $searchRef.setAttribute('virtualkeyboardpolicy', 'manual')
             modals.login.open = false
             clearSearch()
         }
@@ -61,11 +61,7 @@
 
     function handleSubmit() {
         modals.login.open = false        
-        refs.search.setAttribute('virtualkeyboardpolicy', 'auto')
-    }
-
-    function handlePointerDown() {
-        refs.search.blur()
+        $searchRef.setAttribute('virtualkeyboardpolicy', 'auto')
     }
 
     let alert = false
@@ -129,7 +125,6 @@
 </svelte:head>
 
 <svelte:window on:keypress|capture={handleWindowKeyPress}/>
-<svelte:body on:pointerdown|capture={handlePointerDown}/>
 
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-20">
     <SOffline pingUrl="https://esl.minew.com" on:detectedCondition={handleNetworkChange}>
@@ -145,7 +140,7 @@
     </div>
     <div class="relative">
         <input
-            bind:this={refs.search}
+            bind:this={$searchRef}
             bind:value={$search}
             id="search"
             type="search"
