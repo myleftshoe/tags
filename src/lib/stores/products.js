@@ -39,8 +39,8 @@ export default writable([], (set) => {
 export const meta = {
     id: {hidden: true},
     name: {hidden: true},
-    label5: { name: 'name2', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 1, },
-    label4: { name: 'name1', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 2, },
+    label5: { name: 'name 1', alt: '(label line 1)', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 1, },
+    label4: { name: 'name 2', alt: '(label line 2)', editable: true, maxlength:16, uppercase: true, placeholder: '', tabindex: 2, },
     label6: { name: 'price', editable: true, maxlength:5, placeholder: '9.99', },
     label10: { name: 'unit', editable: true, maxlength:4, placeholder: 'kg', default: 'kg', tabindex: 5, },
     label8: { name: 'specification', editable: true, maxlength:16, placeholder: 'Organic', default: 'Organic', },

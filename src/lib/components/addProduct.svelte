@@ -2,11 +2,16 @@
     import { meta, nullProduct } from '$lib/stores/products'
     export let product = { ...nullProduct }
 </script>
-<form method="dialog" id="form">
+<form method="dialog" id="form" class="form-control">
     {#each Object.entries(meta) as [key, value]}
         {#if !(value.hidden)}
             <span>
-                <label for="{key}">{value.name}</label>
+                <span class="flex justify-between items-center">
+                    <label for="{key}">{value.name}</label>
+                    {#if value.alt}
+                        <span class="label-text-alt">{value.alt}</span>
+                    {/if}
+                </span>
                 <input class="input input-bordered w-full max-w-xs focus:input-primary"
                     id="{key}" 
                     type="text" 
