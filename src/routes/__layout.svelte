@@ -8,6 +8,7 @@
     import Keypad  from '$lib/components/keypad.svelte'
     import SOffline from "$lib/components/s-offline.svelte"
     import { sleep } from '$lib/util/sleep'
+    import Hero from '$lib/components/hero.svelte'
     
     const handleNetworkChange = ({ detail }) => {
         console.warn("event details: ", detail);
@@ -175,7 +176,7 @@
 </nav>
 
 <Overlay bind:open={modals.login.open}>
-    <Keypad on:submit={handleSubmit}/>
+    <Hero on:submit={handleSubmit}/>
 </Overlay>
 
 <slot />
