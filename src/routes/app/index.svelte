@@ -2,7 +2,6 @@
     import { onMount } from 'svelte'
     import { slide } from 'svelte/transition'
     import search from '$lib/stores/search'
-    import showUnbound from '$lib/stores/bound'
     import products, { nullProduct } from '$lib/stores/products'
     import { fetchPreview } from '$lib/stores/products'
     import minew from '$lib/datasources/minew'
@@ -121,7 +120,6 @@
             isHex12($search) && handleMac($search)
         } 
         else {
-            // items = $showUnbound ? $products : $products.filter(({ status }) => status === 'bound')
             items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
         }
 </script>
