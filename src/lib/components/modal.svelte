@@ -14,7 +14,7 @@
 <style>
     /* dialog::backdrop { background-color: red;} */
     dialog {
-        @apply rounded-box border-8 border-base-300 p-5 bg-base-200 shadow-2xl backdrop:bg-slate-900/50
+        @apply rounded-box border-8 border-base-300 p-5 bg-base-200 shadow-2xl backdrop:bg-slate-900/10 backdrop:backdrop-blur-sm
     }
     title { 
         @apply uppercase block text-2xl text-accent font-bold w-full text-center  p-2 pb-5 

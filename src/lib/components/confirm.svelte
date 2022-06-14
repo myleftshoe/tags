@@ -16,7 +16,7 @@
 <style>
     /* dialog::backdrop { background-color: red;} */
     dialog {
-        @apply rounded-box bg-warning shadow-xl max-w-sm py-5 px-10 backdrop:bg-slate-900/50
+        @apply rounded-box bg-warning shadow-xl max-w-sm py-5 px-10 backdrop:bg-slate-900/10 backdrop:backdrop-blur-sm
     }
     content {
       @apply flex flex-row gap-2 justify-center items-center
