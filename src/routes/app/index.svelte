@@ -105,20 +105,6 @@
         $searchRef.blur()
     }
 
-    let prevClickedElement = null
-
-    function handleFocusout(e) {
-        prevClickedElement = null
-    }
-
-    function stopFirstClick(e) {
-        if (prevClickedElement === e.currentTarget) {
-            prevClickedElement = null
-            return
-        }
-        e.stopImmediatePropagation()
-        prevClickedElement = e.currentTarget
-    }
 
     onMount(() => {
         const callback = ([entry]) => entry.isIntersecting && loadMore()
@@ -144,10 +130,9 @@
         }
 </script>
 
-<ul tabIndex="-1" class="fixed top-16 bottom-0 inset-x-0 overflow-y-scroll flex flex-col divide-y divide-base-300" on:pointerdown={handlePointerdown} on:focusout={handleFocusout}>
+<ul tabIndex="-1" class="fixed top-16 bottom-0 inset-x-0 overflow-y-scroll flex flex-col divide-y divide-base-300" on:pointerdown|capture={handlePointerdown}>
     {#each items as item, i (item.id)}
         <li  
-            on:click={stopFirstClick} 
             on:click={handleItemClick(item)}
             class={item.status === 'unbound' && 'opacity-50'} 
             style="display: {i > displayedItems ? 'none': ''}"
