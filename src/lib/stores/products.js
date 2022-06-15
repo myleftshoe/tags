@@ -24,9 +24,10 @@ export async function fetchProducts() {
         label11: row.label11 ?? '',
         label13: row.label13 ?? '',
         label18: row.label18 ?? '',
-        status: translate(row.status) || row.status || '',
+        status: row.status || '',
+        lstatus: translate(row.status) || row.status || '',
     }))
-    // .filter(row => row.status === "bound")
+    // .filter(row => row.lstatus === "bound")
     .sort(alpha('name'))
     // .slice(0,20)
     return Promise.resolve(products)

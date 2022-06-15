@@ -162,7 +162,7 @@
             {#each items as item, i (item.id)}
                 <li  
                     on:click={handleItemClick(item)}
-                    class={item.status === 'unbound' && 'opacity-50'} 
+                    class={item.lstatus === 'unbound' && 'opacity-50'} 
                 >
                     <price class="w-1/4 text-right pr-10 text-xl" data-cents={cents(item.label6)} data-unit={item.label10}>{dollars(item.label6)}</price>
                     <span class="w-3/4 flex flex-col justify-center">{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</span>
