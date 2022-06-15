@@ -47,7 +47,7 @@
 
     function clearSearch() {
         search.set('');
-        // $searchRef.focus();
+        $searchRef.focus();
     }
 
     function handleWindowKeyPress(e) {
