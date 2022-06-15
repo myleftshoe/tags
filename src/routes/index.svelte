@@ -23,7 +23,7 @@
     }
 
     async function postOne(product) {
-        const { name, status, checked, ...payload } = { ...product, label18: '@FRUIT&VEG' }
+        const { name, lstatus, checked, ...payload } = { ...product, label18: '@FRUIT&VEG' }
         if (!payload.id) {
             let id
             let response
@@ -107,7 +107,7 @@
         if (e.target.returnValue !== 'default') return
         console.log('Confirm pressed!')
         console.log(selectedItem)
-        products.set($products)
+        // products.set($products)
         await postOne(selectedItem)
         reload()
     }
@@ -224,7 +224,7 @@
                         <th class="w-16 text-left" data-key="label10">Unit</th>
                         <th class="w-32 text-left" data-key="label13">Category</th>
                         <th class="w-32 text-left" data-key="label18">Department</th>
-                        <th class="w-24 text-left" data-key="status">Status</th>
+                        <th class="w-24 text-left" data-key="lstatus">Status</th>
                     </thead>
                     <tbody>
                         {#each items as item, i (item.id)}
@@ -248,7 +248,7 @@
                                 <td class="w-16 text-left">{item.label10}</td>
                                 <td class="w-32 text-left">{item.label13}</td>
                                 <td class="w-32 text-left">{item.label18}</td>
-                                <td class="w-20 text-left" on:click={sort()}>{item.status}</td>
+                                <td class="w-20 text-left" on:click={sort()}>{item.lstatus}</td>
                             </tr>
                         {/each}
                         <!-- scroll trigger -->
