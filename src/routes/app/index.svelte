@@ -184,6 +184,6 @@
         transform: translateX(0.25ch);
     }
     li {
-        @apply flex flex-row gap-3 py-4 px-4 text-base-content;
+        @apply flex flex-row gap-3 py-4 px-4 text-base-content active:bg-base-200;
     }
 </style>
