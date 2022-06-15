@@ -1,5 +1,6 @@
 <script context="module">
-    import { onMount } from 'svelte'
+    import { browser } from '$app/env'
+    import { onMount, onDestroy, afterUpdate } from 'svelte'
     import { slide } from 'svelte/transition'
     import search, { searchRef } from '$lib/stores/search'
     import products, { nullProduct } from '$lib/stores/products'
@@ -105,10 +106,31 @@
         $searchRef.blur()
     }
 
+    let searchChanged = false
+    function handleSearchChange(e) {
+        searchChanged = true
+    }
 
     onMount(() => {
         const callback = ([entry]) => entry.isIntersecting && loadMore()
         new IntersectionObserver(callback).observe(refs.scrollTrigger)
+        $searchRef.addEventListener('change', handleSearchChange)
+        $searchRef.addEventListener('input', handleSearchChange)
+    })
+
+
+    afterUpdate(() => {
+        if (searchChanged && !$search.length) {
+            displayedItems = 20
+            searchChanged = false
+        }
+    })
+
+    onDestroy(() => {
+        if (browser) {
+            $searchRef.removeEventListener('change', handleSearchChange)
+            $searchRef.removeEventListener('input', handleSearchChange)
+        }
     })
 
     function loadMore() {
@@ -126,23 +148,30 @@
             isHex12($search) && handleMac($search)
         } 
         else {
-            items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
+            if (!$search.length) {
+                items = $products
+            } else {
+                items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
+            }
+            items = items.slice(0,displayedItems)
         }
 </script>
-
-<ul tabIndex="-1" class="fixed top-16 bottom-0 inset-x-0 overflow-y-scroll flex flex-col divide-y divide-base-300" on:pointerdown|capture={handlePointerdown}>
-    {#each items as item, i (item.id)}
-        <li  
-            on:click={handleItemClick(item)}
-            class={item.status === 'unbound' && 'opacity-50'} 
-            style="display: {i > displayedItems ? 'none': ''}"
-        >
-            <price class="w-1/4 text-right pr-10 text-xl" data-cents={cents(item.label6)} data-unit={item.label10}>{dollars(item.label6)}</price>
-            <span class="w-3/4 flex flex-col justify-center">{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</span>
-        </li>
-    {/each}
-    <li bind:this={refs.scrollTrigger}></li>
-</ul>
+<div class="fixed top-16 bottom-0 inset-x-0 overflow-y-scroll">
+    {#if displayedItems}
+        <ul bind:this={refs.ul} tabIndex="-1" class="flex flex-col divide-y divide-base-300" on:pointerdown|capture={handlePointerdown}>
+            {#each items as item, i (item.id)}
+                <li  
+                    on:click={handleItemClick(item)}
+                    class={item.status === 'unbound' && 'opacity-50'} 
+                >
+                    <price class="w-1/4 text-right pr-10 text-xl" data-cents={cents(item.label6)} data-unit={item.label10}>{dollars(item.label6)}</price>
+                    <span class="w-3/4 flex flex-col justify-center">{`${item.label4.trim()} ${item.label5.trim()}`.trim()}</span>
+                </li>
+            {/each}
+        </ul>
+    {/if}
+    <div class="h-5/6 w-full grid place-content-center" bind:this={refs.scrollTrigger}></div>
+</div>
 
 <Overlay bind:open={modals.tag.open} on:close={resetItem} cancel="Go Back">
     <Tag bind:product={selectedItem} />
