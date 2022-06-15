@@ -1,8 +1,9 @@
 <script>
-    import { onMount } from 'svelte'
+    import { browser } from '$app/env'
+    import { onMount, afterUpdate, onDestroy } from 'svelte'
     import { fade } from 'svelte/transition'
     import products, { nullProduct, reload} from '$lib/stores/products'
-    import search from '$lib/stores/search'
+    import search, { searchRef } from '$lib/stores/search'
     import fuzzy from '$lib/util/fuzzy'
     import UID from '$lib/util/uid'
     import minew from '$lib/datasources/minew'
@@ -118,9 +119,30 @@
         reload()
     }
 
+    let searchChanged = false
+    function handleSearchChange(e) {
+        searchChanged = true
+    }
+
     onMount(() => {
         const callback = ([entry]) => entry.isIntersecting && loadMore()
         new IntersectionObserver(callback).observe(refs.scrollTrigger)
+        $searchRef.addEventListener('change', handleSearchChange)
+        $searchRef.addEventListener('input', handleSearchChange)
+    })
+
+    afterUpdate(() => {
+        if (searchChanged && !$search.length) {
+            displayedItems = 20
+            searchChanged = false
+        }
+    })
+
+    onDestroy(() => {
+        if (browser) {
+            $searchRef.removeEventListener('change', handleSearchChange)
+            $searchRef.removeEventListener('input', handleSearchChange)
+        }
     })
 
     function loadMore() {
@@ -133,7 +155,11 @@
 
     let items = []
 
-    $: items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
+    $:  if (!$search.length) {
+            items = $products.slice(0, displayedItems)
+        } else {
+            items = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id']).slice(0, displayedItems)
+        }
 </script>
 
 <div class="absolute inset-0 bg-base-300">
@@ -204,7 +230,6 @@
                         {#each items as item, i (item.id)}
                             <tr on:click={() => editProduct(item)}
                                 class="cursor-pointer {item === selectedItem ? 'active' : ''}" 
-                                style="display: {i > displayedItems ? 'none': 'table-row'}"
                             >
                                 <td class="w-12 pt-3 text-right" on:click|stopPropagation>
                                     <input
