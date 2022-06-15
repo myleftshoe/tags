@@ -144,7 +144,7 @@
         }
 </script>
 
-<ul tabIndex="-1" class="flex flex-col divide-y divide-base-300" on:pointerdown={handlePointerdown} on:focusout={handleFocusout}>
+<ul tabIndex="-1" class="fixed top-16 bottom-0 inset-x-0 overflow-y-scroll flex flex-col divide-y divide-base-300" on:pointerdown={handlePointerdown} on:focusout={handleFocusout}>
     {#each items as item, i (item.id)}
         <li  
             on:click={stopFirstClick} 
@@ -199,6 +199,6 @@
         transform: translateX(0.25ch);
     }
     li {
-        @apply flex flex-row gap-3 py-4 px-4 text-base-content bg-base-100 active:bg-base-200;
+        @apply flex flex-row gap-3 py-4 px-4 text-base-content;
     }
 </style>

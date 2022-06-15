@@ -186,7 +186,6 @@
 
 <style>
     :global(body) {
-        overflow: auto;
-        overscroll-behavior-y: contain;
+        @apply bg-base-100 overflow-y-auto overscroll-y-contain h-screen fixed inset-0;
     }
 </style>
