@@ -1,22 +1,14 @@
 <script>
     import '../app.css';
     import { onMount } from 'svelte'
-    import { fly, slide, fade  } from 'svelte/transition'
-    import search from '$lib/stores/search';
+    import { fly } from 'svelte/transition'
+    import search, {searchRef} from '$lib/stores/search';
     import products, { fetchProducts } from '$lib/stores/products'
-    import Overlay from '$lib/components/overlay.svelte'
-    import Keypad  from '$lib/components/keypad.svelte'
     import SOffline from "$lib/components/s-offline.svelte"
     import { sleep } from '$lib/util/sleep'
-    import Hero from '$lib/components/hero.svelte'
-    import { loggedIn } from '$lib/stores/auth.js'
     
     const handleNetworkChange = ({ detail }) => {
         console.warn("event details: ", detail);
-    }
-
-    const modals = {
-        login: { open: true },
     }
 
     let themeColor = ''
@@ -49,25 +41,11 @@
 
     function clearSearch() {
         search.set('');
-        refs.search.focus();
-    }
-
-    function handleWindowKeyPress(e) {
-        if (e.key === '#' && (document.activeElement !== refs.search || $search.startsWith('#'))) {
-            // Scanning using built in phone barcode scanner!!!
-            refs.search.setAttribute('virtualkeyboardpolicy', 'manual')
-            modals.login.open = false
-            clearSearch()
-        }
-    }
-
-    function handleSubmit() {
-        modals.login.open = false        
-        refs.search.setAttribute('virtualkeyboardpolicy', 'auto')
+        $searchRef.focus();
     }
 
     function handlePointerDown() {
-        refs.search.blur()
+        $searchRef.blur()
     }
 
     let alert = false
@@ -130,7 +108,6 @@
     </script>
 </svelte:head>
 
-<svelte:window on:keypress|capture={handleWindowKeyPress}/>
 <svelte:body on:pointerdown|capture={handlePointerDown}/>
 
 <nav on:click|stopPropagation bind:this={refs.nav} class="navbar bg-base-100 sticky top-0 shadow-xl z-20">
@@ -147,7 +124,7 @@
     </div>
     <div class="relative">
         <input
-            bind:this={refs.search}
+            bind:this={$searchRef}
             bind:value={$search}
             id="search"
             type="search"
@@ -176,23 +153,15 @@
     </div>
 </nav>
 
-<!-- <Overlay bind:open={modals.login.open}> -->
-{#if !$loggedIn}
-<div out:fade>
-    <Hero on:submit={handleSubmit}/>
-</div>
-{/if}
-<!-- </Overlay> -->
-
 <slot />
 
 {#if alert}
-<div transition:fly class="alert alert-warning shadow-lg absolute top-16">
-    <div>
-        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-        <p>Can't login to esl.minew.com. No internet or the server is down.</p>
+    <div transition:fly class="alert alert-warning shadow-lg absolute top-16">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            <p>Can't login to esl.minew.com. No internet or the server is down.</p>
+        </div>
     </div>
-</div>
 {/if}
 
 <style>

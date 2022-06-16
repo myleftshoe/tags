@@ -24,26 +24,26 @@
     $: console.log({browser})
 </script>
 
-<main>
+<main class="glass bg-primary fixed inset-0 z-50">
     <p class="text-2xl text-base-content select-none after:content-['*'] after:text-sm after:absolute">Enter PIN</p>
     <h1 class="text-3xl tracking-widest text-accent-focus select-none">{view}</h1>
     <keypad>
         {#each [1,2,3,4,5,6,7,8,9,null,0] as key}
             <button on:click={select(key)}
                 disabled={!browser} 
-                class="{key === null ? 'invisible' : ''} no-animation btn btn-circle btn-lg text-accent-content bg-accent text-2xl font-normal hover:bg-accent active:bg-accent-focus" 
+                class="{key === null ? 'invisible' : ''} no-animation btn btn-circle border-primary-content opacity-50 btn-lg text-primary-content bg-transparent text-2xl font-normal hover:bg-accent active:bg-accent-focus" 
             >
                 {key}
             </button>
         {/each}
     </keypad>
-    <button class="btn btn-link text-accent z-50 {!value && 'invisible'}" on:click={() => (value = '')}>delete</button>
+    <button class="btn btn-link text-accent {!value && 'invisible'}" on:click|stopPropagation={() => (value = '')}>delete</button>
     <footer class="grid place-content-center w-full absolute bottom-4 text-sm text-base-content opacity-50 select-none">*or scan a tag to start</footer>
 </main>
 
 <style>
     main { 
-        height: 95%;
+        /* height: 95%; */
         align-self: flex-end;
         overflow: hidden;
         display: grid;

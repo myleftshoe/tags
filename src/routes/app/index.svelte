@@ -1,13 +1,14 @@
 <script context="module">
     import { onMount } from 'svelte'
     import { slide } from 'svelte/transition'
-    import search from '$lib/stores/search'
+    import search, { searchRef } from '$lib/stores/search'
     import showUnbound from '$lib/stores/bound'
     import products, { nullProduct } from '$lib/stores/products'
     import { fetchPreview } from '$lib/stores/products'
     import minew from '$lib/datasources/minew'
     import fuzzy from '$lib/util/fuzzy'
     import Overlay from '$lib/components/overlay.svelte'
+    import Keypad  from '$lib/components/keypad.svelte'
     import Tag from '$lib/components/tag.svelte'
     export const router = false
     export const prerender = true
@@ -20,9 +21,31 @@
 
     let refs = {}
 
+    function clearSearch() {
+        search.set('');
+        $searchRef.focus();
+    }
+
+    function handleWindowKeyPress(e) {
+        if (e.key === '#' && (document.activeElement !== refs.search || $search.startsWith('#'))) {
+            // Scanning using built in phone barcode scanner!!!
+            $searchRef.setAttribute('virtualkeyboardpolicy', 'manual')
+            modals.login.open = false
+            clearSearch()
+        }
+    }
+
+    function handleSubmit() {
+        modals.login.open = false        
+        $searchRef.setAttribute('virtualkeyboardpolicy', 'auto')
+    }
+
+
+
     const modals = {
         tag: { open: false },
         confirm: { open: false },
+        login: { open: true },        
     }
 
     const handleItemClick = (item) => (e) => {
@@ -137,6 +160,7 @@
             items = [...items].concat(fuzzed.slice(startIndex, startIndex + maxItems))
         }
 </script>
+<svelte:window on:keypress|capture={handleWindowKeyPress}/>
 
 <ul class="flex flex-col divide-y divide-base-300">
     {#each items as item (item.id)}
@@ -170,6 +194,11 @@
         </div>
     </confirm>
 {/if}
+
+<Overlay bind:open={modals.login.open}>
+    <Keypad on:submit={handleSubmit}/>
+</Overlay>
+
 
 <style>
     price:before {

@@ -23,7 +23,7 @@
 </script>
 
 <div class="bg-primary fixed inset-0 z-50">
-  <div class="hero glass h-screen ">
+  <div class="hero glass h-screen">
       <div class="hero-content flex-col lg:flex-row-reverse glass rounded-box">
           <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
               <div class="card-body pb-4">

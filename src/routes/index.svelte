@@ -10,6 +10,8 @@
     import Modal from '$lib/components/modal.svelte'
     import Confirm from '$lib/components/confirm.svelte'
     import AddProduct from '$lib/components/addProduct.svelte'
+    import Hero from '$lib/components/hero.svelte'
+    import { loggedIn } from '$lib/stores/auth.js'
 
     let sort = { by: 'label4', desc: false }
 
@@ -147,6 +149,10 @@
     $: fuzzed = fuzzy($products, $search.toUpperCase(), ['label4', 'label5', 'id'])
     $: items = [...items].concat(fuzzed.slice(startIndex, startIndex + maxItems))
 </script>
+
+{#if !$loggedIn}
+    <Hero/>
+{/if}
 
 <div class="absolute inset-0 bg-base-300">
     <div class="absolute inset-12 top-28">
