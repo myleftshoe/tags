@@ -3,7 +3,7 @@
     const dispatch = createEventDispatcher()
     import { loggedIn, login } from '$lib/stores/auth.js'
 
-    const defaultMessage = '*or scan a tag to start'
+    const defaultMessage = '\u3164' //invisible char for spacinh when no messasge
     let username = ''
     let password = ''
     let message = defaultMessage
@@ -26,7 +26,7 @@
   <div class="hero glass h-screen ">
       <div class="hero-content flex-col lg:flex-row-reverse glass rounded-box">
           <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-              <div class="card-body">
+              <div class="card-body pb-4">
                   <form on:submit|preventDefault={handleSubmit}>
                       <div class="form-control">
                           <label for="username" class="label">
@@ -47,9 +47,9 @@
                           />
                       </div>
                       <div class="form-control mt-6">
-                          <button type="submit" class="btn btn-primary">Login<sup>*</sup></button>
+                          <button type="submit" class="btn btn-primary">Login</button>
                       </div>
-                      <div class="{message === defaultMessage ? 'text-base-content' : 'text-error' } text-xs text-center pt-2">{message}</div> 
+                      <div class="{message === defaultMessage ? 'text-base-content' : 'text-error' } text-xs text-center pt-3">{message}</div> 
                   </form>
               </div>
           </div>
