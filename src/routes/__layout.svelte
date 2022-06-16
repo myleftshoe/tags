@@ -1,7 +1,7 @@
 <script>
     import '../app.css';
     import { onMount } from 'svelte'
-    import { fly } from 'svelte/transition'
+    import { fly, slide, fade  } from 'svelte/transition'
     import search from '$lib/stores/search';
     import products, { fetchProducts } from '$lib/stores/products'
     import Overlay from '$lib/components/overlay.svelte'
@@ -9,6 +9,7 @@
     import SOffline from "$lib/components/s-offline.svelte"
     import { sleep } from '$lib/util/sleep'
     import Hero from '$lib/components/hero.svelte'
+    import { loggedIn } from '$lib/stores/auth.js'
     
     const handleNetworkChange = ({ detail }) => {
         console.warn("event details: ", detail);
@@ -175,9 +176,13 @@
     </div>
 </nav>
 
-<Overlay bind:open={modals.login.open}>
+<!-- <Overlay bind:open={modals.login.open}> -->
+{#if !$loggedIn}
+<div out:fade>
     <Hero on:submit={handleSubmit}/>
-</Overlay>
+</div>
+{/if}
+<!-- </Overlay> -->
 
 <slot />
 
