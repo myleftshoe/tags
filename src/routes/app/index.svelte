@@ -8,6 +8,7 @@
     import minew from '$lib/datasources/minew'
     import fuzzy from '$lib/util/fuzzy'
     import Overlay from '$lib/components/overlay.svelte'
+    import Keypad  from '$lib/components/keypad.svelte'
     import Tag from '$lib/components/tag.svelte'
     export const router = false
     export const prerender = true
@@ -20,9 +21,31 @@
 
     let refs = {}
 
+    function clearSearch() {
+        search.set('');
+        $searchRef.focus();
+    }
+
+    function handleWindowKeyPress(e) {
+        if (e.key === '#' && (document.activeElement !== refs.search || $search.startsWith('#'))) {
+            // Scanning using built in phone barcode scanner!!!
+            $searchRef.setAttribute('virtualkeyboardpolicy', 'manual')
+            modals.login.open = false
+            clearSearch()
+        }
+    }
+
+    function handleSubmit() {
+        modals.login.open = false        
+        $searchRef.setAttribute('virtualkeyboardpolicy', 'auto')
+    }
+
+
+
     const modals = {
         tag: { open: false },
         confirm: { open: false },
+        login: { open: true },        
     }
 
     const handleItemClick = (item) => (e) => {
@@ -156,6 +179,9 @@
             items = items.slice(0,displayedItems)
         }
 </script>
+
+<svelte:window on:keypress|capture={handleWindowKeyPress}/>
+
 <div class="fixed top-16 bottom-0 inset-x-0 overflow-y-scroll">
     {#if displayedItems}
         <ul bind:this={refs.ul} tabIndex="-1" class="flex flex-col divide-y divide-base-300" on:pointerdown|capture={handlePointerdown}>
@@ -195,6 +221,11 @@
         </div>
     </confirm>
 {/if}
+
+<Overlay bind:open={modals.login.open}>
+    <Keypad on:submit={handleSubmit}/>
+</Overlay>
+
 
 <style>
     price:before {
