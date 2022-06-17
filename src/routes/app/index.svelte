@@ -15,6 +15,8 @@
 </script>
 
 <script>
+    import { loggedIn } from '$lib/stores/auth.js'
+
     let selectedItem = { ...nullProduct }
     let scannedItem = null
     let originalItem = { ...nullProduct }
@@ -37,6 +39,7 @@
 
     function handleSubmit() {
         modals.login.open = false        
+        $loggedIn = true
         $searchRef.setAttribute('virtualkeyboardpolicy', 'auto')
     }
 
@@ -182,7 +185,7 @@
 
 <svelte:window on:keypress|capture={handleWindowKeyPress}/>
 
-<div class="fixed top-16 bottom-0 inset-x-0 overflow-y-scroll">
+<div class="fixed top-16 bottom-0 inset-x-0 overflow-y-scroll {!$loggedIn ? 'hidden' : ''}">
     {#if displayedItems}
         <ul bind:this={refs.ul} tabIndex="-1" class="flex flex-col divide-y divide-base-300" on:pointerdown|capture={handlePointerdown}>
             {#each items as item, i (item.id)}
