@@ -44,7 +44,7 @@
             {#each [1,2,3,4,5,6,7,8,9,null,0] as key}
                 <button name="key" on:click={select(key)}
                     disabled={!browser} 
-                    class="{key === null ? 'invisible' : ''} no-animation transition-none btn btn-circle border-primary-content opacity-60 btn-lg text-primary-content bg-accent/0 text-2xl font-normal hover:bg-transparent active:bg-accent active:border-accent hover:border-primary-content" 
+                    class="{key === null ? 'invisible' : ''} no-animation transition-none btn btn-circle border-primary-content opacity-60 btn-lg text-primary-content bg-accent/0 text-2xl font-normal hover:bg-transparent active:bg-accent active:border-accent active:text-accent-content hover:border-primary-content" 
                 >
                     {key}
                 </button>
