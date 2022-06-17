@@ -2,22 +2,33 @@
     import { browser } from '$app/env'
     import { createEventDispatcher } from 'svelte'
     import { sleep } from '$lib/util/sleep'
+    import { loggedIn, loginWithPincode } from '$lib/stores/auth.js'
 
     const dispatch = createEventDispatcher();    
 
 
+    async function checkPincode() {
+        const ok = await loginWithPincode(value)
+        if (!ok) {
+            console.warn('Incorrect pincode')
+            return
+        }            
+        console.log('Correct pin entered')
+        $loggedIn = true
+        await sleep(300)
+        dispatch('submit')
+    }
+
+
     let value = ''
 
-    const select = (num) => async () => {
+    const select = (num) => () => {
         value += num
-        if (value === '2086') {
-            console.log('Correct pin entered')
-            await sleep(300)
-            dispatch('submit')
+        if (value.length === 4) {
+            checkPincode()
         }
         if (value.length > 4) {
             value = ''
-            return
         }
     }
 

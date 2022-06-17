@@ -39,7 +39,6 @@
 
     function handleSubmit() {
         modals.login.open = false        
-        $loggedIn = true
         $searchRef.setAttribute('virtualkeyboardpolicy', 'auto')
     }
 

@@ -15,3 +15,17 @@ export const login = async ( username, password ) => {
     const json = await response.json()
     return json.ok
 }
+
+export const loginWithPincode = async ( pincode ) => {
+    console.log({pincode})
+    const response = await fetch('api/loginWithPincode', {
+        method: 'POST',
+        body: JSON.stringify(pincode),
+        headers: {
+            'Content-Type': 'application/json'
+        }        
+    })
+    console.log(response.status)
+    const json = await response.json()
+    return json.ok
+}
