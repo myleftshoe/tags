@@ -168,7 +168,7 @@
     <Hero/>
 {/if}
 
-<div class="absolute inset-0 bg-base-300">
+<div class="absolute inset-0 bg-base-300 {!$loggedIn && 'hidden'}">
     <div class="absolute inset-12 top-28">
         <div class="w-full flex justify-between items-center">
             <!-- Department -->
