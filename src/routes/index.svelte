@@ -223,14 +223,14 @@
                                 on:change={selectAll}
                             />
                         </th>
-                        <th class="w-16 text-center" data-key="id" data-type="number">ID</th>
-                        <th class="w-16 text-center" data-key="label3" data-type="number">PLU</th>
-                        <th class="w-56 text-left" data-key="name">Product</th>
-                        <th class="w-20 text-right" data-key="label6" data-type="number">Price</th>
-                        <th class="w-16 text-left" data-key="label10">Unit</th>
-                        <th class="w-32 text-left" data-key="label13">Category</th>
-                        <th class="w-32 text-left" data-key="label18">Department</th>
-                        <th class="w-24 text-left" data-key="lstatus">Status</th>
+                        <th class="w-16 text-center" data-key="id" data-type="number" data-after=" {sort.by === 'id' ?  sort.desc ? '↓' : '↑' : ''}">ID</th>
+                        <th class="w-16 text-center" data-key="label3" data-type="number" data-after=" {sort.by === 'label3' ?  sort.desc ? '↓' : '↑' : ''}">PLU</th>
+                        <th class="w-56 text-left" data-key="name" data-after=" {sort.by === 'name' ?  sort.desc ? '↓' : '↑' : ''}">Product</th>
+                        <th class="w-20 text-right" data-key="label6" data-type="number" data-before="{sort.by === 'name' ?  sort.desc ? '↓' : '↑' : ''} ">Price</th>
+                        <th class="w-16 text-left" data-key="label10" data-after=" {sort.by === 'label10' ?  sort.desc ? '↓' : '↑' : ''}">Unit</th>
+                        <th class="w-32 text-left" data-key="label13" data-after=" {sort.by === 'label13' ?  sort.desc ? '↓' : '↑' : ''}">Category</th>
+                        <th class="w-32 text-left" data-key="label18" data-after=" {sort.by === 'label18' ?  sort.desc ? '↓' : '↑' : ''}">Department</th>
+                        <th class="w-24 text-left" data-key="lstatus" data-after=" {sort.by === 'lstatus' ?  sort.desc ? '↓' : '↑' : ''}">Status</th>
                     </thead>
                     <tbody>
                         {#each items as item, i (item.id)}
@@ -302,6 +302,6 @@
 
 <style>
     th {
-        @apply bg-primary text-primary-content sticky top-0 py-4 cursor-pointer shadow-2xl;
+        @apply bg-primary text-primary-content sticky top-0 py-4 cursor-pointer shadow-2xl before:content-[attr(data-before)] after:content-[attr(data-after)];
     }
 </style>
