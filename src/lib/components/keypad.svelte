@@ -1,7 +1,7 @@
 <script>
     import { browser } from '$app/env'
     import { createEventDispatcher } from 'svelte'
-    import { sleep } from '$lib/util/sleep'
+    // import { sleep } from '$lib/util/sleep'
     import { loggedIn, loginWithPincode } from '$lib/stores/auth.js'
 
     const dispatch = createEventDispatcher();    
@@ -15,7 +15,7 @@
         }            
         console.log('Correct pin entered')
         $loggedIn = true
-        await sleep(300)
+        // await sleep(300)
         dispatch('submit')
     }
 
