@@ -226,7 +226,7 @@
                         <th class="w-16 text-center" data-key="id" data-type="number" data-after=" {sort.by === 'id' ?  sort.desc ? '↓' : '↑' : ''}">ID</th>
                         <th class="w-16 text-center" data-key="label3" data-type="number" data-after=" {sort.by === 'label3' ?  sort.desc ? '↓' : '↑' : ''}">PLU</th>
                         <th class="w-56 text-left" data-key="name" data-after=" {sort.by === 'name' ?  sort.desc ? '↓' : '↑' : ''}">Product</th>
-                        <th class="w-20 text-right" data-key="label6" data-type="number" data-before="{sort.by === 'name' ?  sort.desc ? '↓' : '↑' : ''} ">Price</th>
+                        <th class="w-20 text-right" data-key="label6" data-type="number" data-before="{sort.by === 'label6' ?  sort.desc ? '↓' : '↑' : ''} ">Price</th>
                         <th class="w-16 text-left" data-key="label10" data-after=" {sort.by === 'label10' ?  sort.desc ? '↓' : '↑' : ''}">Unit</th>
                         <th class="w-32 text-left" data-key="label13" data-after=" {sort.by === 'label13' ?  sort.desc ? '↓' : '↑' : ''}">Category</th>
                         <th class="w-32 text-left" data-key="label18" data-after=" {sort.by === 'label18' ?  sort.desc ? '↓' : '↑' : ''}">Department</th>
