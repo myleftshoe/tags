@@ -254,7 +254,7 @@
                                 <td class="w-16 text-left">{item.label10}</td>
                                 <td class="w-32 text-left">{item.label13}</td>
                                 <td class="w-32 text-left">{item.label18}</td>
-                                <td class="w-20 text-left" on:click={sort()}>{item.lstatus}</td>
+                                <td class="w-20 text-left">{item.lstatus}</td>
                             </tr>
                         {/each}
                         <!-- scroll trigger -->
