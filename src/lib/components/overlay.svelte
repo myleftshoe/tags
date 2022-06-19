@@ -32,7 +32,7 @@
     $: if (mounted && open) handleOpen()
 </script>
 {#if open}
-    <main in:scale={{duration: 250}} out:scale={{duration: 500}} class="bg-base-100 z-30">
+    <main in:scale={{duration: 250}} out:scale={{duration: 500}} class="bg-base-100/50 backdrop-blur-sm z-30">
         <slot/>
         {#if (closeButton)}
             <button class="no-animation btn btn-sm btn-circle absolute right-5 top-4" on:click={close}>
@@ -52,8 +52,11 @@
 {/if}
 <style>
     main { 
-        display: grid;
-        place-content: center center;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        /* place-content: center center; */
         /* background-color: #f003; */
         position: fixed;
         top: 0;

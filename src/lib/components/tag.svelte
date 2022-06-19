@@ -103,7 +103,7 @@
         display: grid;
         place-items: start center;
         width: 100vw;
-        height: 100vh;
+        height: 60vh;
         overflow: hidden;
     }
     case {
