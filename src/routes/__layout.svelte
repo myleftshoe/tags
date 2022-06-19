@@ -4,7 +4,6 @@
     import { fly } from 'svelte/transition'
     import search, { searchRef } from '$lib/stores/search';
     import { reload } from '$lib/stores/products'
-    import products, { fetchProducts } from '$lib/stores/products'
     import SOffline from "$lib/components/s-offline.svelte"
     import { sleep } from '$lib/util/sleep'
     
