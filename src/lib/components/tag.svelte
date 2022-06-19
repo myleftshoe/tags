@@ -51,7 +51,7 @@
 </script>
 
 <container bind:this={refs.container}>
-    <case bind:this={refs.case} style="transform: scale(.8);">
+    <case bind:this={refs.case}>
         <tag style="height: {height}px; width: {width}px;">
             <tagcontent bind:this={refs.tagcontent} class:loading={!product?.id}>
                 {#each text as [label, style], i}
@@ -113,6 +113,7 @@
         border-width: 32px 15px 32px 15px;
         border-color: #f5f7f7;
         border-radius: 32px;
+        transform: scale(.8);        
         transform-origin: top center;
         transition: transform 0.1s ease-out;
     }
