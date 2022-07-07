@@ -1,7 +1,7 @@
 <script context="module">
     import { browser } from '$app/env'
     import { onMount, onDestroy, afterUpdate } from 'svelte'
-    import { slide } from 'svelte/transition'
+    import { fly } from 'svelte/transition'
     import search, { searchRef } from '$lib/stores/search'
     import products, { nullProduct } from '$lib/stores/products'
     import { fetchPreview } from '$lib/stores/products'
@@ -107,11 +107,17 @@
     const getName = ({label4 = '', label5 = ''} = {}) => `${label4.trim()} ${label5.trim()}`.trim() 
     const getNameReversed = ({label4 = '', label5 = ''} = {}) => `${label5.trim()} ${label4.trim()}`.trim() 
 
+    let showNotFound = false
     async function handleMac(mac) {
         if (!isHex12(mac)) return
         document.activeElement.blur()
-        modals.tag.open = true // open it eagely, i.e. it will show nullProduct them update
+        // modals.tag.open = true // open it eagely, i.e. it will show nullProduct them update
         scannedItem = await fetchPreview(mac.slice(1)) // remove # prefix
+        if (!scannedItem.id) {
+            showNotFound = true
+            setTimeout(() => showNotFound = false, 2000)
+            return
+        }
         if (selectedItem.id) {
             // Previous was a scan.
             if (JSON.stringify(scannedItem) !== JSON.stringify(selectedItem)) {
@@ -122,8 +128,8 @@
         else {
             selectedItem = scannedItem
             originalItem = { ...selectedItem }
-            // modals.tag.open = true  // uncomment to open it lazily, ie wait for fetch
         }
+        modals.tag.open = true  // open it lazily, ie wait for fetch
     }
 
 
@@ -201,6 +207,13 @@
     {/if}
     <div class="h-5/6 w-full grid place-content-center" bind:this={refs.scrollTrigger}></div>
 </div>
+
+{#if showNotFound}
+<div transition:fly="{{ y: -50, duration: 300 }}" class="rounded px-3 -translate-x-1/2 bg-warning text-warning-content font-medium fixed top-16 left-1/2 z-50" data-tip="Not found!">
+    Not found!
+</div>
+{/if}
+
 
 <Overlay bind:open={modals.tag.open} on:close={resetItem} cancel="Go Back">
     <Tag bind:product={selectedItem} />
