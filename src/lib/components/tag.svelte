@@ -45,7 +45,7 @@
     `
 
     $: document?.activeElement.blur()
-    $: product ??= { ...nullProduct }
+    $: product = product.id ? product : { ...nullProduct }
     $: [dollars, cents = ''] = product.label6.split('.')
 
 </script>
