@@ -209,9 +209,9 @@
 </div>
 
 {#if showNotFound}
-<div transition:fly="{{ y: -50, duration: 300 }}" class="rounded px-3 -translate-x-1/2 bg-warning text-warning-content font-medium fixed top-16 left-1/2 z-50" data-tip="Not found!">
-    Not found!
-</div>
+    <div transition:fly="{{ y: -50, duration: 300 }}" class="tooltip tooltip-open tooltip-bottom tooltip-warning fixed top-16 left-1/2 z-50" data-tip="Not found!">
+        <div hidden/>
+    </div>
 {/if}
 
 
